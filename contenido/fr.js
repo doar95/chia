@@ -29,7 +29,7 @@ window.CHIA_TXT.fr = {
     ["Ordonnance 36 de 1954", "Le Cadre budgétaire à moyen terme de la commune cite l'Ordonnance 36 de 1954 comme son acte de création dans le régime départemental en vigueur."],
     ["Première station d'épuration", "En 1989 fut construite la PTAR Chía I, un système de lagunes au bord du río Bogotá. La CAR la géra jusqu'en 2012, date de son transfert à Emserchía."],
     ["Premier Plan d'aménagement du territoire", "Le Conseil municipal adopta le POT par l'Accord 17 du 15 juillet 2000. Il compte 243 articles et c'est la norme de nouveau appliquée en 2019."],
-    ["Resguardo muisca de Fonquetá et Cerca de Piedra", "L'Accord 315 du 12 novembre 2013 de l'INCODER constitua la réserve autochtone sur la montagne occidentale de la commune."],
+    ["Le resguardo de Fonquetá et Cerca de Piedra", "La communauté muisca de Chía conserve des terres collectives sur la montagne occidentale. Un tribunal de Zipaquirá les lui a remises en 1911, après des années de procès autour d'un resguardo d'origine coloniale. L'Accord 315 du 12 novembre 2013 de l'INCODER a donné le titre de resguardo à un terrain de 200 hectares et 2 741 mètres carrés."],
     ["Arrêt du río Bogotá", "Le 28 mars 2014, le Conseil d'État ordonna la restauration du bassin. Chía est l'une des 46 communes tenues de s'y conformer."],
     ["Révision générale du POT", "L'Accord 100 du 29 juillet 2016 adopta la révision générale du POT. La CAR avait concerté les questions environnementales par la Résolution 3024 du 30 décembre 2015."],
     ["Licence de la Troncal de los Andes", "L'ANLA accorda la licence environnementale par la Résolution 02189 du 27 novembre 2018. Les travaux commencèrent le 6 mars 2019."],
@@ -55,6 +55,7 @@ window.CHIA_TXT.fr = {
     n: "Montants en pesos constants de 2025. Exécutions budgétaires du DNP de 1984 à 1999 et Opérations effectives de caisse de 2000 à 2025."
   },
   suelo: {"s1": "Le diagnostic du POT de 2020 compte 61 046 parcelles au cadastre de 2019, dont 33 711 urbaines. Les parcelles de moins de 500 mètres carrés sont passées de 4 703 en 2010 à 10 542 en 2019, le signe le plus net de la subdivision du sol.", "t1": "Parcelles par taille, 2010 à 2019", "t2": "Taille des parcelles dans chaque vereda, 2019", "t3": "Parcelles par hectare, 2020", "n": "Le même document présente des totaux différents d'un tableau à l'autre. Chaque tableau est reproduit ici tel qu'il apparaît.", "p": "Les valeurs du sol au mètre carré existent sous forme de zones homogènes géoéconomiques du cadastre, mais la commune ne les publie que comme cartes en image et le gestionnaire cadastral les fournit sur demande. Aucune base ouverte par zone, vereda ou îlot n'a été trouvée.", "u": "Urbain"},
+  cat: {"c1": "Le cadastre de l'IGAC arrêté en mai 2018 recense 43 581 parcelles à Chía, pour une valeur cadastrale totale de 9,9 billions de pesos. La valeur cadastrale n'est pas le prix du marché et lui est généralement inférieure.", "ct1": "Valeur cadastrale par mètre carré de terrain, 2018", "cn1": "Médiane et intervalle entre les quartiles 25 et 75, en pesos de 2018. C'est la valeur totale de la parcelle divisée par la surface du terrain. Hors copropriétés et améliorations.", "ct2": "Distribution de la valeur par mètre carré", "ct3": "Zones géoéconomiques urbaines", "cn3": "Médiane par code de zone géoéconomique du cadastre. Il n'existe pas de carte publique de ces zones.", "ct4": "Par destination économique", "dest": {"hab": "Habitation", "agro": "Agricole", "com": "Commerce", "lote": "Terrains", "otros": "Autres"}, "h": ["Parcelles", "Milliards", "Médiane par m²"], "ru": "Rural", "ma": "par îlot ou secteur", "zo": "par zone", "p": "Les valeurs de marché au mètre carré restent sans source ouverte. Ce qui est montré ici est la valeur cadastrale."},
   agua: {
     a1: ["Río Frío", "Il naît dans le páramo de Guerrero, à Zipaquirá, et parcourt 58,9 kilomètres par Tabio, Cajicá et Chía jusqu'au río Bogotá, à la limite de Cota. En 2018, l'autorité environnementale municipale recensait 35 rejets dans le río Frío et 17 dans le río Bogotá."],
     a2: ["PTAR Chía I", "Lagunes d'oxydation construites en 1989 à environ 70 mètres du río Bogotá. Des mesures de la CAR citées en 2019 montraient un effluent à 177 milligrammes par litre de DBO pour une limite de 70."],
@@ -69,7 +70,7 @@ window.CHIA_TXT.fr = {
     p4: ["Troncal de los Andes", "Route à deux chaussées de 3,4 kilomètres entre la variante vers Cota et l'Autopista Norte, avec deux ponts sur le río Bogotá. Convention de 2017, licence de 2018, chantier lancé en 2019 puis bloqué par une mesure conservatoire protégeant un plan d'eau. L'ANLA a approuvé un nouveau tracé en décembre 2025."],
     p5: ["Autopista Norte", "La première phase prévoit l'élargissement de la chaussée orientale entre la rue 245 et La Caro. La seconde phase, Accesos Norte II, a reçu sa licence environnementale le 7 janvier 2026 et l'aval de démarrage le 14 août 2026 pour le tronçon des rues 191 à 245, déjà à Bogotá."],
     p6: ["Liaisons par l'ouest", "Le prolongement vers le nord de l'Avenida Longitudinal de Occidente et celui de l'Avenida Boyacá dépendent de décisions de Bogotá et de la CAR concernant la réserve Thomas van der Hammen. Le tronçon nord ne dispose que d'études de faisabilité selon l'IDU."],
-    p7: ["Territoire du resguardo", "Le resguardo occupe la montagne occidentale, dans les veredas Fonquetá et Cerca de Piedra. Les fiches d'investissement municipales indiquent entre 200 et 287 hectares selon la source, ainsi qu'un projet de récupération de la langue propre, le muyscubun."]
+    p7: ["Territoire du resguardo", "Le resguardo occupe la montagne occidentale, dans les veredas Fonquetá et Cerca de Piedra. L'Accord 315 de 2013 de l'INCODER titre 200 hectares et 2 741 mètres carrés, sur une terre que la communauté possédait en commun bien avant. D'autres fiches municipales parlent de 287 hectares. Un projet vise à récupérer la langue propre, le muyscubun."]
   },
   metodo: {
     m: [
@@ -91,7 +92,7 @@ window.CHIA_TXT.fr = {
   },
   tour: [
     ["Chía", "Une commune de la Savane, entre deux collines et deux rivières"],
-    ["Territoire muisca", "Chefferie avant 1537, resguardo reconnu en 2013"],
+    ["Héritage muisca", "Une chefferie avant 1537 et une communauté qui conserve aujourd'hui sa terre collective"],
     ["De 9 514 à 173 728", "La population a été multipliée par dix-huit depuis 1951"],
     ["Deux rivières", "Le Frío et le Bogotá structurent l'eau et l'assainissement"],
     ["Des plans disputés", "Un POT de 2000, un autre de 2016 et une décennie devant les juges"],

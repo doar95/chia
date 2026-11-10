@@ -34,11 +34,15 @@ No se incluyen datos de Bogotá. Los demás municipios de Sabana Centro y Sabana
 | --- | --- | --- |
 | `datos/datos.js` | Límites, veredas, población, pirámide y hacienda que usa el mapa | DANE y DNP |
 | `datos/poblacion.csv` | Población total y de cabecera, 19 municipios, 1985 a 2025 | DANE, proyecciones y retroproyecciones |
+| `datos/catastro_zona_2018.csv` | Avalúo catastral por vereda y zona urbana, 2018 | IGAC, registros 1 y 2 |
+| `datos/catastro_manzana_2018.csv` | Avalúo catastral por manzana o sector con cinco o más predios, 2018 | IGAC, registros 1 y 2 |
 | `datos/hacienda.csv` | Ingresos y gastos de Chía, 1984 a 2025 | DNP, ejecuciones presupuestales y Operaciones Efectivas de Caja |
 
 Los límites municipales se construyen uniendo las veredas de la capa de referencia DANE 2024 y asignando a cada municipio su cabecera. El área resultante para Chía es de 80,5 kilómetros cuadrados, frente a 80,44 que reporta la Alcaldía. Los límites de los demás municipios son aproximados y sirven solo como contexto.
 
 La serie fiscal proviene del panel del repositorio [carga-tributaria-ciudades](https://github.com/doar95/carga-tributaria-ciudades).
+
+Los archivos de catastro son agregados. No se publican nombres, documentos, direcciones ni registros de predios individuales.
 
 ## Pendientes
 

@@ -29,7 +29,7 @@ window.CHIA_TXT.es = {
     ["Ordenanza 36 de 1954", "El Marco Fiscal de Mediano Plazo del municipio cita la Ordenanza 36 de 1954 como su acto de creación dentro del régimen departamental vigente."],
     ["Primera planta de aguas residuales", "En 1989 se construyó la PTAR Chía I, un sistema de lagunas junto al río Bogotá. La CAR la administró hasta 2012, cuando pasó a Emserchía."],
     ["Primer Plan de Ordenamiento Territorial", "El Concejo adoptó el POT con el Acuerdo 17 del 15 de julio de 2000. Tiene 243 artículos y es la norma que volvió a aplicarse en 2019."],
-    ["Resguardo Muisca de Fonquetá y Cerca de Piedra", "El Acuerdo 315 del 12 de noviembre de 2013 del INCODER constituyó el resguardo en la montaña occidental del municipio."],
+    ["El resguardo de Fonquetá y Cerca de Piedra", "La comunidad muisca de Chía conserva tierra colectiva en la montaña occidental. Un juzgado de Zipaquirá se la entregó en 1911, tras años de pleitos por un resguardo de origen colonial. El Acuerdo 315 del 12 de noviembre de 2013 del INCODER le dio el título de resguardo a un predio de 200 hectáreas y 2.741 metros cuadrados."],
     ["Sentencia del río Bogotá", "El 28 de marzo de 2014 el Consejo de Estado ordenó la recuperación de la cuenca. Chía es uno de los 46 municipios obligados."],
     ["Revisión general del POT", "El Acuerdo 100 del 29 de julio de 2016 adoptó la revisión general del POT. La CAR había concertado los asuntos ambientales con la Resolución 3024 del 30 de diciembre de 2015."],
     ["Licencia de la Troncal de los Andes", "La ANLA otorgó licencia ambiental con la Resolución 02189 del 27 de noviembre de 2018. La construcción empezó el 6 de marzo de 2019."],
@@ -55,6 +55,7 @@ window.CHIA_TXT.es = {
     n: "Cifras en pesos constantes de 2025. Ejecuciones presupuestales del DNP de 1984 a 1999 y Operaciones Efectivas de Caja de 2000 a 2025."
   },
   suelo: {"s1": "El diagnóstico del POT de 2020 cuenta 61.046 predios en el catastro de 2019, de los cuales 33.711 son urbanos. Los predios de menos de 500 metros cuadrados pasaron de 4.703 en 2010 a 10.542 en 2019, la señal más clara de la subdivisión del suelo.", "t1": "Predios por tamaño, 2010 a 2019", "t2": "Tamaño de los predios en cada vereda, 2019", "t3": "Predios por hectárea, 2020", "n": "El mismo documento presenta totales distintos entre sus tablas. Aquí se reproduce cada tabla tal como aparece.", "p": "Los valores del suelo por metro cuadrado existen como zonas homogéneas geoeconómicas del catastro, pero el municipio solo los publica como mapas en imagen y el gestor catastral los entrega por solicitud. No se encontró una base abierta por zona, vereda o manzana.", "u": "Urbano"},
+  cat: {"c1": "El catastro del IGAC con corte a mayo de 2018 registra 43.581 predios en Chía, con un avalúo catastral total de 9,9 billones de pesos. El avalúo catastral no es el precio comercial y suele estar por debajo.", "ct1": "Avalúo catastral por metro cuadrado de terreno, 2018", "cn1": "Mediana y rango entre los cuartiles 25 y 75, en pesos de 2018. Es el avalúo total del predio dividido por su área de terreno. Excluye propiedad horizontal y mejoras.", "ct2": "Distribución del avalúo por metro cuadrado", "ct3": "Zonas geoeconómicas urbanas", "cn3": "Mediana por código de zona geoeconómica del catastro. No hay mapa público de estas zonas.", "ct4": "Por destino económico", "dest": {"hab": "Habitacional", "agro": "Agropecuario", "com": "Comercial", "lote": "Lotes", "otros": "Otros"}, "h": ["Predios", "Miles de millones", "Mediana por m²"], "ru": "Rural", "ma": "por manzana o sector", "zo": "por zona", "p": "Los valores comerciales por metro cuadrado siguen sin fuente abierta. Lo que aquí se muestra es avalúo catastral."},
   agua: {
     a1: ["Río Frío", "Nace en el páramo de Guerrero, en Zipaquirá, y recorre 58,9 kilómetros por Tabio, Cajicá y Chía hasta el río Bogotá, en el límite con Cota. En 2018 la autoridad ambiental municipal registraba 35 vertimientos al río Frío y 17 al río Bogotá."],
     a2: ["PTAR Chía I", "Lagunas de oxidación construidas en 1989 a unos 70 metros del río Bogotá. Mediciones de la CAR citadas en 2019 mostraban un efluente con 177 miligramos por litro de DBO frente a un límite de 70."],
@@ -69,7 +70,7 @@ window.CHIA_TXT.es = {
     p4: ["Troncal de los Andes", "Doble calzada de 3,4 kilómetros entre la variante a Cota y la Autopista Norte, con dos puentes sobre el río Bogotá. Convenio de 2017, licencia de 2018, obra iniciada en 2019 y frenada por una medida cautelar para proteger un cuerpo de agua. La ANLA aprobó un nuevo trazado en diciembre de 2025."],
     p5: ["Autopista Norte", "La primera fase contempla la ampliación de la calzada oriental entre la calle 245 y La Caro. La segunda fase, Accesos Norte II, recibió licencia ambiental el 7 de enero de 2026 y aval de inicio de obra el 14 de agosto de 2026 para el tramo de las calles 191 a 245, ya en Bogotá."],
     p6: ["Conexiones por el occidente", "La prolongación de la Avenida Longitudinal de Occidente hacia el norte y de la Avenida Boyacá dependen de decisiones de Bogotá y de la CAR sobre la reserva Thomas van der Hammen. El tramo norte solo tiene estudios de factibilidad según el IDU."],
-    p7: ["Territorio del resguardo", "El resguardo ocupa la montaña occidental, en las veredas Fonquetá y Cerca de Piedra. Las fichas de inversión municipales registran entre 200 y 287 hectáreas según la fuente, y un proyecto de recuperación de la lengua propia, el muyscubun."]
+    p7: ["Territorio del resguardo", "El resguardo ocupa la montaña occidental, en las veredas Fonquetá y Cerca de Piedra. El Acuerdo 315 de 2013 del INCODER titula 200 hectáreas y 2.741 metros cuadrados, sobre tierra que la comunidad poseía en común desde mucho antes. Otras fichas municipales hablan de 287 hectáreas. Hay un proyecto de recuperación de la lengua propia, el muyscubun."]
   },
   metodo: {
     m: [
@@ -91,7 +92,7 @@ window.CHIA_TXT.es = {
   },
   tour: [
     ["Chía", "Un municipio de la Sabana, entre dos cerros y dos ríos"],
-    ["Territorio muisca", "Cacicazgo antes de 1537, resguardo reconocido en 2013"],
+    ["Herencia muisca", "Un cacicazgo antes de 1537 y una comunidad que hoy conserva su tierra colectiva"],
     ["De 9.514 a 173.728", "La población se multiplicó por dieciocho desde 1951"],
     ["Dos ríos", "El Frío y el Bogotá ordenan el agua y el saneamiento"],
     ["Planes en disputa", "Un POT de 2000, otro de 2016 y una década en los estrados"],

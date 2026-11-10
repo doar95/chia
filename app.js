@@ -42,6 +42,9 @@
     danep: ["DANE, proyecciones y retroproyecciones de población municipal", "https://www.dane.gov.co/index.php/estadisticas-por-tema/demografia-y-poblacion/proyecciones-de-poblacion", "of"],
     danev: ["DANE, capa de referencia de veredas 2024", "https://geoportal.dane.gov.co/", "of"],
     dnp: ["DNP, ejecuciones presupuestales y Operaciones Efectivas de Caja, panel municipal 1984 a 2025", "https://github.com/doar95/carga-tributaria-ciudades", "of"],
+    dts: ["Municipio de Chía, Documento Técnico de Soporte del POT, Acuerdo 100 de 2016", "https://www.chia-cundinamarca.gov.co/POT/Acuerdo100de2016/DTS%20%20FINAL.pdf", "of"],
+    uptc: ["Revista Nuevas Lecturas de Historia, UPTC, el resguardo de Chía entre 1904 y 1937", "https://revistas.uptc.edu.co/index.php/nuev_lec_historia/article/download/20754/16599", "ac"],
+    igac18: ["IGAC, registros catastrales 1 y 2 de Chía, corte del 28 de mayo de 2018, entregados para tesis de la Universidad Nacional", "", "of"],
     diag: ["Alcaldía de Chía, Diagnóstico del POT, tomo II, dimensión económica, 2020", "https://www.chia-cundinamarca.gov.co/2020/POT/2.%20DIMENSI%C3%93N%20ECON%C3%93MICA.pdf", "of"],
     icde: ["IGAC, Mapa digital catastral urbano de Chía, metadato ICDE", "https://metadatos.icde.gov.co/geonetwork/srv/api/records/14160649", "of"],
     a227: ["Concejo de Chía, Acuerdo 227 de 2024", "https://chia-cundinamarca.gov.co/acuerdos/2024/ACUERDO%20227.pdf", "of"]
@@ -50,14 +53,14 @@
   const EV = [
     [1500, ["esap"], null], [1537, ["cont"], null], [1815, ["esap"], null], [1857, ["esap"], null], [1886, ["c1886"], null],
     [1951, ["pob"], null], [1954, ["mfmp"], null], [1989, ["tesis"], null], [2000, ["seg"], "*"],
-    [2013, ["res", "mga"], ["Fonqueta", "Cerca De Piedra"]], [2014, ["pomca", "tesis"], "*"], [2016, ["a164", "etpot"], "*"],
+    [2013, ["dts", "uptc", "res"], ["Fonqueta", "Cerca De Piedra"]], [2014, ["pomca", "tesis"], "*"], [2016, ["a164", "etpot"], "*"],
     [2018, ["accen", "alctr"], null], [2019, ["a164", "pomca", "eesusp"], "*"], [2025, ["etpot", "al", "ettr"], "*"], [2026, ["ens", "tac"], null]
   ];
   const TAR = {
     a1: [["tesis"], ["Fagua", "Tiquiza", "Fonqueta", "Cerca De Piedra", "La Balsa"]], a2: [["tesis"], null], a3: [["car", "ptar2", "sspd"], ["La Balsa"]],
     a4: [["pomca", "tesis"], "*"], a5: [["etchu", "eechu"], ["Fagua"]],
     p1: [["seg", "a164"], "*"], p2: [["etpot", "al", "eesusp"], "*"], p3: [["seg"], null], p4: [["accen", "alctr", "tac", "ettr"], null],
-    p5: [["accen", "anla", "ani"], null], p6: [["idu"], null], p7: [["res", "mga", "mga2"], ["Fonqueta", "Cerca De Piedra"]]
+    p5: [["accen", "anla", "ani"], null], p6: [["idu"], null], p7: [["dts", "uptc", "mga", "mga2"], ["Fonqueta", "Cerca De Piedra"]]
   };
   const CENSOS = [[1951, 9514, 2698, 6816], [1964, 15793, 5655, 10138], [1973, 20602, 9355, 11247], [1985, 38852, 24709, 14143], [1993, 45696, 41632, 4064], [2005, 97444, 73087, 24357], [2018, 132181, 105509, 26672]];
   const RANGOS = ["< 500 m²", "500 – 1.000", "1.000 – 3.000", "3.000 – 10.000", "1 – 2 ha", "> 2 ha"];
@@ -118,6 +121,13 @@
     ys.forEach((a, i) => { let y = h - B; PANIO[a].forEach((n, k) => { const hh = (n / mx) * (h - Tp - B); y -= hh; g += `<rect x="${L + i * bw + 3}" y="${y}" width="${bw - 6}" height="${hh}" fill="${cols[k]}"/>`; }); g += `<text x="${L + i * bw + bw / 2}" y="${h - 4}" text-anchor="middle">${a}</text>`; });
     return `<svg viewBox="0 0 ${w} ${h}" width="100%" role="img" style="direction:ltr">${g}</svg>`;
   }
+  function histo(H, w, h) {
+    const n = H.u.length, L = 8, B = 18, mx = Math.max(...H.u, ...H.r), bw = (w - 2 * L) / n; let g = "";
+    for (let i = 0; i < n; i++) { const hu = H.u[i] / mx * (h - B - 4), hr = H.r[i] / mx * (h - B - 4);
+      g += `<rect x="${L + i * bw + 1}" y="${h - B - hr}" width="${bw / 2 - 1}" height="${hr}" fill="#8fb47a"/><rect x="${L + i * bw + bw / 2}" y="${h - B - hu}" width="${bw / 2 - 1}" height="${hu}" fill="#e3b04b"/>`;
+      const e = H.lo + i * H.step; if (Math.abs(e - Math.round(e)) < 0.01) g += `<text x="${L + i * bw}" y="${h - 4}" text-anchor="middle">${nf(Math.pow(10, e), { notation: "compact" })}</text>`; }
+    return `<svg viewBox="0 0 ${w} ${h}" width="100%" role="img" style="direction:ltr">${g}</svg>`;
+  }
   function ranking(a) {
     const fs = D.mun.features.map((m) => [m.properties, (D.pop[m.properties.c] || {})[a]]).filter((x) => x[1]).sort((x, y) => y[1][0] - x[1][0]).slice(0, 8);
     const mx = fs[0][1][0];
@@ -144,7 +154,13 @@
       h += `<h2>${z.t2}</h2>` + Object.keys(PVER).map((v) => { const tot = PVER[v].reduce((a, b) => a + b, 0); return `<div style="display:flex;align-items:center;gap:8px;font-size:12.5px;margin:4px 0;cursor:pointer" data-ver="${v}"><span style="width:104px;color:var(--tenue)">${VNOM[v] || v}</span><span style="flex:1;height:12px;display:flex;border-radius:3px;overflow:hidden;direction:ltr">${PVER[v].map((n, i) => `<i style="width:${n / tot * 100}%;background:${cols[i]}" title="${RANGOS[i]}: ${nf(n)}"></i>`).join("")}</span><span style="width:44px;text-align:end">${nf(tot)}</span></div>`; }).join("");
       const mx = 84.78;
       h += `<h2>${z.t3}</h2>` + DENS.map(([v, pr, ha, d]) => `<div style="display:flex;align-items:center;gap:8px;font-size:12.5px;margin:3px 0"><span style="width:104px;color:var(--tenue)">${v === "U" ? z.u : v === "UMC" ? z.u + " Calahorra" : v}</span><span style="flex:1;height:8px;background:#1b2b3f;border-radius:4px;overflow:hidden"><i style="display:block;height:100%;width:${Math.sqrt(d / mx) * 100}%;background:var(--teja)"></i></span><span style="width:44px;text-align:end">${nf(d, { maximumFractionDigits: 1 })}</span></div>`).join("");
-      h += `<p class="nota" style="margin-top:8px">${z.n}</p>${fts(["diag"])}<p>${z.p}</p>${fts(["diag", "icde"])}`;
+      h += `<p class="nota" style="margin-top:8px">${z.n}</p>${fts(["diag"])}`;
+      const k = t.cat, C = D.cat, zmx = 1100000, ZN = { "Urbano": z.u, "Urbano Calahorra": z.u + " Calahorra" }, ZV = { "Fonquetá": "Fonqueta", "Tíquiza": "Tiquiza", "Cerca de Piedra": "Cerca De Piedra", "Urbano Calahorra": "Calahorra 1" };
+      h += `<h2>${k.ct1}</h2><p>${k.c1}</p>` + C.zonas.slice().sort((a, b) => a.p50 - b.p50).map((q) => `<div style="display:flex;align-items:center;gap:8px;font-size:13px;margin:5px 0;cursor:pointer" data-ver="${ZV[q.z] || q.z}"><span style="width:104px;color:var(--tenue)">${ZN[q.z] || q.z}</span><span style="flex:1;height:12px;position:relative;background:#1b2b3f;border-radius:6px;direction:ltr"><i style="position:absolute;top:3px;height:6px;border-radius:3px;background:#e3b04b88;left:${q.p25 / zmx * 100}%;width:${(q.p75 - q.p25) / zmx * 100}%"></i><i style="position:absolute;top:0;width:4px;height:12px;border-radius:2px;background:var(--oro);left:${q.p50 / zmx * 100}%"></i></span><span style="width:66px;text-align:end">${nf(q.p50)}</span></div>`).join("") + `<p class="nota">${k.cn1}</p>`;
+      h += `<h2>${k.ct2}</h2><div class="ley"><span><i style="background:#e3b04b"></i>${z.u}</span><span><i style="background:#8fb47a"></i>${k.ru}</span></div>${histo(C.hM2, 370, 160)}`;
+      const emx = Math.max(...C.ze.map((e) => e.p50));
+      h += `<h2>${k.ct3}</h2><div style="display:flex;align-items:flex-end;gap:3px;height:90px;direction:ltr">${C.ze.map((e) => `<div title="${e.ze}: ${nf(e.p50)} (${nf(e.n)})" style="flex:1;background:var(--oro);opacity:.85;border-radius:2px 2px 0 0;height:${e.p50 / emx * 100}%"></div>`).join("")}</div><div style="display:flex;gap:3px;direction:ltr">${C.ze.map((e) => `<span style="flex:1;text-align:center;font-size:10.5px;color:var(--tenue)">${e.ze}</span>`).join("")}</div><p class="nota">${k.cn3} ${nf(C.ze[0].p50)} – ${nf(emx)}.</p>`;
+      h += `<h2>${k.ct4}</h2><table><tr><th></th><th>${k.h[0]}</th><th>${k.h[1]}</th><th>${k.h[2]}</th></tr>${["hab", "com", "agro", "lote", "otros"].map((d) => { const r = C.dest.find((x) => x.d === d); return `<tr><td>${k.dest[d]}</td><td>${nf(r.n)}</td><td>${nf(r.av)}</td><td>${nf(r.p50)}</td></tr>`; }).join("")}</table>${fts(["igac18"])}<p><a href="datos/catastro_zona_2018.csv" download>${t.ui.download} ${k.zo}</a> · <a href="datos/catastro_manzana_2018.csv" download>${k.ma}</a></p><p>${k.p}</p>${fts(["diag", "icde"])}`;
     } else {
       const grupo = cap === 4 ? t.agua : t.planes;
       h += Object.keys(grupo).map((k) => `<div class="tar ${tarAct === k ? "act" : ""}" data-tar="${k}"><h3>${grupo[k][0]}</h3><p>${grupo[k][1]}</p>${fts(TAR[k][0])}</div>`).join("");
@@ -160,7 +176,7 @@
     $("rec-rep").textContent = t.ui.replay; $("rec-fin").textContent = t.ui.skip;
     $("caps").innerHTML = t.ui.chapters.map((n, i) => `<button role="tab" aria-selected="${i === cap}" data-c="${i}">${n}</button>`).join("");
     document.querySelectorAll("#idi button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.l === lang));
-    $("leym").innerHTML = `<div><i style="border-color:#e3b04b"></i>${t.ui.lgChia}</div><div><i style="border-color:#63b8c4"></i>${t.ui.lgCentro}</div><div><i style="border-color:#8fb47a"></i>${t.ui.lgOcc}</div><div><i style="border-color:#e3b04b;border-top-style:dotted"></i>${t.ui.lgVer}</div><div style="margin-top:4px">${t.ui.legend}</div>`;
+    $("leym").innerHTML = `<div><i style="border-color:#e3b04b"></i>${t.ui.lgChia}</div><div><i style="border-color:#63b8c4"></i>${t.ui.lgCentro}</div><div><i style="border-color:#8fb47a"></i>${t.ui.lgOcc}</div><div><i style="border-color:#e3b04b;border-top-style:dotted"></i>${t.ui.lgVer}</div><div style="margin-top:4px">${t.ui.legend}</div>` + (cap === 3 ? `<div style="display:block;margin-top:8px">${t.cat.ct1}<span style="display:block;height:10px;border-radius:5px;margin:5px 0 2px;background:linear-gradient(90deg,#23405c,#63b8c4,#e3b04b,#dd7a55)"></span><span style="display:flex;justify-content:space-between;direction:ltr"><span>${nf(20000)}</span><span>${nf(900000)}</span></span></div>` : "");
     pintar(); cabAnio();
   }
   function cabAnio() {
@@ -183,6 +199,7 @@
     puntos.features.forEach((f) => { const v = (D.pop[f.properties.c] || {})[a]; f.properties.pob = vis && v ? v[0] : 0; });
     if (listo) map.getSource("pts").setData(puntos);
   }
+  function capaCat() { if (listo && map.getLayer("ver-cat")) map.setLayoutProperty("ver-cat", "visibility", cap === 3 ? "visible" : "none"); }
   function resalta(v) {
     if (!listo) return;
     const filtro = v === "*" ? ["has", "n"] : v ? ["in", ["get", "n"], ["literal", v]] : ["==", ["get", "n"], "__"];
@@ -209,6 +226,9 @@
       map.addLayer({ id: "chia-h", type: "line", source: "mun", filter: ["==", ["get", "c"], 25175], paint: { "line-color": "#e3b04b", "line-width": 9, "line-blur": 9, "line-opacity": 0.5 } });
       map.addLayer({ id: "chia-l", type: "line", source: "mun", filter: ["==", ["get", "c"], 25175], paint: { "line-color": "#e3b04b", "line-width": 2 } });
       map.addLayer({ id: "ver-res", type: "fill", source: "ver", filter: ["==", ["get", "n"], "__"], paint: { "fill-color": "#e3b04b", "fill-opacity": 0.28 } });
+      const cm = {}; D.cat.zonas.forEach((q) => cm[{ "Fonquetá": "Fonqueta", "Tíquiza": "Tiquiza", "Cerca de Piedra": "Cerca De Piedra", "Urbano Calahorra": "Calahorra 1" }[q.z] || q.z] = q.p50);
+      const mexp = ["match", ["get", "n"]]; D.ver.features.forEach((f) => mexp.push(f.properties.n, cm[f.properties.n] || 0)); mexp.push(0);
+      map.addLayer({ id: "ver-cat", type: "fill", source: "ver", layout: { visibility: "none" }, paint: { "fill-color": ["interpolate", ["linear"], mexp, 20000, "#23405c", 100000, "#63b8c4", 250000, "#e3b04b", 900000, "#dd7a55"], "fill-opacity": 0.55 } });
       map.addLayer({ id: "ver-l", type: "line", source: "ver", minzoom: 10.2, paint: { "line-color": "#e3b04b", "line-width": 1, "line-dasharray": [1, 2], "line-opacity": 0.8 } });
       map.addLayer({ id: "pts-h", type: "circle", source: "pts", paint: { "circle-radius": ["interpolate", ["linear"], ["sqrt", ["get", "pob"]], 0, 0, 450, 30], "circle-color": ["case", ["==", ["get", "c"], 25175], "#e3b04b", ["==", ["get", "p"], "centro"], "#63b8c4", "#8fb47a"], "circle-opacity": 0.22, "circle-blur": 0.6 } });
       map.addLayer({ id: "pts", type: "circle", source: "pts", paint: { "circle-radius": ["interpolate", ["linear"], ["sqrt", ["get", "pob"]], 0, 0, 450, 15], "circle-color": ["case", ["==", ["get", "c"], 25175], "#e3b04b", ["==", ["get", "p"], "centro"], "#63b8c4", "#8fb47a"], "circle-opacity": 0.85, "circle-stroke-color": "#0a1420", "circle-stroke-width": 1 } });
@@ -295,7 +315,7 @@
 
   /* Eventos */
   $("idi").onclick = (e) => { const l = e.target.dataset.l; if (!l) return; lang = l; try { localStorage.setItem("chia-idioma", l); } catch (x) {} interfaz(); if ($("rec").classList.contains("ab")) recPaso(Math.max(rec.i, 0)); };
-  $("caps").onclick = (e) => { const c = e.target.dataset.c; if (c == null) return; cap = +c; evAct = -1; tarAct = null; resalta(null); interfaz(); $("cont").scrollTop = 0; if (listo) vista(cap === 1 ? "region" : cap === 4 ? "rios" : cap === 3 ? "plano" : "chia"); };
+  $("caps").onclick = (e) => { const c = e.target.dataset.c; if (c == null) return; cap = +c; evAct = -1; tarAct = null; resalta(null); interfaz(); capaCat(); $("cont").scrollTop = 0; if (listo) vista(cap === 1 ? "region" : cap === 4 ? "rios" : cap === 3 ? "plano" : "chia"); };
   $("cont").onclick = (e) => {
     if (e.target.closest("a")) return;
     const ev = e.target.closest("[data-ev]"), ta = e.target.closest("[data-tar]"), ve = e.target.closest("[data-ver]");

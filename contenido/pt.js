@@ -29,7 +29,7 @@ window.CHIA_TXT.pt = {
     ["Ordenança 36 de 1954", "O Marco Fiscal de Médio Prazo do município cita a Ordenança 36 de 1954 como seu ato de criação dentro do regime departamental vigente."],
     ["Primeira estação de tratamento de esgoto", "Em 1989 foi construída a PTAR Chía I, um sistema de lagoas junto ao rio Bogotá. A CAR administrou-a até 2012, quando passou à Emserchía."],
     ["Primeiro Plano de Ordenamento Territorial", "A Câmara Municipal adotou o POT com o Acordo 17 de 15 de julho de 2000. Tem 243 artigos e é a norma que voltou a ser aplicada em 2019."],
-    ["Resguardo Muísca de Fonquetá e Cerca de Piedra", "O Acordo 315 de 12 de novembro de 2013 do INCODER constituiu o resguardo indígena na montanha ocidental do município."],
+    ["O resguardo de Fonquetá e Cerca de Piedra", "A comunidade muísca de Chía conserva terra coletiva na montanha ocidental. Um juizado de Zipaquirá entregou-lhe essa terra em 1911, após anos de litígios por um resguardo de origem colonial. O Acordo 315 de 12 de novembro de 2013 do INCODER deu o título de resguardo a um imóvel de 200 hectares e 2.741 metros quadrados."],
     ["Sentença do rio Bogotá", "Em 28 de março de 2014 o Conselho de Estado ordenou a recuperação da bacia. Chía é um dos 46 municípios obrigados."],
     ["Revisão geral do POT", "O Acordo 100 de 29 de julho de 2016 adotou a revisão geral do POT. A CAR havia concertado os assuntos ambientais com a Resolução 3024 de 30 de dezembro de 2015."],
     ["Licença da Troncal de los Andes", "A ANLA concedeu a licença ambiental com a Resolução 02189 de 27 de novembro de 2018. A construção começou em 6 de março de 2019."],
@@ -55,6 +55,7 @@ window.CHIA_TXT.pt = {
     n: "Valores em pesos constantes de 2025. Execuções orçamentárias do DNP de 1984 a 1999 e Operações Efetivas de Caixa de 2000 a 2025."
   },
   suelo: {"s1": "O diagnóstico do POT de 2020 conta 61.046 imóveis no cadastro de 2019, dos quais 33.711 são urbanos. Os imóveis com menos de 500 metros quadrados passaram de 4.703 em 2010 para 10.542 em 2019, o sinal mais claro da subdivisão do solo.", "t1": "Imóveis por tamanho, 2010 a 2019", "t2": "Tamanho dos imóveis em cada vereda, 2019", "t3": "Imóveis por hectare, 2020", "n": "O mesmo documento apresenta totais diferentes entre suas tabelas. Aqui cada tabela é reproduzida como aparece.", "p": "Os valores do solo por metro quadrado existem como zonas homogêneas geoeconômicas do cadastro, mas o município só os publica como mapas em imagem e o gestor cadastral os entrega mediante solicitação. Não se encontrou uma base aberta por zona, vereda ou quadra.", "u": "Urbano"},
+  cat: {"c1": "O cadastro do IGAC com data de maio de 2018 registra 43.581 imóveis em Chía, com um valor cadastral total de 9,9 trilhões de pesos. O valor cadastral não é o preço de mercado e costuma ficar abaixo dele.", "ct1": "Valor cadastral por metro quadrado de terreno, 2018", "cn1": "Mediana e intervalo entre os quartis 25 e 75, em pesos de 2018. É o valor total do imóvel dividido pela área do terreno. Exclui propriedade horizontal e benfeitorias.", "ct2": "Distribuição do valor por metro quadrado", "ct3": "Zonas geoeconômicas urbanas", "cn3": "Mediana por código de zona geoeconômica do cadastro. Não há mapa público dessas zonas.", "ct4": "Por destinação econômica", "dest": {"hab": "Habitacional", "agro": "Agropecuário", "com": "Comercial", "lote": "Lotes", "otros": "Outros"}, "h": ["Imóveis", "Bilhões", "Mediana por m²"], "ru": "Rural", "ma": "por quadra ou setor", "zo": "por zona", "p": "Os valores de mercado por metro quadrado continuam sem fonte aberta. O que se mostra aqui é valor cadastral."},
   agua: {
     a1: ["Rio Frío", "Nasce no páramo de Guerrero, em Zipaquirá, e percorre 58,9 quilômetros por Tabio, Cajicá e Chía até o rio Bogotá, no limite com Cota. Em 2018 a autoridade ambiental municipal registrava 35 lançamentos de efluentes no rio Frío e 17 no rio Bogotá."],
     a2: ["PTAR Chía I", "Lagoas de oxidação construídas em 1989 a cerca de 70 metros do rio Bogotá. Medições da CAR citadas em 2019 mostravam um efluente com 177 miligramas por litro de DBO diante de um limite de 70."],
@@ -69,7 +70,7 @@ window.CHIA_TXT.pt = {
     p4: ["Troncal de los Andes", "Pista dupla de 3,4 quilômetros entre a variante para Cota e a Autopista Norte, com duas pontes sobre o rio Bogotá. Convênio de 2017, licença de 2018, obra iniciada em 2019 e travada por uma medida cautelar para proteger um corpo d'água. A ANLA aprovou um novo traçado em dezembro de 2025."],
     p5: ["Autopista Norte", "A primeira fase prevê a ampliação da pista oriental entre a rua 245 e La Caro. A segunda fase, Accesos Norte II, recebeu licença ambiental em 7 de janeiro de 2026 e aval de início de obra em 14 de agosto de 2026 para o trecho das ruas 191 a 245, já em Bogotá."],
     p6: ["Conexões pelo ocidente", "O prolongamento da Avenida Longitudinal de Occidente para o norte e da Avenida Boyacá depende de decisões de Bogotá e da CAR sobre a reserva Thomas van der Hammen. O trecho norte só tem estudos de viabilidade, segundo o IDU."],
-    p7: ["Território do resguardo", "O resguardo ocupa a montanha ocidental, nas veredas Fonquetá e Cerca de Piedra. As fichas de investimento municipais registram entre 200 e 287 hectares conforme a fonte, e um projeto de recuperação da língua própria, o muyscubun."]
+    p7: ["Território do resguardo", "O resguardo ocupa a montanha ocidental, nas veredas Fonquetá e Cerca de Piedra. O Acordo 315 de 2013 do INCODER titula 200 hectares e 2.741 metros quadrados, sobre terra que a comunidade possuía em comum muito antes. Outras fichas municipais falam de 287 hectares. Há um projeto de recuperação da língua própria, o muyscubun."]
   },
   metodo: {
     m: [
@@ -91,7 +92,7 @@ window.CHIA_TXT.pt = {
   },
   tour: [
     ["Chía", "Um município da Savana, entre dois cerros e dois rios"],
-    ["Território muísca", "Cacicado antes de 1537, resguardo reconhecido em 2013"],
+    ["Herança muísca", "Um cacicado antes de 1537 e uma comunidade que hoje conserva sua terra coletiva"],
     ["De 9.514 a 173.728", "A população multiplicou-se por dezoito desde 1951"],
     ["Dois rios", "O Frío e o Bogotá ordenam a água e o saneamento"],
     ["Planos em disputa", "Um POT de 2000, outro de 2016 e uma década nos tribunais"],
