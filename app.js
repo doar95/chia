@@ -192,12 +192,10 @@
     map = new maplibregl.Map({
       container: "map", center: [-74.12, 4.86], zoom: 9.6, minZoom: 8, maxZoom: 15, pitch: 0, attributionControl: false,
       style: { version: 8, sources: {
-        base: { type: "raster", tiles: ["https://a.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}@2x.png", "https://b.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}@2x.png"], tileSize: 256, attribution: "© OpenStreetMap, © CARTO" },
         dem: { type: "raster-dem", tiles: ["https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png"], tileSize: 256, encoding: "terrarium", maxzoom: 13, attribution: "Relieve: AWS Terrain Tiles" }
       }, layers: [
         { id: "fondo", type: "background", paint: { "background-color": "#0a1420" } },
-        { id: "base", type: "raster", source: "base", paint: { "raster-opacity": 0.55 } },
-        { id: "relieve", type: "hillshade", source: "dem", paint: { "hillshade-exaggeration": 0.55, "hillshade-shadow-color": "#02060c", "hillshade-highlight-color": "#c9b78e", "hillshade-accent-color": "#0a1420" } }
+        { id: "relieve", type: "hillshade", source: "dem", paint: { "hillshade-exaggeration": 0.6, "hillshade-shadow-color": "#02060c", "hillshade-highlight-color": "#c9b78e", "hillshade-accent-color": "#0a1420" } }
       ] }
     });
     map.addControl(new maplibregl.NavigationControl({ visualizePitch: true }), "top-right");
@@ -228,6 +226,7 @@
       map.on("mouseleave", "mun-f", () => { pop.remove(); map.getCanvas().style.cursor = ""; });
       map.on("click", "mun-f", (e) => { if (e.features[0].properties.c === 25175) vista("chia"); });
       listo = true; actualizaPuntos(); vista("chia", 0);
+      map.once("idle", actualizaPuntos); setTimeout(actualizaPuntos, 1500);
       setTimeout(() => { const at = document.querySelector(".maplibregl-ctrl-attrib"); at && at.classList.remove("maplibregl-compact-show"); }, 300);
       if (!/sin-recorrido/.test(location.search)) setTimeout(recorrido, 700);
     });

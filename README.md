@@ -54,7 +54,7 @@ La serie fiscal proviene del panel del repositorio [carga-tributaria-ciudades](h
 
 ## Tecnología
 
-Sitio estático sin proceso de compilación. MapLibre GL JS incluido en `vendor/`. Fondo de CARTO y relieve de AWS Terrain Tiles, que se cargan desde internet. Si no están disponibles, el mapa funciona igual con los límites del DANE.
+Sitio estático sin proceso de compilación. MapLibre GL JS incluido en `vendor/`. El relieve proviene de AWS Terrain Tiles y se carga desde internet. Si no está disponible, el mapa funciona igual con los límites del DANE.
 
 ## Licencia
 
