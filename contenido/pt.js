@@ -6,7 +6,7 @@ window.CHIA_TXT.pt = {
     tour: "Percurso de 30 segundos",
     src: "Fontes e método",
     play: "Reproduzir", pause: "Pausar", replay: "Repetir", close: "Fechar", skip: "Entrar no mapa",
-    chapters: ["História", "Gente", "Finanças", "Água", "Planos e obras"],
+    chapters: ["História", "Gente", "Finanças", "Solo", "Água", "Planos e obras"],
     popLabel: "habitantes de Chía, série DANE",
     noPop: "A série anual do DANE começa em 1985",
     legend: "Cada círculo é um município. O tamanho é a população do ano escolhido",
@@ -54,6 +54,7 @@ window.CHIA_TXT.pt = {
     debt: "A Câmara autorizou um limite de endividamento com o Acordo 227 de 2024. O saldo da dívida e seus indicadores legais ainda não estão incorporados neste portal.",
     n: "Valores em pesos constantes de 2025. Execuções orçamentárias do DNP de 1984 a 1999 e Operações Efetivas de Caixa de 2000 a 2025."
   },
+  suelo: {"s1": "O diagnóstico do POT de 2020 conta 61.046 imóveis no cadastro de 2019, dos quais 33.711 são urbanos. Os imóveis com menos de 500 metros quadrados passaram de 4.703 em 2010 para 10.542 em 2019, o sinal mais claro da subdivisão do solo.", "t1": "Imóveis por tamanho, 2010 a 2019", "t2": "Tamanho dos imóveis em cada vereda, 2019", "t3": "Imóveis por hectare, 2020", "n": "O mesmo documento apresenta totais diferentes entre suas tabelas. Aqui cada tabela é reproduzida como aparece.", "p": "Os valores do solo por metro quadrado existem como zonas homogêneas geoeconômicas do cadastro, mas o município só os publica como mapas em imagem e o gestor cadastral os entrega mediante solicitação. Não se encontrou uma base aberta por zona, vereda ou quadra.", "u": "Urbano"},
   agua: {
     a1: ["Rio Frío", "Nasce no páramo de Guerrero, em Zipaquirá, e percorre 58,9 quilômetros por Tabio, Cajicá e Chía até o rio Bogotá, no limite com Cota. Em 2018 a autoridade ambiental municipal registrava 35 lançamentos de efluentes no rio Frío e 17 no rio Bogotá."],
     a2: ["PTAR Chía I", "Lagoas de oxidação construídas em 1989 a cerca de 70 metros do rio Bogotá. Medições da CAR citadas em 2019 mostravam um efluente com 177 miligramas por litro de DBO diante de um limite de 70."],

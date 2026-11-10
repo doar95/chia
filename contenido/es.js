@@ -6,7 +6,7 @@ window.CHIA_TXT.es = {
     tour: "Recorrido de 30 segundos",
     src: "Fuentes y método",
     play: "Reproducir", pause: "Pausar", replay: "Repetir", close: "Cerrar", skip: "Entrar al mapa",
-    chapters: ["Historia", "Gente", "Hacienda", "Agua", "Planes y obras"],
+    chapters: ["Historia", "Gente", "Hacienda", "Suelo", "Agua", "Planes y obras"],
     popLabel: "habitantes de Chía, serie DANE",
     noPop: "La serie anual del DANE empieza en 1985",
     legend: "Cada círculo es un municipio. Su tamaño es la población del año elegido",
@@ -54,6 +54,7 @@ window.CHIA_TXT.es = {
     debt: "El Concejo autorizó un cupo de endeudamiento con el Acuerdo 227 de 2024. El saldo de la deuda y sus indicadores de ley aún no están incorporados en este portal.",
     n: "Cifras en pesos constantes de 2025. Ejecuciones presupuestales del DNP de 1984 a 1999 y Operaciones Efectivas de Caja de 2000 a 2025."
   },
+  suelo: {"s1": "El diagnóstico del POT de 2020 cuenta 61.046 predios en el catastro de 2019, de los cuales 33.711 son urbanos. Los predios de menos de 500 metros cuadrados pasaron de 4.703 en 2010 a 10.542 en 2019, la señal más clara de la subdivisión del suelo.", "t1": "Predios por tamaño, 2010 a 2019", "t2": "Tamaño de los predios en cada vereda, 2019", "t3": "Predios por hectárea, 2020", "n": "El mismo documento presenta totales distintos entre sus tablas. Aquí se reproduce cada tabla tal como aparece.", "p": "Los valores del suelo por metro cuadrado existen como zonas homogéneas geoeconómicas del catastro, pero el municipio solo los publica como mapas en imagen y el gestor catastral los entrega por solicitud. No se encontró una base abierta por zona, vereda o manzana.", "u": "Urbano"},
   agua: {
     a1: ["Río Frío", "Nace en el páramo de Guerrero, en Zipaquirá, y recorre 58,9 kilómetros por Tabio, Cajicá y Chía hasta el río Bogotá, en el límite con Cota. En 2018 la autoridad ambiental municipal registraba 35 vertimientos al río Frío y 17 al río Bogotá."],
     a2: ["PTAR Chía I", "Lagunas de oxidación construidas en 1989 a unos 70 metros del río Bogotá. Mediciones de la CAR citadas en 2019 mostraban un efluente con 177 miligramos por litro de DBO frente a un límite de 70."],

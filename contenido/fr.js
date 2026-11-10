@@ -6,7 +6,7 @@ window.CHIA_TXT.fr = {
     tour: "Parcours de 30 secondes",
     src: "Sources et méthode",
     play: "Lire", pause: "Pause", replay: "Rejouer", close: "Fermer", skip: "Entrer dans la carte",
-    chapters: ["Histoire", "Population", "Finances", "Eau", "Plans et travaux"],
+    chapters: ["Histoire", "Population", "Finances", "Sol", "Eau", "Plans et travaux"],
     popLabel: "habitants de Chía, série DANE",
     noPop: "La série annuelle du DANE commence en 1985",
     legend: "Chaque cercle est une commune. Sa taille représente la population de l'année choisie",
@@ -54,6 +54,7 @@ window.CHIA_TXT.fr = {
     debt: "Le Conseil municipal a autorisé un plafond d'endettement par l'Accord 227 de 2024. L'encours de la dette et ses indicateurs légaux ne figurent pas encore dans ce portail.",
     n: "Montants en pesos constants de 2025. Exécutions budgétaires du DNP de 1984 à 1999 et Opérations effectives de caisse de 2000 à 2025."
   },
+  suelo: {"s1": "Le diagnostic du POT de 2020 compte 61 046 parcelles au cadastre de 2019, dont 33 711 urbaines. Les parcelles de moins de 500 mètres carrés sont passées de 4 703 en 2010 à 10 542 en 2019, le signe le plus net de la subdivision du sol.", "t1": "Parcelles par taille, 2010 à 2019", "t2": "Taille des parcelles dans chaque vereda, 2019", "t3": "Parcelles par hectare, 2020", "n": "Le même document présente des totaux différents d'un tableau à l'autre. Chaque tableau est reproduit ici tel qu'il apparaît.", "p": "Les valeurs du sol au mètre carré existent sous forme de zones homogènes géoéconomiques du cadastre, mais la commune ne les publie que comme cartes en image et le gestionnaire cadastral les fournit sur demande. Aucune base ouverte par zone, vereda ou îlot n'a été trouvée.", "u": "Urbain"},
   agua: {
     a1: ["Río Frío", "Il naît dans le páramo de Guerrero, à Zipaquirá, et parcourt 58,9 kilomètres par Tabio, Cajicá et Chía jusqu'au río Bogotá, à la limite de Cota. En 2018, l'autorité environnementale municipale recensait 35 rejets dans le río Frío et 17 dans le río Bogotá."],
     a2: ["PTAR Chía I", "Lagunes d'oxydation construites en 1989 à environ 70 mètres du río Bogotá. Des mesures de la CAR citées en 2019 montraient un effluent à 177 milligrammes par litre de DBO pour une limite de 70."],

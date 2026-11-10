@@ -42,6 +42,8 @@
     danep: ["DANE, proyecciones y retroproyecciones de población municipal", "https://www.dane.gov.co/index.php/estadisticas-por-tema/demografia-y-poblacion/proyecciones-de-poblacion", "of"],
     danev: ["DANE, capa de referencia de veredas 2024", "https://geoportal.dane.gov.co/", "of"],
     dnp: ["DNP, ejecuciones presupuestales y Operaciones Efectivas de Caja, panel municipal 1984 a 2025", "https://github.com/doar95/carga-tributaria-ciudades", "of"],
+    diag: ["Alcaldía de Chía, Diagnóstico del POT, tomo II, dimensión económica, 2020", "https://www.chia-cundinamarca.gov.co/2020/POT/2.%20DIMENSI%C3%93N%20ECON%C3%93MICA.pdf", "of"],
+    icde: ["IGAC, Mapa digital catastral urbano de Chía, metadato ICDE", "https://metadatos.icde.gov.co/geonetwork/srv/api/records/14160649", "of"],
     a227: ["Concejo de Chía, Acuerdo 227 de 2024", "https://chia-cundinamarca.gov.co/acuerdos/2024/ACUERDO%20227.pdf", "of"]
   };
   /* Hitos: año, fuentes, veredas que se resaltan */
@@ -58,6 +60,10 @@
     p5: [["accen", "anla", "ani"], null], p6: [["idu"], null], p7: [["res", "mga", "mga2"], ["Fonqueta", "Cerca De Piedra"]]
   };
   const CENSOS = [[1951, 9514, 2698, 6816], [1964, 15793, 5655, 10138], [1973, 20602, 9355, 11247], [1985, 38852, 24709, 14143], [1993, 45696, 41632, 4064], [2005, 97444, 73087, 24357], [2018, 132181, 105509, 26672]];
+  const RANGOS = ["< 500 m²", "500 – 1.000", "1.000 – 3.000", "3.000 – 10.000", "1 – 2 ha", "> 2 ha"];
+  const PANIO = { 2010: [4703, 2056, 2806, 1431, 885, 463], 2011: [5112, 2127, 2873, 1422, 886, 465], 2012: [5403, 2164, 2894, 1431, 880, 467], 2013: [5834, 2270, 2914, 1429, 882, 468], 2014: [6409, 2399, 2947, 1427, 880, 461], 2015: [5728, 2199, 2579, 1219, 786, 460], 2016: [7446, 2573, 2931, 1434, 804, 454], 2017: [7807, 2691, 2987, 1448, 808, 451], 2018: [10147, 4226, 4325, 2174, 1120, 676], 2019: [10542, 4250, 4314, 2193, 1121, 726] };
+  const PVER = { "Fagua": [625, 319, 549, 316, 63, 74], "Tiquiza": [1332, 150, 202, 141, 51, 42], "Fonqueta": [1133, 387, 365, 198, 39, 27], "Cerca De Piedra": [919, 347, 330, 136, 50, 10], "La Balsa": [2235, 789, 930, 259, 43, 108], "Yerbabuena": [99, 240, 634, 398, 680, 246], "Fusca": [77, 75, 157, 284, 135, 159] };
+  const DENS = [["Fusca", 672, 1443, 0.47], ["Yerbabuena", 1565, 2421, 0.65], ["Fagua", 1343, 695, 1.93], ["Tíquiza", 1325, 484, 2.74], ["La Balsa", 3214, 838, 3.84], ["Fonquetá", 1654, 385, 4.29], ["Cerca de Piedra", 1663, 336, 4.96], ["Bojacá", 6321, 838, 7.54], ["U", 27710, 562, 49.31], ["UMC", 3452, 41, 84.78]];
   const VNOM = { "Fonqueta": "Fonquetá", "Tiquiza": "Tíquiza", "Cerca De Piedra": "Cerca de Piedra", "Calahorra 1": "Calahorra" };
 
   /* Escala de tiempo: 1500 a 1950 ocupa un cuarto de la pista */
@@ -106,6 +112,12 @@
     });
     return `<svg viewBox="0 0 ${w} ${h}" width="100%" role="img" style="direction:ltr">${g}</svg>`;
   }
+  function barrasAnio(w, h, cols) {
+    const ys = Object.keys(PANIO), L = 44, B = 18, Tp = 6, R = 8, mx = 24000, bw = (w - L - R) / ys.length; let g = "";
+    for (let i = 0; i <= 3; i++) { const v = mx * i / 3, y = h - B - (v / mx) * (h - Tp - B); g += `<line x1="${L}" x2="${w - R}" y1="${y}" y2="${y}" stroke="#22344a"/><text x="${L - 5}" y="${y + 3}" text-anchor="end">${nf(v, { notation: "compact" })}</text>`; }
+    ys.forEach((a, i) => { let y = h - B; PANIO[a].forEach((n, k) => { const hh = (n / mx) * (h - Tp - B); y -= hh; g += `<rect x="${L + i * bw + 3}" y="${y}" width="${bw - 6}" height="${hh}" fill="${cols[k]}"/>`; }); g += `<text x="${L + i * bw + bw / 2}" y="${h - 4}" text-anchor="middle">${a}</text>`; });
+    return `<svg viewBox="0 0 ${w} ${h}" width="100%" role="img" style="direction:ltr">${g}</svg>`;
+  }
   function ranking(a) {
     const fs = D.mun.features.map((m) => [m.properties, (D.pop[m.properties.c] || {})[a]]).filter((x) => x[1]).sort((x, y) => y[1][0] - x[1][0]).slice(0, 8);
     const mx = fs[0][1][0];
@@ -126,8 +138,15 @@
       h += `<h2>${t.gente.pirT}</h2>${piramide(370, 300)}<p class="nota">${t.gente.pirN}</p>${fts(["danep"])}`;
     } else if (cap === 2) {
       h += `<p>${t.hacienda.h1}</p><h2>${t.hacienda.chartT}</h2><div class="ley">${t.hacienda.k.map((k, i) => `<span><i style="background:${["#e3b04b", "#63b8c4", "#b79ad6"][i]}"></i>${k}</span>`).join("")}</div>${apilada(370, 190, Math.min(Math.max(anio, 1984), 2025))}<p class="nota">${t.ui.mill}. ${t.hacienda.n}</p>${fts(["dnp"])}<p>${t.hacienda.h2}</p><p>${t.hacienda.h3}</p><p>${t.hacienda.debt}</p>${fts(["a227"])}<p><a href="datos/hacienda.csv" download>${t.ui.download}</a></p>`;
+    } else if (cap === 3) {
+      const z = t.suelo, cols = ["#f3d58a", "#e3b04b", "#dd7a55", "#b79ad6", "#63b8c4", "#8fb47a"];
+      h += `<p>${z.s1}</p><h2>${z.t1}</h2><div class="ley">${RANGOS.map((r, i) => `<span><i style="background:${cols[i]}"></i>${r}</span>`).join("")}</div>${barrasAnio(370, 180, cols)}`;
+      h += `<h2>${z.t2}</h2>` + Object.keys(PVER).map((v) => { const tot = PVER[v].reduce((a, b) => a + b, 0); return `<div style="display:flex;align-items:center;gap:8px;font-size:12.5px;margin:4px 0;cursor:pointer" data-ver="${v}"><span style="width:104px;color:var(--tenue)">${VNOM[v] || v}</span><span style="flex:1;height:12px;display:flex;border-radius:3px;overflow:hidden;direction:ltr">${PVER[v].map((n, i) => `<i style="width:${n / tot * 100}%;background:${cols[i]}" title="${RANGOS[i]}: ${nf(n)}"></i>`).join("")}</span><span style="width:44px;text-align:end">${nf(tot)}</span></div>`; }).join("");
+      const mx = 84.78;
+      h += `<h2>${z.t3}</h2>` + DENS.map(([v, pr, ha, d]) => `<div style="display:flex;align-items:center;gap:8px;font-size:12.5px;margin:3px 0"><span style="width:104px;color:var(--tenue)">${v === "U" ? z.u : v === "UMC" ? z.u + " Calahorra" : v}</span><span style="flex:1;height:8px;background:#1b2b3f;border-radius:4px;overflow:hidden"><i style="display:block;height:100%;width:${Math.sqrt(d / mx) * 100}%;background:var(--teja)"></i></span><span style="width:44px;text-align:end">${nf(d, { maximumFractionDigits: 1 })}</span></div>`).join("");
+      h += `<p class="nota" style="margin-top:8px">${z.n}</p>${fts(["diag"])}<p>${z.p}</p>${fts(["diag", "icde"])}`;
     } else {
-      const grupo = cap === 3 ? t.agua : t.planes;
+      const grupo = cap === 4 ? t.agua : t.planes;
       h += Object.keys(grupo).map((k) => `<div class="tar ${tarAct === k ? "act" : ""}" data-tar="${k}"><h3>${grupo[k][0]}</h3><p>${grupo[k][1]}</p>${fts(TAR[k][0])}</div>`).join("");
     }
     c.innerHTML = h;
@@ -277,10 +296,11 @@
 
   /* Eventos */
   $("idi").onclick = (e) => { const l = e.target.dataset.l; if (!l) return; lang = l; try { localStorage.setItem("chia-idioma", l); } catch (x) {} interfaz(); if ($("rec").classList.contains("ab")) recPaso(Math.max(rec.i, 0)); };
-  $("caps").onclick = (e) => { const c = e.target.dataset.c; if (c == null) return; cap = +c; evAct = -1; tarAct = null; resalta(null); interfaz(); $("cont").scrollTop = 0; if (listo) vista(cap === 1 ? "region" : cap === 3 ? "rios" : "chia"); };
+  $("caps").onclick = (e) => { const c = e.target.dataset.c; if (c == null) return; cap = +c; evAct = -1; tarAct = null; resalta(null); interfaz(); $("cont").scrollTop = 0; if (listo) vista(cap === 1 ? "region" : cap === 4 ? "rios" : cap === 3 ? "plano" : "chia"); };
   $("cont").onclick = (e) => {
     if (e.target.closest("a")) return;
-    const ev = e.target.closest("[data-ev]"), ta = e.target.closest("[data-tar]");
+    const ev = e.target.closest("[data-ev]"), ta = e.target.closest("[data-tar]"), ve = e.target.closest("[data-ver]");
+    if (ve) resalta([ve.dataset.ver]);
     if (ev) { evAct = +ev.dataset.ev; ponAnio(EV[evAct][0]); resalta(EV[evAct][2]); pintar(); const el = document.querySelector(`[data-ev="${evAct}"]`); el && el.scrollIntoView({ block: "nearest" }); }
     if (ta) { tarAct = ta.dataset.tar; resalta(TAR[tarAct][1]); pintar(); if (listo) vista(tarAct === "p7" ? "oeste" : tarAct === "a3" || tarAct === "a1" ? "rios" : "plano"); }
   };

@@ -4,13 +4,14 @@ Portal interactivo sobre la historia y los planes del municipio de Chía, Cundin
 
 ## Qué contiene
 
-Un solo mapa con un control de tiempo que va de la época muisca a 2026 y cinco capítulos.
+Un solo mapa con un control de tiempo que va de la época muisca a 2026 y seis capítulos.
 
 1. **Historia.** Dieciséis hitos, desde el cacicazgo de Chía hasta las decisiones judiciales de 2026.
 2. **Gente.** Población anual del DANE de 1985 a 2025, censos de 1951 a 2018, estructura por edad y sexo y comparación con Sabana Centro y Sabana Occidente.
 3. **Hacienda.** Recaudo por impuesto de 1984 a 2025 en pesos constantes, gasto e inversión.
-4. **Agua.** Río Frío, PTAR Chía I y II, Sentencia del río Bogotá y Chucua de Fagua.
-5. **Planes y obras.** POT de 2000 y de 2016 y su trámite judicial, Troncal de los Andes, Autopista Norte, conexiones por el occidente y territorio del resguardo muisca.
+4. **Suelo.** Predios por tamaño de 2010 a 2019, estructura predial por vereda y densidad predial, según el diagnóstico del POT de 2020.
+5. **Agua.** Río Frío, PTAR Chía I y II, Sentencia del río Bogotá y Chucua de Fagua.
+6. **Planes y obras.** POT de 2000 y de 2016 y su trámite judicial, Troncal de los Andes, Autopista Norte, conexiones por el occidente y territorio del resguardo muisca.
 
 Incluye un recorrido automático de 30 segundos con pausa y repetición, y versiones en español, portugués, francés, chino mandarín y árabe. La versión validada es la española. Las demás son traducciones de apoyo pendientes de revisión por hablantes nativos.
 
