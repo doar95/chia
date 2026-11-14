@@ -85,7 +85,9 @@
   const PANIO = { 2010: [4703, 2056, 2806, 1431, 885, 463], 2011: [5112, 2127, 2873, 1422, 886, 465], 2012: [5403, 2164, 2894, 1431, 880, 467], 2013: [5834, 2270, 2914, 1429, 882, 468], 2014: [6409, 2399, 2947, 1427, 880, 461], 2015: [5728, 2199, 2579, 1219, 786, 460], 2016: [7446, 2573, 2931, 1434, 804, 454], 2017: [7807, 2691, 2987, 1448, 808, 451], 2018: [10147, 4226, 4325, 2174, 1120, 676], 2019: [10542, 4250, 4314, 2193, 1121, 726] };
   const PVER = { "Fagua": [625, 319, 549, 316, 63, 74], "Tiquiza": [1332, 150, 202, 141, 51, 42], "Fonqueta": [1133, 387, 365, 198, 39, 27], "Cerca De Piedra": [919, 347, 330, 136, 50, 10], "La Balsa": [2235, 789, 930, 259, 43, 108], "Yerbabuena": [99, 240, 634, 398, 680, 246], "Fusca": [77, 75, 157, 284, 135, 159] };
   const DENS = [["Fusca", 672, 1443, 0.47], ["Yerbabuena", 1565, 2421, 0.65], ["Fagua", 1343, 695, 1.93], ["Tíquiza", 1325, 484, 2.74], ["La Balsa", 3214, 838, 3.84], ["Fonquetá", 1654, 385, 4.29], ["Cerca de Piedra", 1663, 336, 4.96], ["Bojacá", 6321, 838, 7.54], ["U", 27710, 562, 49.31], ["UMC", 3452, 41, 84.78]];
-  const GEO = { alt: true, cur: true, agua: true, qos: false, bos: true, per: false, cul: false, pre: false, av: false };
+  const GEO = { alt: false, cur: false, agua: false, qos: false, bos: false, per: false, cul: false, pre: false, av: false };
+  const SW = { alt: "linear-gradient(90deg,#1d3b4f,#2f6b5e,#8fb47a,#e3b04b,#dd7a55,#efe9dc)", cur: "#8a94a3", agua: "#63b8c4", qos: "#8fd0d8", bos: "#3f8a57", per: "#ff5c8a", cul: "linear-gradient(90deg,#c9b458 50%,#efe9dc 50%)", pre: "linear-gradient(90deg,#e3b04b,#dd7a55,#8fb47a,#b79ad6)", av: "linear-gradient(90deg,#23405c,#63b8c4,#e3b04b,#dd7a55)" };
+  let geoVisto = false;
   const GEOOK = { alt: true, cur: !!window.mlcontour, agua: !!window.CHIA_GEO_AGUA, qos: !!window.CHIA_GEO_QOSM, bos: !!window.CHIA_GEO_BOSQUE, per: true, cul: !!window.CHIA_GEO_CULT, pre: true, av: true };
   const VNOM = { "Fonqueta": "Fonquetá", "Tiquiza": "Tíquiza", "Cerca De Piedra": "Cerca de Piedra", "Calahorra 1": "Calahorra" };
 
@@ -197,11 +199,9 @@
       h += `<h2>${k.ct4}</h2><table><tr><th></th><th>${k.h[0]}</th><th>${k.h[1]}</th><th>${k.h[2]}</th></tr>${["hab", "com", "agro", "lote", "otros"].map((d) => { const r = C.dest.find((x) => x.d === d); return `<tr><td>${k.dest[d]}</td><td>${nf(r.n)}</td><td>${nf(r.av)}</td><td>${nf(r.p50)}</td></tr>`; }).join("")}</table>${fts(["igac18"])}<p><a href="datos/catastro_zona_2018.csv" download>${t.ui.download} ${k.zo}</a> · <a href="datos/catastro_manzana_2018.csv" download>${k.ma}</a></p><p>${k.p}</p>${fts(["diag", "icde"])}`;
     } else if (cap === 6) {
       const g = t.geo, sw = { alt: "linear-gradient(90deg,#1d3b4f,#2f6b5e,#8fb47a,#e3b04b,#dd7a55,#efe9dc)", cur: "#cfd8e3", agua: "#63b8c4", qos: "#8fd0d8", bos: "#3f8a57", per: "#ff5c8a", cul: "linear-gradient(90deg,#c9b458 50%,#efe9dc 50%)", pre: "linear-gradient(90deg,#e3b04b,#dd7a55,#8fb47a,#b79ad6)", av: "linear-gradient(90deg,#23405c,#63b8c4,#e3b04b,#dd7a55)" };
-      h += `<p>${g.g1}</p><div class="alt-box"><span>${g.cursor}</span><b id="alt-v">–</b></div>`;
-      h += Object.keys(GEO).filter((k) => GEOOK[k]).map((k) => `<label class="capa"><input type="checkbox" data-geo="${k}" ${GEO[k] ? "checked" : ""}><i style="background:${sw[k]}"></i><span>${g.lay[k]}</span></label>`).join("");
-      h += `<div class="ley" style="margin-top:10px">${["#e3b04b", "#dd7a55", "#8fb47a", "#b79ad6", "#63b8c4", "#4a5566"].map((c, i) => `<span><i style="background:${c}"></i>${g.dest[i]}</span>`).join("")}</div>`;
+      h += `<p>${g.g1}</p>`;
       h += `<p class="nota" style="margin-top:10px">${g.osm}</p>${fts(["osm", "gfc"])}`;
-      h += `<h2>${g.lay.pre}</h2><p>${g.pre}</p>${fts(["igac26", "igac18"])}<h2>${g.lay.av}</h2><p>${g.av}</p><div class="ley" style="direction:ltr"><span>${nf(20000)}</span><span style="flex:1;height:10px;border-radius:5px;background:${sw.av}"></span><span>${nf(1000000)}</span></div>${fts(["igac18"])}<h2>${g.relT}</h2><p>${g.rel}${GEOOK.agua || GEOOK.bos ? " " + g.rel2 : ""}</p>${fts(GEOOK.agua ? ["aws", "igac25"] : ["aws"])}<p><a href="datos/predios_2026.geojson" download>${t.ui.download}: predios_2026.geojson</a> · <a href="datos/avaluo_rejilla_2018.geojson" download>avaluo_rejilla_2018.geojson</a></p>`;
+      h += `<h2>${g.lay.pre}</h2><div class="ley">${["#e3b04b", "#dd7a55", "#8fb47a", "#b79ad6", "#63b8c4", "#4a5566"].map((c, i) => `<span><i style="background:${c}"></i>${g.dest[i]}</span>`).join("")}</div><p>${g.pre}</p>${fts(["igac26", "igac18"])}<h2>${g.lay.av}</h2><p>${g.av}</p><div class="ley" style="direction:ltr"><span>${nf(20000)}</span><span style="flex:1;height:10px;border-radius:5px;background:${sw.av}"></span><span>${nf(1000000)}</span></div>${fts(["igac18"])}<h2>${g.relT}</h2><p>${g.rel}${GEOOK.agua || GEOOK.bos ? " " + g.rel2 : ""}</p>${fts(GEOOK.agua ? ["aws", "igac25"] : ["aws"])}<p><a href="datos/predios_2026.geojson" download>${t.ui.download}: predios_2026.geojson</a> · <a href="datos/avaluo_rejilla_2018.geojson" download>avaluo_rejilla_2018.geojson</a></p>`;
     } else {
       const grupo = cap === 4 ? t.agua : t.planes;
       h += Object.keys(grupo).map((k) => `<div class="tar ${tarAct === k ? "act" : ""}" data-tar="${k}"><h3>${grupo[k][0]}</h3><p>${grupo[k][1]}</p>${fts(TAR[k][0])}</div>`).join("");
@@ -215,9 +215,11 @@
     $("t-title").textContent = t.ui.title; $("t-sub").textContent = t.ui.sub;
     $("b-tour").textContent = "▶ " + t.ui.tour; $("b-src").textContent = t.ui.src; $("b-data").textContent = "⬇ " + t.ui.data; $("b-glos").textContent = t.ped.gloss; $("b-tema").textContent = tema === "claro" ? "☾ " + t.ped.dark : "☀ " + t.ped.light;
     $("rec-rep").textContent = t.ui.replay; $("rec-fin").textContent = t.ui.skip;
-    $("caps").innerHTML = t.ui.chapters.map((n, i) => `<button role="tab" aria-selected="${i === cap}" data-c="${i}">${n}</button>`).join("");
+    $("caps").innerHTML = [0, 6, 1, 2, 3, 4, 5].map((i) => `<button role="tab" aria-selected="${i === cap}" data-c="${i}">${t.ui.chapters[i]}</button>`).join("");
     document.querySelectorAll("#idi button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.l === lang));
-    $("leym").innerHTML = `<div><i style="border-color:#e3b04b"></i>${t.ui.lgChia}</div><div><i style="border-color:#63b8c4"></i>${t.ui.lgCentro}</div><div><i style="border-color:#8fb47a"></i>${t.ui.lgOcc}</div><div><i style="border-color:#e3b04b;border-top-style:dotted"></i>${t.ui.lgVer}</div><div style="margin-top:4px">${t.ui.legend}</div>` + (cap === 3 ? `<div style="display:block;margin-top:8px">${t.cat.ct1}<span style="display:block;height:10px;border-radius:5px;margin:5px 0 2px;background:linear-gradient(90deg,#23405c,#63b8c4,#e3b04b,#dd7a55)"></span><span style="display:flex;justify-content:space-between;direction:ltr"><span>${nf(20000)}</span><span>${nf(900000)}</span></span></div>` : "");
+    const leyHtml = `<div><i style="border-color:#e3b04b"></i>${t.ui.lgChia}</div><div><i style="border-color:#63b8c4"></i>${t.ui.lgCentro}</div><div><i style="border-color:#8fb47a"></i>${t.ui.lgOcc}</div><div><i style="border-color:#e3b04b;border-top-style:dotted"></i>${t.ui.lgVer}</div><div class="lt">${t.ui.legend}</div>`;
+    const ab = $("capas-d") ? $("capas-d").open : innerWidth >= 820;
+    $("capas").innerHTML = `<details id="capas-d" ${ab ? "open" : ""}><summary>${t.ped.layers}</summary><div class="alt-box"><span>${t.geo.cursor}</span><b id="alt-v">–</b></div>${Object.keys(GEO).filter((k) => GEOOK[k]).map((k) => `<label class="capa"><input type="checkbox" data-geo="${k}" ${GEO[k] ? "checked" : ""}><i style="background:${SW[k]}"></i><span>${t.geo.lay[k]}</span></label>`).join("")}<div class="leyc">${leyHtml}</div></details>`;
     pintar(); cabAnio();
   }
   function cabAnio() {
@@ -243,12 +245,12 @@
   const cargado = {};
   async function trae(src, url) { if (cargado[src]) return; cargado[src] = 1; try { const j = await fetch(url).then((r) => r.json()); map.getSource(src).setData(j); } catch (e) { cargado[src] = 0; } }
   function capasGeo() {
-    if (!listo) return; const on = cap === 6;
+    if (!listo) return; const on = true, geo = cap === 6;
     const vis = (id, v) => map.getLayer(id) && map.setLayoutProperty(id, "visibility", v ? "visible" : "none");
     vis("qos", on && GEO.qos); vis("per", on && GEO.per); vis("cul", on && GEO.cul); vis("alt", on && GEO.alt); vis("cur", on && GEO.cur); vis("bos", on && GEO.bos); vis("agua", on && GEO.agua); vis("agua-l", on && GEO.agua); vis("pre", on && GEO.pre); vis("av", on && GEO.av);
     if (on && GEO.pre) trae("pred", "datos/predios_2026.geojson"); if (on && GEO.av) trae("rej", "datos/avaluo_rejilla_2018.geojson");
-    ["pts", "pts-h", "mun-f"].forEach((id) => vis(id, !on));
-    document.querySelectorAll(".etq.cerro").forEach((e) => e.style.display = on ? "" : "none");
+    ["pts", "pts-h", "mun-f"].forEach((id) => vis(id, !geo));
+    document.querySelectorAll(".etq.cerro").forEach((e) => e.style.display = geo || GEO.alt || GEO.cur ? "" : "none");
   }
   function capaCat() { if (listo && map.getLayer("ver-cat")) map.setLayoutProperty("ver-cat", "visibility", cap === 3 ? "visible" : "none"); }
   function resalta(v) {
@@ -294,7 +296,7 @@
       const altura = async (ll) => { const Z = 12, n = 2 ** Z, xf = (ll.lng + 180) / 360 * n, la = ll.lat * Math.PI / 180, yf = (1 - Math.log(Math.tan(la) + 1 / Math.cos(la)) / Math.PI) / 2 * n, tx = Math.floor(xf), ty = Math.floor(yf), k = tx + "/" + ty;
         if (!tiles[k]) tiles[k] = new Promise((ok) => { const im = new Image(); im.crossOrigin = "anonymous"; im.onload = () => { try { const c = document.createElement("canvas"); c.width = c.height = 256; const x = c.getContext("2d", { willReadFrequently: true }); x.drawImage(im, 0, 0); ok(x.getImageData(0, 0, 256, 256).data); } catch (e) { ok(null); } }; im.onerror = () => ok(null); im.src = `https://s3.amazonaws.com/elevation-tiles-prod/terrarium/${Z}/${tx}/${ty}.png`; });
         const d = await tiles[k]; if (!d) return null; const px = Math.min(255, Math.floor((xf - tx) * 256)), py = Math.min(255, Math.floor((yf - ty) * 256)), i = (py * 256 + px) * 4; return d[i] * 256 + d[i + 1] + d[i + 2] / 256 - 32768; };
-      map.on("mousemove", (e) => { if (cap !== 6) return; const now = Date.now(); if (now - tAlt < 80) return; tAlt = now; altura(e.lngLat).then((z) => { const el = $("alt-v"); if (el && z != null && z > -500) el.textContent = nf(Math.round(z)) + " m"; }); });
+      map.on("mousemove", (e) => { if (!$("alt-v")) return; const now = Date.now(); if (now - tAlt < 80) return; tAlt = now; altura(e.lngLat).then((z) => { const el = $("alt-v"); if (el && z != null && z > -500) el.textContent = nf(Math.round(z)) + " m"; }); });
       map.addSource("mun", { type: "geojson", data: D.mun });
       map.addSource("ver", { type: "geojson", data: D.ver });
       map.addSource("pts", { type: "geojson", data: puntos });
@@ -331,7 +333,7 @@
   }
   const VISTAS = { region: { center: [-74.16, 4.86], zoom: 9.3, pitch: 0, bearing: 0 }, chia: { center: [-74.058, 4.868], zoom: 11.7, pitch: 35, bearing: -12 }, oeste: { center: [-74.078, 4.858], zoom: 12.7, pitch: 55, bearing: 70 }, rios: { center: [-74.052, 4.84], zoom: 12.6, pitch: 50, bearing: -30 }, plano: { center: [-74.045, 4.868], zoom: 12, pitch: 0, bearing: 0 } };
   function vista(k, ms) {
-    const v = Object.assign({}, VISTAS[k]); if (innerWidth < 820) { v.zoom -= 0.8; v.padding = { bottom: innerHeight * 0.42, top: 0, left: 0, right: 0 }; } else v.padding = { left: 520, top: 0, right: 0, bottom: 60 };
+    const v = Object.assign({}, VISTAS[k]); if (innerWidth < 820) { v.zoom -= 0.8; v.padding = { bottom: innerHeight * 0.42, top: 0, left: 0, right: 0 }; } else v.padding = { left: document.body.classList.contains("amplio") ? Math.round(innerWidth * 0.5) : 580, right: 330, top: 0, right: 0, bottom: 60 };
     if (ms === 0) map.jumpTo(v); else map.flyTo(Object.assign(v, { duration: ms || 2600, essential: true }));
   }
 
@@ -402,8 +404,9 @@
 
   /* Eventos */
   $("idi").onclick = (e) => { const l = e.target.dataset.l; if (!l) return; lang = l; try { localStorage.setItem("chia-idioma", l); } catch (x) {} interfaz(); if ($("rec").classList.contains("ab")) recPaso(Math.max(rec.i, 0)); };
-  $("caps").onclick = (e) => { const c = e.target.dataset.c; if (c == null) return; cap = +c; evAct = -1; tarAct = null; resalta(null); interfaz(); capaCat(); capasGeo(); $("cont").scrollTop = 0; if (listo) vista(cap === 1 ? "region" : cap === 4 ? "rios" : cap === 3 ? "plano" : "chia"); };
-  $("cont").onchange = (e) => { const k = e.target.dataset && e.target.dataset.geo; if (!k) return; GEO[k] = e.target.checked; capasGeo(); };
+  $("caps").onclick = (e) => { const c = e.target.dataset.c; if (c == null) return; cap = +c; if (cap === 6 && !geoVisto) { geoVisto = true; ["alt", "cur", "agua", "bos"].forEach((k) => GEO[k] = true); } evAct = -1; tarAct = null; resalta(null); interfaz(); capaCat(); capasGeo(); $("cont").scrollTop = 0; if (listo) vista(cap === 1 ? "region" : cap === 4 ? "rios" : cap === 3 ? "plano" : "chia"); };
+  $("b-amp").onclick = () => { document.body.classList.toggle("amplio"); $("b-amp").textContent = document.body.classList.contains("amplio") ? "⇤" : "⇥"; if (listo) vista(cap === 1 ? "region" : "chia"); };
+  $("capas").onchange = $("cont").onchange = (e) => { const k = e.target.dataset && e.target.dataset.geo; if (!k) return; GEO[k] = e.target.checked; capasGeo(); };
   $("cont").onclick = (e) => {
     if (e.target.closest(".capa")) return;
     if (e.target.closest("a")) return;

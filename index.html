@@ -17,7 +17,7 @@
 <meta name="twitter:image" content="https://doar95.github.io/chia/vista.png">
 <meta name="theme-color" content="#f6f4ee">
 <link rel="icon" href="icono.svg" type="image/svg+xml">
-<link rel="stylesheet" href="vendor/maplibre-gl.css?v=11">
+<link rel="stylesheet" href="vendor/maplibre-gl.css?v=13">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -52,10 +52,11 @@ h1{font-family:var(--serif);font-weight:600;font-size:clamp(22px,2.6vw,34px);mar
 .idi{display:flex;border:1px solid var(--linea);border-radius:999px;overflow:hidden;background:var(--chip)}
 .idi button{border:0;background:none;padding:8px 11px;font-size:14.5px;color:var(--tenue)}
 .idi button[aria-pressed=true]{background:var(--selfondo);color:var(--sobreoro);font-weight:600}
-.lat{position:fixed;inset-block:126px 128px;inset-inline-start:22px;width:min(500px,calc(100vw - 44px));background:var(--panel);border:1px solid var(--linea);border-radius:16px;display:flex;flex-direction:column;z-index:4;backdrop-filter:blur(8px);overflow:hidden}
-.caps{display:flex;flex-wrap:wrap;gap:1px;padding:8px;border-bottom:1px solid var(--linea)}
-.caps button{border:0;background:none;padding:6px 8px;border-radius:999px;color:var(--tenue);white-space:nowrap;font-size:14.5px}
-.caps button[aria-selected=true]{background:var(--sel);color:var(--luna);font-weight:600}
+.lat{position:fixed;inset-block:180px 100px;inset-inline-start:22px;width:min(560px,calc(100vw - 44px));background:var(--panel);border:1px solid var(--linea);border-radius:16px;display:flex;flex-direction:column;z-index:4;backdrop-filter:blur(8px);overflow:hidden}
+.caps{position:fixed;inset-block-start:122px;inset-inline-start:22px;z-index:5;display:flex;flex-wrap:wrap;gap:6px;max-width:calc(100vw - 420px)}
+.caps button{border:1px solid var(--linea);background:var(--chip);padding:9px 18px;border-radius:999px;color:var(--luna);white-space:nowrap;font-size:16.5px;font-weight:500;backdrop-filter:blur(6px);box-shadow:0 2px 10px #00000014}
+.caps button:hover{border-color:var(--oro)}
+.caps button[aria-selected=true]{background:var(--selfondo);color:var(--sobreoro);border-color:var(--selfondo);font-weight:600}
 .cont{padding:16px 18px 20px;overflow-y:auto;flex:1}
 .cont h2{font-family:var(--serif);font-weight:600;font-size:21px;margin:18px 0 6px}
 .cont h2:first-child{margin-top:0}
@@ -139,19 +140,33 @@ body.enrec .lat,body.enrec .tiempo,body.enrec .leym,body.enrec .anio,body.enrec 
 .dls{display:grid;gap:8px}
 .dls a{display:flex;justify-content:space-between;gap:12px;border:1px solid var(--linea);border-radius:10px;padding:10px 14px;text-decoration:none;color:var(--luna)}
 .dls a:hover{border-color:var(--oro)}.dls span{color:var(--tenue);font-size:13px;white-space:nowrap}.dls b{font-weight:500}
+.amp{position:absolute;inset-block-start:8px;inset-inline-end:8px;z-index:2;width:34px;height:34px;border-radius:50%;border:1px solid var(--linea);background:var(--caja);color:var(--tenue);font-size:17px;line-height:1}
+.amp:hover{border-color:var(--oro);color:var(--oro)}
+@media (min-width:821px){body.amplio .lat{width:min(48vw,900px)}body.amplio .cont{font-size:17.5px}body.amplio .cont svg{max-width:640px;display:block}}
+.guia{margin-inline-end:34px!important}
+.capas{position:fixed;inset-block-end:100px;inset-inline-end:22px;z-index:4;width:318px;max-height:calc(100vh - 395px);overflow:auto;background:var(--panel);border:1px solid var(--linea);border-radius:14px;padding:4px 14px 8px;box-shadow:0 6px 28px #0000001f;backdrop-filter:blur(8px)}
+.capas summary{font-family:var(--serif);font-weight:600;font-size:18px;padding:8px 0;cursor:pointer}
+.capas .alt-box{margin:2px 0 6px;padding:6px 10px;font-size:14px}.capas .alt-box b{font-size:19px}
+.capas .capa{padding:4px 2px;font-size:14px;line-height:1.25}
+.leyc{font-size:13.5px;color:var(--tenue);padding-top:8px}.leyc div{display:flex;align-items:center;gap:10px;margin:3px 0}.leyc i{width:22px;height:0;border-top:3px solid;flex:none}.leyc .lt{display:block;margin-top:6px;line-height:1.35}
+body.enrec .capas,body.enrec .caps{opacity:0;pointer-events:none}
 .trad{font-size:12px;color:var(--tenue);border:1px dashed var(--linea);border-radius:8px;padding:6px 10px;margin:0 0 12px}
 .maplibregl-ctrl-attrib{font-size:10px}
-.maplibregl-ctrl-top-right{top:290px;right:16px}
-.maplibregl-ctrl-bottom-left{bottom:74px;left:530px}
-[dir=rtl] .maplibregl-ctrl-bottom-left{left:auto;right:530px}
-[dir=rtl] .maplibregl-ctrl-top-right{right:auto;left:16px}
+.maplibregl-ctrl-top-right{top:auto;bottom:100px;right:356px}
+.maplibregl-ctrl-bottom-left{bottom:74px;left:590px}
+[dir=rtl] .maplibregl-ctrl-bottom-left{left:auto;right:590px}
+[dir=rtl] .maplibregl-ctrl-top-right{right:auto;left:356px}
 body.enrec .maplibregl-control-container{opacity:0}
 @media (max-width:820px){
   .cab{flex-direction:column;padding:12px 14px;gap:8px}h1{white-space:normal}.acc{justify-content:flex-start}
   .sub{display:none}
   .lat{inset-block:auto 96px;inset-inline:10px;width:auto;height:44vh}
   .anio{inset-block-start:128px;inset-inline-end:14px}
-  .leym{display:none}.tiempo{padding:8px 12px 12px}
+  .tiempo{padding:8px 12px 12px}
+  .caps{position:fixed;inset-block-start:auto;inset-block-end:calc(44vh + 100px);inset-inline:10px;max-width:none;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}.caps button{padding:7px 13px;font-size:14.5px}
+  .lat{inset-block:auto 96px!important}.amp{display:none}
+  .idi{max-width:100%;overflow-x:auto;scrollbar-width:none}.idi button{white-space:nowrap}.pld{padding:6px 11px;font-size:13.5px}
+  .capas{inset-block-end:auto;inset-block-start:206px;inset-inline-end:10px;width:min(300px,calc(100vw - 20px));max-height:calc(56vh - 260px)}
   .maplibregl-ctrl-top-right{display:none}.maplibregl-ctrl-bottom-left{left:8px;bottom:60px}
 }
 @media (prefers-reduced-motion:reduce){.rec .txt>*{animation:none}}
@@ -182,12 +197,13 @@ body.enrec .maplibregl-control-container{opacity:0}
 
 <div class="anio" aria-live="polite"><div class="n" id="anio-n"></div><div class="p" id="anio-p"></div><div class="l" id="anio-l"></div></div>
 
+<nav class="caps" id="caps" role="tablist"></nav>
 <aside class="lat">
-  <nav class="caps" id="caps" role="tablist"></nav>
+  <button class="amp" id="b-amp" aria-label="Ampliar panel">⇥</button>
   <div class="cont" id="cont"></div>
 </aside>
 
-<div class="leym" id="leym"></div>
+<div class="capas" id="capas"></div>
 
 <footer class="tiempo">
   <button class="bt" id="b-play" aria-label="Reproducir">▶</button>
@@ -200,12 +216,12 @@ body.enrec .maplibregl-control-container{opacity:0}
 
 <div class="modal" id="modal"><div class="caja" id="caja"></div></div>
 
-<script src="vendor/maplibre-gl.js?v=11"></script>
+<script src="vendor/maplibre-gl.js?v=13"></script>
 <script src="vendor/maplibre-contour.js"></script>
-<script src="datos/geografia.js?v=11"></script>
-<script src="datos/geografia_osm.js?v=11"></script>
-<script src="datos/datos.js?v=11"></script>
-<script src="contenido/es.js?v=11"></script><script src="contenido/en.js?v=11"></script><script src="contenido/pt.js?v=11"></script><script src="contenido/fr.js?v=11"></script><script src="contenido/zh.js?v=11"></script><script src="contenido/ar.js?v=11"></script>
-<script src="app.js?v=11"></script>
+<script src="datos/geografia.js?v=13"></script>
+<script src="datos/geografia_osm.js?v=13"></script>
+<script src="datos/datos.js?v=13"></script>
+<script src="contenido/es.js?v=13"></script><script src="contenido/en.js?v=13"></script><script src="contenido/pt.js?v=13"></script><script src="contenido/fr.js?v=13"></script><script src="contenido/zh.js?v=13"></script><script src="contenido/ar.js?v=13"></script>
+<script src="app.js?v=13"></script>
 </body>
 </html>
