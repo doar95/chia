@@ -1,7 +1,7 @@
 /* Chía, memoria y porvenir. Lógica del portal. */
 (function () {
   const D = window.CHIA_DATOS, TX = window.CHIA_TXT;
-  const LOC = { es: "es-CO", pt: "pt-BR", fr: "fr-FR", zh: "zh-CN", ar: "ar-u-nu-latn" };
+  const LOC = { es: "es-CO", en: "en-US", pt: "pt-BR", fr: "fr-FR", zh: "zh-CN", ar: "ar-u-nu-latn" };
   const $ = (id) => document.getElementById(id);
   let lang = "es", cap = 0, anio = 2026, evAct = -1, tarAct = null, map, listo = false;
   try { const g = localStorage.getItem("chia-idioma"); if (g && TX[g]) lang = g; } catch (e) {}
@@ -51,12 +51,14 @@
     igac25: ["IGAC, cartografía básica vectorial a escala 1:25.000", "https://www.colombiaenmapas.gov.co/?b=igac&u=0&t=23&servicio=206", "of"],
     osm: ["OpenStreetMap, datos colaborativos bajo licencia ODbL", "https://www.openstreetmap.org/copyright", "ac"],
     gfc: ["Universidad de Maryland, Global Forest Change, versión 1.11, Hansen y otros", "https://glad.earthengine.app/view/global-forest-change", "ac"],
+    tur: ["Alcaldía de Chía, Dirección de Turismo, guía Chía Natural 2024 a 2027", "https://turismo.chia-cundinamarca.gov.co/2024/pdf/ChiaTurismodenaturalezaFin_co.pdf", "of"],
+    epc: ["El Periódico de Chía, cierre catastral del IGAC y predial de 2025", "https://elperiodicodechia.com/chia/chia-al-rojo-vivo-el-impuesto-predial-2025-un-cobro-bajo-la-sombra-de-la-ilegalidad-y-la-contradiccion-oficial/", "pr"],
     aws: ["Relieve: Mapzen Terrain Tiles en AWS Open Data, a partir de SRTM y otras fuentes públicas", "https://registry.opendata.aws/terrain-tiles/", "ac"],
     a227: ["Concejo de Chía, Acuerdo 227 de 2024", "https://chia-cundinamarca.gov.co/acuerdos/2024/ACUERDO%20227.pdf", "of"]
   };
   /* Hitos: año, fuentes, veredas que se resaltan */
   const EV = [
-    [1500, ["esap"], null], [1537, ["cont"], null], [1815, ["esap"], null], [1857, ["esap"], null], [1886, ["c1886"], null],
+    [1500, ["esap", "tur"], null], [1537, ["cont"], null], [1815, ["esap"], null], [1857, ["esap"], null], [1886, ["c1886"], null],
     [1951, ["pob"], null], [1954, ["mfmp"], null], [1989, ["tesis"], null], [2000, ["seg"], "*"],
     [2013, ["dts", "uptc", "res"], ["Fonqueta", "Cerca De Piedra"]], [2014, ["pomca", "tesis"], "*"], [2016, ["a164", "etpot"], "*"],
     [2018, ["accen", "alctr"], null], [2019, ["a164", "pomca", "eesusp"], "*"], [2025, ["etpot", "al", "ettr"], "*"], [2026, ["ens", "tac"], null]
@@ -92,7 +94,7 @@
     const X = (x) => L + ((x - x0) / (x1 - x0)) * (w - L - R), Y = (y) => Tp + (1 - y / y1) * (h - Tp - B);
     let g = "";
     for (let i = 0; i <= 3; i++) { const y = (y1 / 1.08) * i / 3; g += `<line x1="${L}" x2="${w - R}" y1="${Y(y)}" y2="${Y(y)}" stroke="#22344a"/><text x="${L - 5}" y="${Y(y) + 3}" text-anchor="end">${nf(y, { notation: "compact" })}</text>`; }
-    [x0, 1995, 2005, 2015, x1].forEach((x) => g += `<text x="${X(x)}" y="${h - 4}" text-anchor="middle">${x}</text>`);
+    [x0, 1995, 2005, 2015, x1].filter((x, i, a) => x >= x0 && a.indexOf(x) === i).forEach((x) => g += `<text x="${X(x)}" y="${h - 4}" text-anchor="middle">${x}</text>`);
     const p = serie.map((d, i) => (i ? "L" : "M") + X(d[0]).toFixed(1) + " " + Y(d[1]).toFixed(1)).join("");
     const m = serie.find((d) => d[0] === marca);
     return `<svg viewBox="0 0 ${w} ${h}" width="100%" role="img" style="direction:ltr">${g}<path d="${p}L${X(x1)} ${Y(0)}L${X(x0)} ${Y(0)}Z" fill="${color}22"/><path d="${p}" fill="none" stroke="${color}" stroke-width="2"/>${m ? `<circle cx="${X(m[0])}" cy="${Y(m[1])}" r="4.5" fill="${color}" stroke="#0a1420" stroke-width="2"/>` : ""}</svg>`;
@@ -135,6 +137,12 @@
       const e = H.lo + i * H.step; if (Math.abs(e - Math.round(e)) < 0.01) g += `<text x="${L + i * bw}" y="${h - 4}" text-anchor="middle">${nf(Math.pow(10, e), { notation: "compact" })}</text>`; }
     return `<svg viewBox="0 0 ${w} ${h}" width="100%" role="img" style="direction:ltr">${g}</svg>`;
   }
+  function partes(w, h, cols, marca) {
+    const f = D.fis.filter((d) => d.trib), L = 44, B = 18, R = 8, bw = (w - L - R) / f.length; let g = "";
+    [0, 50, 100].forEach((p) => { const y = (h - B) * (1 - p / 100); g += `<text x="${L - 5}" y="${Math.max(y + 3, 9)}" text-anchor="end">${p}%</text>`; });
+    f.forEach((d, i) => { let y = h - B; [d.pred, d.ica, d.otros].forEach((v, k) => { const hh = (v || 0) / d.trib * (h - B); y -= hh; g += `<rect x="${L + i * bw}" y="${y}" width="${bw + .3}" height="${hh}" fill="${cols[k]}" opacity="${d.a === marca ? 1 : .75}"/>`; }); if (d.a % 10 === 0 || d.a === 2025) g += `<text x="${L + i * bw + bw / 2}" y="${h - 4}" text-anchor="middle">${d.a}</text>`; });
+    return `<svg viewBox="0 0 ${w} ${h}" width="100%" role="img" style="direction:ltr">${g}</svg>`;
+  }
   function ranking(a) {
     const fs = D.mun.features.map((m) => [m.properties, (D.pop[m.properties.c] || {})[a]]).filter((x) => x[1]).sort((x, y) => y[1][0] - x[1][0]).slice(0, 8);
     const mx = fs[0][1][0];
@@ -154,7 +162,15 @@
       h += `<h2>${t.gente.censT}</h2><table><tr><th>${t.ui.census}</th><th>${t.ui.total}</th><th>${t.ui.urban}</th><th>${t.ui.rural}</th></tr>${CENSOS.map((r) => `<tr><td>${r[0]}</td><td>${nf(r[1])}</td><td>${nf(r[2])}</td><td>${nf(r[3])}</td></tr>`).join("")}</table><p class="nota">${t.gente.censN}</p>${fts(["pob", "danef"])}`;
       h += `<h2>${t.gente.pirT}</h2>${piramide(370, 300)}<p class="nota">${t.gente.pirN}</p>${fts(["danep"])}`;
     } else if (cap === 2) {
-      h += `<p>${t.hacienda.h1}</p><h2>${t.hacienda.chartT}</h2><div class="ley">${t.hacienda.k.map((k, i) => `<span><i style="background:${["#e3b04b", "#63b8c4", "#b79ad6"][i]}"></i>${k}</span>`).join("")}</div>${apilada(370, 190, Math.min(Math.max(anio, 1984), 2025))}<p class="nota">${t.ui.mill}. ${t.hacienda.n}</p>${fts(["dnp"])}<p>${t.hacienda.h2}</p><p>${t.hacienda.h3}</p><p>${t.hacienda.debt}</p>${fts(["a227"])}<p><a href="datos/hacienda.csv" download>${t.ui.download}</a></p>`;
+      const H = t.hacienda, x = t.hx, cols = ["#e3b04b", "#63b8c4", "#b79ad6"], F = D.fis.filter((d) => d.trib != null), u = F[F.length - 1];
+      const ay = Math.min(Math.max(anio, F[0].a), u.a), y = F.find((d) => d.a === ay) || u;
+      const kp = [[nf(Math.round(u.trib)), x.mi], [nf(u.pc / 1e6, { maximumFractionDigits: 1 }), x.mi], [nf(Math.round(u.pred / u.trib * 100)) + " %", ""], [nf(Math.round(u.inv / u.gas * 100)) + " %", ""]];
+      h += `<p>${H.h1}</p><div class="kpis">${kp.map((k, i) => `<div><b>${k[0]}</b><small>${k[1]}</small><span>${x.kpi[i]}</span></div>`).join("")}</div>`;
+      h += `<h2>${H.chartT}</h2><div class="ley">${H.k.map((k, i) => `<span><i style="background:${cols[i]}"></i>${k}</span>`).join("")}</div>${apilada(370, 190, ay)}`;
+      h += `<div class="aniofila"><b>${y.a}</b>${[y.pred, y.ica, y.otros].map((v, i) => `<span><i style="background:${cols[i]}"></i>${nf(Math.round(v || 0))}</span>`).join("")}</div><p class="nota">${x.yr}. ${t.ui.mill}. ${H.n}</p>${fts(["dnp"])}`;
+      h += `<h2>${x.defsT}</h2>${H.k.map((k, i) => `<div class="def"><i style="background:${cols[i]}"></i><div><b>${k}</b><p>${x.defs[i]}</p></div></div>`).join("")}`;
+      h += `<h2>${x.t2}</h2>${partes(370, 150, cols, ay)}<p>${H.h2}</p><p>${x.h4}</p>${fts(["dnp", "epc"])}`;
+      h += `<h2>${x.t3}</h2>${linea(F.filter((d) => d.pc).map((d) => [d.a, d.pc]), 370, 160, "#e3b04b", ay)}<p>${H.h3}</p><p>${H.debt}</p>${fts(["a227"])}<p><a href="datos/hacienda.csv" download>${t.ui.download}</a></p>`;
     } else if (cap === 3) {
       const z = t.suelo, cols = ["#f3d58a", "#e3b04b", "#dd7a55", "#b79ad6", "#63b8c4", "#8fb47a"];
       h += `<p>${z.s1}</p><h2>${z.t1}</h2><div class="ley">${RANGOS.map((r, i) => `<span><i style="background:${cols[i]}"></i>${r}</span>`).join("")}</div>${barrasAnio(370, 180, cols)}`;
@@ -186,7 +202,7 @@
     document.documentElement.lang = lang; document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
     document.title = t.ui.title;
     $("t-title").textContent = t.ui.title; $("t-sub").textContent = t.ui.sub;
-    $("b-tour").textContent = t.ui.tour; $("b-src").textContent = t.ui.src;
+    $("b-tour").textContent = "▶ " + t.ui.tour; $("b-src").textContent = t.ui.src; $("b-data").textContent = "⬇ " + t.ui.data;
     $("rec-rep").textContent = t.ui.replay; $("rec-fin").textContent = t.ui.skip;
     $("caps").innerHTML = t.ui.chapters.map((n, i) => `<button role="tab" aria-selected="${i === cap}" data-c="${i}">${n}</button>`).join("");
     document.querySelectorAll("#idi button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.l === lang));
@@ -299,12 +315,12 @@
       listo = true; actualizaPuntos(); vista("chia", 0);
       map.once("idle", actualizaPuntos); setTimeout(actualizaPuntos, 1500);
       setTimeout(() => { const at = document.querySelector(".maplibregl-ctrl-attrib"); at && at.classList.remove("maplibregl-compact-show"); }, 300);
-      if (!/sin-recorrido/.test(location.search)) setTimeout(recorrido, 700);
+      if (/recorrido=1/.test(location.search)) setTimeout(recorrido, 700);
     });
   }
   const VISTAS = { region: { center: [-74.16, 4.86], zoom: 9.3, pitch: 0, bearing: 0 }, chia: { center: [-74.058, 4.868], zoom: 11.7, pitch: 35, bearing: -12 }, oeste: { center: [-74.078, 4.858], zoom: 12.7, pitch: 55, bearing: 70 }, rios: { center: [-74.052, 4.84], zoom: 12.6, pitch: 50, bearing: -30 }, plano: { center: [-74.045, 4.868], zoom: 12, pitch: 0, bearing: 0 } };
   function vista(k, ms) {
-    const v = Object.assign({}, VISTAS[k]); if (innerWidth < 820) { v.zoom -= 0.8; v.padding = { bottom: innerHeight * 0.42, top: 0, left: 0, right: 0 }; } else v.padding = { left: 460, top: 0, right: 0, bottom: 60 };
+    const v = Object.assign({}, VISTAS[k]); if (innerWidth < 820) { v.zoom -= 0.8; v.padding = { bottom: innerHeight * 0.42, top: 0, left: 0, right: 0 }; } else v.padding = { left: 520, top: 0, right: 0, bottom: 60 };
     if (ms === 0) map.jumpTo(v); else map.flyTo(Object.assign(v, { duration: ms || 2600, essential: true }));
   }
 
@@ -362,6 +378,13 @@
     h += `<p><a href="datos/poblacion.csv" download>${t.ui.download}: poblacion.csv</a> · <a href="datos/hacienda.csv" download>hacienda.csv</a> · <a href="https://github.com/doar95/chia" target="_blank" rel="noopener">GitHub</a></p>`;
     $("caja").innerHTML = h; $("modal").classList.add("ab"); $("m-x").onclick = () => $("modal").classList.remove("ab");
   }
+  function descargas() {
+    const t = T(), R = "https://github.com/doar95/chia", f = ["datos/poblacion.csv", "datos/hacienda.csv", "datos/catastro_zona_2018.csv", "datos/catastro_manzana_2018.csv", "datos/predios_2026.geojson", "datos/avaluo_rejilla_2018.geojson", "datos/datos.js", "datos/geografia.js", R + "/archive/refs/heads/main.zip", R];
+    const fmt = ["CSV", "CSV", "CSV", "CSV", "GeoJSON, 7 MB", "GeoJSON", "JS", "JS", "ZIP", "GitHub"];
+    $("caja").innerHTML = `<div style="display:flex;justify-content:space-between;gap:12px;align-items:start"><h2>${t.dl.t}</h2><button class="pld" id="m-x">${t.ui.close}</button></div><p>${t.dl.i}</p><div class="dls">${f.map((u, i) => `<a href="${u}" ${i < 8 ? "download" : 'target="_blank" rel="noopener"'}><b>${t.dl.it[i]}</b><span>${fmt[i]}</span></a>`).join("")}</div>`;
+    $("modal").classList.add("ab"); $("m-x").onclick = () => $("modal").classList.remove("ab");
+  }
+  $("b-data").onclick = descargas;
   $("b-src").onclick = modal; $("modal").onclick = (e) => { if (e.target.id === "modal") $("modal").classList.remove("ab"); };
 
   /* Eventos */

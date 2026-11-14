@@ -14,7 +14,7 @@ Un solo mapa con un control de tiempo que va de la época muisca a 2026 y siete 
 7. **Geografía.** Altitud, curvas de nivel, cuerpos de agua y bosque, predios del catastro de 2026 por destino económico y avalúo catastral de 2018 en celdas de 150 metros.
 6. **Planes y obras.** POT de 2000 y de 2016 y su trámite judicial, Troncal de los Andes, Autopista Norte, conexiones por el occidente y territorio del resguardo muisca.
 
-Incluye un recorrido automático de 30 segundos con pausa y repetición, y versiones en español, portugués, francés, chino mandarín y árabe. La versión validada es la española. Las demás son traducciones de apoyo pendientes de revisión por hablantes nativos.
+Incluye un recorrido automático de 30 segundos con pausa y repetición, y versiones en español, inglés, portugués, francés, chino mandarín y árabe. La versión validada es la española. Las demás son traducciones de apoyo pendientes de revisión por hablantes nativos.
 
 ## Criterio de fuentes
 

@@ -2,9 +2,9 @@ window.CHIA_TXT = window.CHIA_TXT || {};
 window.CHIA_TXT.pt = {
   ui: {
     title: "Chía, memória e porvir",
-    sub: "Cinco séculos de um município da Savana de Bogotá contados com documentos oficiais",
-    tour: "Percurso de 30 segundos",
-    src: "Fontes e método",
+    sub: "A Cidade da Lua. Cinco séculos de um município da Savana de Bogotá contados com documentos oficiais",
+    tour: "Resumo de 30 segundos",
+    src: "Fontes e método", data: "Dados e mapas",
     play: "Reproduzir", pause: "Pausar", replay: "Repetir", close: "Fechar", skip: "Entrar no mapa",
     chapters: ["História", "Gente", "Finanças", "Solo", "Água", "Planos e obras", "Geografia"],
     popLabel: "habitantes de Chía, série DANE",
@@ -20,7 +20,7 @@ window.CHIA_TXT.pt = {
     ha: "hectares", vereda: "Vereda", rank: "População da região em"
   },
   ev: [
-    ["O cacicado de Chía", "Antes da chegada europeia, Chía era um cacicado muísca de primeira ordem. Seu chefe, o psihipqua de Chía, era o sucessor do zipa de Bogotá e aliou-se aos recém-chegados durante a guerra que rompeu o equilíbrio de poder no altiplano."],
+    ["O cacicado de Chía", "Antes da chegada europeia, Chía era um cacicado muísca de primeira ordem. Seu chefe, o psihipqua de Chía, era o sucessor do zipa de Bogotá e aliou-se aos recém-chegados durante a guerra que rompeu o equilíbrio de poder no altiplano. Na língua chibcha, Chía quer dizer lua, e por isso é conhecida como a Cidade da Lua."],
     ["Fundação hispânica", "A administração municipal registra 24 de março de 1537 como data de fundação. O povoado ficou ligado ao caminho entre Santafé e Zipaquirá."],
     ["Povoado do cantão de Zipaquirá", "A Constituição da província de Cundinamarca de 1815 situou Chía no cantão de Zipaquirá, com Cajicá, Tabio, Sopó, Cota e Cogua, entre outros povoados."],
     ["De província de Bogotá a Estado de Cundinamarca", "Com a Nova Granada de 1832 o nome Cundinamarca desapareceu e a província passou a chamar-se Bogotá. Reapareceu em 1852 e, em 1857, o território tornou-se Estado de Cundinamarca, chamado Estado Soberano a partir de 1861."],
@@ -54,6 +54,8 @@ window.CHIA_TXT.pt = {
     debt: "A Câmara autorizou um limite de endividamento com o Acordo 227 de 2024. O saldo da dívida e seus indicadores legais ainda não estão incorporados neste portal.",
     n: "Valores em pesos constantes de 2025. Execuções orçamentárias do DNP de 1984 a 1999 e Operações Efetivas de Caixa de 2000 a 2025."
   },
+  hx: {"kpi": ["Arrecadação própria em 2025", "Por habitante", "Peso do imposto predial", "Investimento dentro da despesa"], "mi": "milhões", "defsT": "O que é cada imposto", "defs": ["Pago pelos donos de casas, lotes e sítios conforme o valor cadastral de cada imóvel.", "Pago por empresas e comércios sobre suas vendas dentro do município.", "Reúne os demais impostos municipais, como a taxa de licença de obras e a sobretaxa da gasolina."], "t2": "De que imposto vem cada peso", "t3": "Arrecadação por habitante, 1985 a 2025", "h4": "Em 2025 o imposto predial cresceu 33 por cento em termos reais frente a 2024. Segundo a imprensa local, nesse ano começaram a ser cobrados os valores da atualização cadastral que o IGAC encerrou em dezembro de 2024.", "yr": "Mova a barra de tempo para ver cada ano"},
+  dl: {"t": "Baixe os dados e os mapas", "i": "Todo o portal é aberto. Você pode baixar cada arquivo ou o repositório completo.", "it": ["População de 19 municípios, 1985 a 2025", "Finanças de Chía, 1984 a 2025", "Valor cadastral por zona, 2018", "Valor cadastral por quadra, 2018", "Imóveis de Chía, IGAC 2026", "Valor cadastral em grade, 2018", "Limites, veredas e séries do mapa", "Água e floresta, IGAC 1:25.000", "Tudo em um arquivo ZIP", "Repositório no GitHub"]},
   suelo: {"s1": "O diagnóstico do POT de 2020 conta 61.046 imóveis no cadastro de 2019, dos quais 33.711 são urbanos. Os imóveis com menos de 500 metros quadrados passaram de 4.703 em 2010 para 10.542 em 2019, o sinal mais claro da subdivisão do solo.", "t1": "Imóveis por tamanho, 2010 a 2019", "t2": "Tamanho dos imóveis em cada vereda, 2019", "t3": "Imóveis por hectare, 2020", "n": "O mesmo documento apresenta totais diferentes entre suas tabelas. Aqui cada tabela é reproduzida como aparece.", "p": "Os valores do solo por metro quadrado existem como zonas homogêneas geoeconômicas do cadastro, mas o município só os publica como mapas em imagem e o gestor cadastral os entrega mediante solicitação. Não se encontrou uma base aberta por zona, vereda ou quadra.", "u": "Urbano"},
   cat: {"c1": "O cadastro do IGAC com data de maio de 2018 registra 43.581 imóveis em Chía, com um valor cadastral total de 9,9 trilhões de pesos. O valor cadastral não é o preço de mercado e costuma ficar abaixo dele.", "ct1": "Valor cadastral por metro quadrado de terreno, 2018", "cn1": "Mediana e intervalo entre os quartis 25 e 75, em pesos de 2018. É o valor total do imóvel dividido pela área do terreno. Exclui propriedade horizontal e benfeitorias.", "ct2": "Distribuição do valor por metro quadrado", "ct3": "Zonas geoeconômicas urbanas", "cn3": "Mediana por código de zona geoeconômica do cadastro. Não há mapa público dessas zonas.", "ct4": "Por destinação econômica", "dest": {"hab": "Habitacional", "agro": "Agropecuário", "com": "Comercial", "lote": "Lotes", "otros": "Outros"}, "h": ["Imóveis", "Bilhões", "Mediana por m²"], "ru": "Rural", "ma": "por quadra ou setor", "zo": "por zona", "p": "Os valores de mercado por metro quadrado continuam sem fonte aberta. O que se mostra aqui é valor cadastral."},
   geo: {"g1": "Chía ocupa um trecho plano do altiplano, com o vale dos rios Bogotá e Frío no centro e cerros a leste e a oeste. Ative as camadas para ver o relevo, a água, a floresta e os imóveis.", "cursor": "Altitude sob o cursor", "lay": {"alt": "Altitude", "cur": "Curvas de nível", "agua": "Rios, riachos e corpos d'água", "qos": "Córregos e canais, OpenStreetMap", "bos": "Floresta", "per": "Perda de floresta 2001 a 2023", "cul": "Cultivos e estufas, OpenStreetMap", "pre": "Imóveis por destinação econômica", "av": "Valor cadastral por m², 2018"}, "dest": ["Habitacional", "Comercial", "Agropecuário", "Lotes", "Outros", "Sem dado"], "pre": "A base cadastral pública do IGAC de setembro de 2026 traz 32.322 imóveis em Chía, 15.451 urbanos e 16.871 rurais. A destinação econômica vem dos registros de 2018 e cruza com 22.338 deles. Os demais aparecem sem dado, na maioria por imóveis novos ou renumerados.", "av": "O valor é mostrado em células de cerca de 150 metros que reúnem cinco ou mais imóveis, nunca imóvel a imóvel. São valores cadastrais de 2018 em pesos daquele ano, não preços de mercado.", "relT": "Relevo e água", "rel": "A altitude e as curvas de nível são calculadas no seu navegador a partir de um modelo digital de elevação público com cerca de 30 metros de resolução.", "rel2": "Os corpos d'água e as florestas provêm da cartografia básica do IGAC na escala 1:25.000. Essa cartografia registra em Chía e em sua borda o rio Bogotá, o rio Frío e os riachos Honda, Zapata, Laureles e Torca, além de 32 lagoas e 1.086 hectares de floresta.", "osm": "Os cultivos, estufas, córregos menores e canais vêm do OpenStreetMap, um mapa colaborativo e não oficial que serve de complemento. Registra cerca de 330 hectares de estufas e 240 de cultivos dentro de Chía, uma contagem parcial. A perda de floresta é a camada Global Forest Change da Universidade de Maryland, feita com imagens Landsat de 30 metros."},
@@ -92,7 +94,7 @@ window.CHIA_TXT.pt = {
     ]
   },
   tour: [
-    ["Chía", "Um município da Savana, entre dois cerros e dois rios"],
+    ["Chía", "Chía quer dizer lua na língua muísca. A Cidade da Lua, entre dois cerros e dois rios"],
     ["Herança muísca", "Um cacicado antes de 1537 e uma comunidade que hoje conserva sua terra coletiva"],
     ["De 9.514 a 173.728", "A população multiplicou-se por dezoito desde 1951"],
     ["Dois rios", "O Frío e o Bogotá ordenam a água e o saneamento"],
