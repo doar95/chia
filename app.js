@@ -47,6 +47,11 @@
     igac18: ["IGAC, registros catastrales 1 y 2 de Chía, corte del 28 de mayo de 2018, entregados para tesis de la Universidad Nacional", "", "of"],
     diag: ["Alcaldía de Chía, Diagnóstico del POT, tomo II, dimensión económica, 2020", "https://www.chia-cundinamarca.gov.co/2020/POT/2.%20DIMENSI%C3%93N%20ECON%C3%93MICA.pdf", "of"],
     icde: ["IGAC, Mapa digital catastral urbano de Chía, metadato ICDE", "https://metadatos.icde.gov.co/geonetwork/srv/api/records/14160649", "of"],
+    igac26: ["IGAC, Base Catastral Pública del Gestor IGAC, corte de septiembre de 2026", "https://www.igac.gov.co/datos-abiertos/datos-abiertos-geoespaciales", "of"],
+    igac25: ["IGAC, cartografía básica vectorial a escala 1:25.000", "https://www.colombiaenmapas.gov.co/?b=igac&u=0&t=23&servicio=206", "of"],
+    osm: ["OpenStreetMap, datos colaborativos bajo licencia ODbL", "https://www.openstreetmap.org/copyright", "ac"],
+    gfc: ["Universidad de Maryland, Global Forest Change, versión 1.11, Hansen y otros", "https://glad.earthengine.app/view/global-forest-change", "ac"],
+    aws: ["Relieve: Mapzen Terrain Tiles en AWS Open Data, a partir de SRTM y otras fuentes públicas", "https://registry.opendata.aws/terrain-tiles/", "ac"],
     a227: ["Concejo de Chía, Acuerdo 227 de 2024", "https://chia-cundinamarca.gov.co/acuerdos/2024/ACUERDO%20227.pdf", "of"]
   };
   /* Hitos: año, fuentes, veredas que se resaltan */
@@ -67,6 +72,8 @@
   const PANIO = { 2010: [4703, 2056, 2806, 1431, 885, 463], 2011: [5112, 2127, 2873, 1422, 886, 465], 2012: [5403, 2164, 2894, 1431, 880, 467], 2013: [5834, 2270, 2914, 1429, 882, 468], 2014: [6409, 2399, 2947, 1427, 880, 461], 2015: [5728, 2199, 2579, 1219, 786, 460], 2016: [7446, 2573, 2931, 1434, 804, 454], 2017: [7807, 2691, 2987, 1448, 808, 451], 2018: [10147, 4226, 4325, 2174, 1120, 676], 2019: [10542, 4250, 4314, 2193, 1121, 726] };
   const PVER = { "Fagua": [625, 319, 549, 316, 63, 74], "Tiquiza": [1332, 150, 202, 141, 51, 42], "Fonqueta": [1133, 387, 365, 198, 39, 27], "Cerca De Piedra": [919, 347, 330, 136, 50, 10], "La Balsa": [2235, 789, 930, 259, 43, 108], "Yerbabuena": [99, 240, 634, 398, 680, 246], "Fusca": [77, 75, 157, 284, 135, 159] };
   const DENS = [["Fusca", 672, 1443, 0.47], ["Yerbabuena", 1565, 2421, 0.65], ["Fagua", 1343, 695, 1.93], ["Tíquiza", 1325, 484, 2.74], ["La Balsa", 3214, 838, 3.84], ["Fonquetá", 1654, 385, 4.29], ["Cerca de Piedra", 1663, 336, 4.96], ["Bojacá", 6321, 838, 7.54], ["U", 27710, 562, 49.31], ["UMC", 3452, 41, 84.78]];
+  const GEO = { alt: true, cur: true, agua: true, qos: false, bos: true, per: false, cul: false, pre: false, av: false };
+  const GEOOK = { alt: true, cur: !!window.mlcontour, agua: !!window.CHIA_GEO_AGUA, qos: !!window.CHIA_GEO_QOSM, bos: !!window.CHIA_GEO_BOSQUE, per: true, cul: !!window.CHIA_GEO_CULT, pre: true, av: true };
   const VNOM = { "Fonqueta": "Fonquetá", "Tiquiza": "Tíquiza", "Cerca De Piedra": "Cerca de Piedra", "Calahorra 1": "Calahorra" };
 
   /* Escala de tiempo: 1500 a 1950 ocupa un cuarto de la pista */
@@ -161,6 +168,13 @@
       const emx = Math.max(...C.ze.map((e) => e.p50));
       h += `<h2>${k.ct3}</h2><div style="display:flex;align-items:flex-end;gap:3px;height:90px;direction:ltr">${C.ze.map((e) => `<div title="${e.ze}: ${nf(e.p50)} (${nf(e.n)})" style="flex:1;background:var(--oro);opacity:.85;border-radius:2px 2px 0 0;height:${e.p50 / emx * 100}%"></div>`).join("")}</div><div style="display:flex;gap:3px;direction:ltr">${C.ze.map((e) => `<span style="flex:1;text-align:center;font-size:10.5px;color:var(--tenue)">${e.ze}</span>`).join("")}</div><p class="nota">${k.cn3} ${nf(C.ze[0].p50)} – ${nf(emx)}.</p>`;
       h += `<h2>${k.ct4}</h2><table><tr><th></th><th>${k.h[0]}</th><th>${k.h[1]}</th><th>${k.h[2]}</th></tr>${["hab", "com", "agro", "lote", "otros"].map((d) => { const r = C.dest.find((x) => x.d === d); return `<tr><td>${k.dest[d]}</td><td>${nf(r.n)}</td><td>${nf(r.av)}</td><td>${nf(r.p50)}</td></tr>`; }).join("")}</table>${fts(["igac18"])}<p><a href="datos/catastro_zona_2018.csv" download>${t.ui.download} ${k.zo}</a> · <a href="datos/catastro_manzana_2018.csv" download>${k.ma}</a></p><p>${k.p}</p>${fts(["diag", "icde"])}`;
+    } else if (cap === 6) {
+      const g = t.geo, sw = { alt: "linear-gradient(90deg,#1d3b4f,#2f6b5e,#8fb47a,#e3b04b,#dd7a55,#efe9dc)", cur: "#cfd8e3", agua: "#63b8c4", qos: "#8fd0d8", bos: "#3f8a57", per: "#ff5c8a", cul: "linear-gradient(90deg,#c9b458 50%,#efe9dc 50%)", pre: "linear-gradient(90deg,#e3b04b,#dd7a55,#8fb47a,#b79ad6)", av: "linear-gradient(90deg,#23405c,#63b8c4,#e3b04b,#dd7a55)" };
+      h += `<p>${g.g1}</p><div class="alt-box"><span>${g.cursor}</span><b id="alt-v">–</b></div>`;
+      h += Object.keys(GEO).filter((k) => GEOOK[k]).map((k) => `<label class="capa"><input type="checkbox" data-geo="${k}" ${GEO[k] ? "checked" : ""}><i style="background:${sw[k]}"></i><span>${g.lay[k]}</span></label>`).join("");
+      h += `<div class="ley" style="margin-top:10px">${["#e3b04b", "#dd7a55", "#8fb47a", "#b79ad6", "#63b8c4", "#4a5566"].map((c, i) => `<span><i style="background:${c}"></i>${g.dest[i]}</span>`).join("")}</div>`;
+      h += `<p class="nota" style="margin-top:10px">${g.osm}</p>${fts(["osm", "gfc"])}`;
+      h += `<h2>${g.lay.pre}</h2><p>${g.pre}</p>${fts(["igac26", "igac18"])}<h2>${g.lay.av}</h2><p>${g.av}</p><div class="ley" style="direction:ltr"><span>${nf(20000)}</span><span style="flex:1;height:10px;border-radius:5px;background:${sw.av}"></span><span>${nf(1000000)}</span></div>${fts(["igac18"])}<h2>${g.relT}</h2><p>${g.rel}${GEOOK.agua || GEOOK.bos ? " " + g.rel2 : ""}</p>${fts(GEOOK.agua ? ["aws", "igac25"] : ["aws"])}<p><a href="datos/predios_2026.geojson" download>${t.ui.download}: predios_2026.geojson</a> · <a href="datos/avaluo_rejilla_2018.geojson" download>avaluo_rejilla_2018.geojson</a></p>`;
     } else {
       const grupo = cap === 4 ? t.agua : t.planes;
       h += Object.keys(grupo).map((k) => `<div class="tar ${tarAct === k ? "act" : ""}" data-tar="${k}"><h3>${grupo[k][0]}</h3><p>${grupo[k][1]}</p>${fts(TAR[k][0])}</div>`).join("");
@@ -199,6 +213,16 @@
     puntos.features.forEach((f) => { const v = (D.pop[f.properties.c] || {})[a]; f.properties.pob = vis && v ? v[0] : 0; });
     if (listo) map.getSource("pts").setData(puntos);
   }
+  const cargado = {};
+  async function trae(src, url) { if (cargado[src]) return; cargado[src] = 1; try { const j = await fetch(url).then((r) => r.json()); map.getSource(src).setData(j); } catch (e) { cargado[src] = 0; } }
+  function capasGeo() {
+    if (!listo) return; const on = cap === 6;
+    const vis = (id, v) => map.getLayer(id) && map.setLayoutProperty(id, "visibility", v ? "visible" : "none");
+    vis("qos", on && GEO.qos); vis("per", on && GEO.per); vis("cul", on && GEO.cul); vis("alt", on && GEO.alt); vis("cur", on && GEO.cur); vis("bos", on && GEO.bos); vis("agua", on && GEO.agua); vis("agua-l", on && GEO.agua); vis("pre", on && GEO.pre); vis("av", on && GEO.av);
+    if (on && GEO.pre) trae("pred", "datos/predios_2026.geojson"); if (on && GEO.av) trae("rej", "datos/avaluo_rejilla_2018.geojson");
+    ["pts", "pts-h", "mun-f"].forEach((id) => vis(id, !on));
+    document.querySelectorAll(".etq.cerro").forEach((e) => e.style.display = on ? "" : "none");
+  }
   function capaCat() { if (listo && map.getLayer("ver-cat")) map.setLayoutProperty("ver-cat", "visibility", cap === 3 ? "visible" : "none"); }
   function resalta(v) {
     if (!listo) return;
@@ -218,6 +242,32 @@
     map.addControl(new maplibregl.NavigationControl({ visualizePitch: true }), "top-right");
     map.addControl(new maplibregl.AttributionControl({ compact: true, customAttribution: "Límites y veredas: DANE 2024" }), "bottom-left");
     map.once("style.load", () => {
+      try {
+        map.addLayer({ id: "alt", type: "color-relief", source: "dem", layout: { visibility: "none" }, paint: { "color-relief-opacity": 0.8, "color-relief-color": ["interpolate", ["linear"], ["elevation"], 2500, "#1d3b4f", 2550, "#24544f", 2580, "#2f6b5e", 2650, "#8fb47a", 2800, "#e3b04b", 3000, "#dd7a55", 3250, "#efe9dc"] } }, "relieve");
+      } catch (e) { GEOOK.alt = false; }
+      if (window.mlcontour) try {
+        const ds = new mlcontour.DemSource({ url: "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png", encoding: "terrarium", maxzoom: 13, worker: true });
+        ds.setupMaplibre(maplibregl);
+        map.addSource("curvas", { type: "vector", tiles: [ds.contourProtocolUrl({ thresholds: { 10: [100, 500], 12: [50, 250], 13: [25, 100], 14: [10, 50] }, elevationKey: "ele", levelKey: "level", contourLayer: "c" })], maxzoom: 15 });
+        map.addLayer({ id: "cur", type: "line", source: "curvas", "source-layer": "c", layout: { visibility: "none" }, paint: { "line-color": "#cfd8e3", "line-opacity": ["match", ["get", "level"], 1, 0.55, 0.22], "line-width": ["match", ["get", "level"], 1, 1, 0.5] } });
+      } catch (e) { GEOOK.cur = false; }
+      map.addSource("rej", { type: "geojson", data: { type: "FeatureCollection", features: [] } });
+      map.addSource("pred", { type: "geojson", data: { type: "FeatureCollection", features: [] } });
+      map.addLayer({ id: "av", type: "fill", source: "rej", layout: { visibility: "none" }, paint: { "fill-color": ["interpolate", ["linear"], ["get", "v"], 20000, "#23405c", 100000, "#63b8c4", 300000, "#e3b04b", 1000000, "#dd7a55"], "fill-opacity": 0.72 } });
+      map.addLayer({ id: "pre", type: "fill", source: "pred", layout: { visibility: "none" }, paint: { "fill-color": ["match", ["get", "d"], "h", "#e3b04b", "c", "#dd7a55", "a", "#8fb47a", "l", "#b79ad6", "o", "#63b8c4", "#4a5566"], "fill-opacity": 0.7, "fill-outline-color": "#0a1420" } });
+      if (window.CHIA_GEO_BOSQUE) { map.addSource("gbos", { type: "geojson", data: window.CHIA_GEO_BOSQUE }); map.addLayer({ id: "bos", type: "fill", source: "gbos", layout: { visibility: "none" }, paint: { "fill-color": "#3f8a57", "fill-opacity": 0.55 } }); }
+      map.addSource("gfc", { type: "raster", tiles: ["https://storage.googleapis.com/earthenginepartners-hansen/tiles/gfc_v1.11/loss_alpha/{z}/{x}/{y}.png"], tileSize: 256, maxzoom: 12, attribution: "Hansen/UMD/Google/USGS/NASA" });
+      map.addLayer({ id: "per", type: "raster", source: "gfc", layout: { visibility: "none" }, paint: { "raster-opacity": 0.9, "raster-hue-rotate": 300 } });
+      if (window.CHIA_GEO_CULT) { map.addSource("gcul", { type: "geojson", data: window.CHIA_GEO_CULT }); map.addLayer({ id: "cul", type: "fill", source: "gcul", layout: { visibility: "none" }, paint: { "fill-color": ["match", ["get", "t"], "i", "#efe9dc", "#c9b458"], "fill-opacity": 0.6 } }); }
+      if (window.CHIA_GEO_QOSM) { map.addSource("gqos", { type: "geojson", data: window.CHIA_GEO_QOSM }); map.addLayer({ id: "qos", type: "line", source: "gqos", layout: { visibility: "none", "line-cap": "round" }, paint: { "line-color": "#8fd0d8", "line-width": 1.3, "line-dasharray": [2, 1.5] } }); }
+      if (window.CHIA_GEO_AGUA) { map.addSource("gagua", { type: "geojson", data: window.CHIA_GEO_AGUA });
+        map.addLayer({ id: "agua", type: "fill", source: "gagua", filter: ["==", ["geometry-type"], "Polygon"], layout: { visibility: "none" }, paint: { "fill-color": "#63b8c4", "fill-opacity": 0.8 } });
+        map.addLayer({ id: "agua-l", type: "line", source: "gagua", filter: ["==", ["geometry-type"], "LineString"], layout: { visibility: "none", "line-cap": "round" }, paint: { "line-color": "#63b8c4", "line-width": ["case", ["==", ["get", "t"], "d"], 2.6, 1.1], "line-opacity": 0.9 } }); }
+      const tiles = {}; let tAlt = 0;
+      const altura = async (ll) => { const Z = 12, n = 2 ** Z, xf = (ll.lng + 180) / 360 * n, la = ll.lat * Math.PI / 180, yf = (1 - Math.log(Math.tan(la) + 1 / Math.cos(la)) / Math.PI) / 2 * n, tx = Math.floor(xf), ty = Math.floor(yf), k = tx + "/" + ty;
+        if (!tiles[k]) tiles[k] = new Promise((ok) => { const im = new Image(); im.crossOrigin = "anonymous"; im.onload = () => { try { const c = document.createElement("canvas"); c.width = c.height = 256; const x = c.getContext("2d", { willReadFrequently: true }); x.drawImage(im, 0, 0); ok(x.getImageData(0, 0, 256, 256).data); } catch (e) { ok(null); } }; im.onerror = () => ok(null); im.src = `https://s3.amazonaws.com/elevation-tiles-prod/terrarium/${Z}/${tx}/${ty}.png`; });
+        const d = await tiles[k]; if (!d) return null; const px = Math.min(255, Math.floor((xf - tx) * 256)), py = Math.min(255, Math.floor((yf - ty) * 256)), i = (py * 256 + px) * 4; return d[i] * 256 + d[i + 1] + d[i + 2] / 256 - 32768; };
+      map.on("mousemove", (e) => { if (cap !== 6) return; const now = Date.now(); if (now - tAlt < 80) return; tAlt = now; altura(e.lngLat).then((z) => { const el = $("alt-v"); if (el && z != null && z > -500) el.textContent = nf(Math.round(z)) + " m"; }); });
       map.addSource("mun", { type: "geojson", data: D.mun });
       map.addSource("ver", { type: "geojson", data: D.ver });
       map.addSource("pts", { type: "geojson", data: puntos });
@@ -235,6 +285,7 @@
       D.mun.features.forEach((m) => { const e = document.createElement("div"); e.className = "etq" + (m.properties.c === 25175 ? " c" : ""); e.textContent = m.properties.n; const c = centro(m.geometry); new maplibregl.Marker({ element: e, anchor: "top", offset: [0, 12] }).setLngLat(c).addTo(map); });
       const ev = [];
       D.ver.features.forEach((v) => { const e = document.createElement("div"); e.className = "etq v"; e.textContent = VNOM[v.properties.n] || v.properties.n; e.style.display = "none"; ev.push(e); new maplibregl.Marker({ element: e }).setLngLat(centro(v.geometry)).addTo(map); });
+      (window.CHIA_GEO_CERROS || []).forEach((c) => { const e = document.createElement("div"); e.className = "etq cerro"; e.textContent = "▲ " + c[0]; e.style.display = "none"; new maplibregl.Marker({ element: e, anchor: "top" }).setLngLat([c[1], c[2]]).addTo(map); });
       const zv = () => ev.forEach((e) => e.style.display = map.getZoom() > 11.3 ? "" : "none"); map.on("zoom", zv);
       map.on("click", "ver-res", () => {});
       const pop = new maplibregl.Popup({ closeButton: false, closeOnClick: false, offset: 10 });
@@ -253,7 +304,7 @@
   }
   const VISTAS = { region: { center: [-74.16, 4.86], zoom: 9.3, pitch: 0, bearing: 0 }, chia: { center: [-74.058, 4.868], zoom: 11.7, pitch: 35, bearing: -12 }, oeste: { center: [-74.078, 4.858], zoom: 12.7, pitch: 55, bearing: 70 }, rios: { center: [-74.052, 4.84], zoom: 12.6, pitch: 50, bearing: -30 }, plano: { center: [-74.045, 4.868], zoom: 12, pitch: 0, bearing: 0 } };
   function vista(k, ms) {
-    const v = Object.assign({}, VISTAS[k]); if (innerWidth < 820) { v.zoom -= 0.8; v.padding = { bottom: innerHeight * 0.42, top: 0, left: 0, right: 0 }; } else v.padding = { left: 430, top: 0, right: 0, bottom: 60 };
+    const v = Object.assign({}, VISTAS[k]); if (innerWidth < 820) { v.zoom -= 0.8; v.padding = { bottom: innerHeight * 0.42, top: 0, left: 0, right: 0 }; } else v.padding = { left: 460, top: 0, right: 0, bottom: 60 };
     if (ms === 0) map.jumpTo(v); else map.flyTo(Object.assign(v, { duration: ms || 2600, essential: true }));
   }
 
@@ -315,8 +366,10 @@
 
   /* Eventos */
   $("idi").onclick = (e) => { const l = e.target.dataset.l; if (!l) return; lang = l; try { localStorage.setItem("chia-idioma", l); } catch (x) {} interfaz(); if ($("rec").classList.contains("ab")) recPaso(Math.max(rec.i, 0)); };
-  $("caps").onclick = (e) => { const c = e.target.dataset.c; if (c == null) return; cap = +c; evAct = -1; tarAct = null; resalta(null); interfaz(); capaCat(); $("cont").scrollTop = 0; if (listo) vista(cap === 1 ? "region" : cap === 4 ? "rios" : cap === 3 ? "plano" : "chia"); };
+  $("caps").onclick = (e) => { const c = e.target.dataset.c; if (c == null) return; cap = +c; evAct = -1; tarAct = null; resalta(null); interfaz(); capaCat(); capasGeo(); $("cont").scrollTop = 0; if (listo) vista(cap === 1 ? "region" : cap === 4 ? "rios" : cap === 3 ? "plano" : "chia"); };
+  $("cont").onchange = (e) => { const k = e.target.dataset && e.target.dataset.geo; if (!k) return; GEO[k] = e.target.checked; capasGeo(); };
   $("cont").onclick = (e) => {
+    if (e.target.closest(".capa")) return;
     if (e.target.closest("a")) return;
     const ev = e.target.closest("[data-ev]"), ta = e.target.closest("[data-tar]"), ve = e.target.closest("[data-ver]");
     if (ve) resalta([ve.dataset.ver]);
