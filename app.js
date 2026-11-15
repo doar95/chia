@@ -52,7 +52,7 @@
     danef: ["DANE, ficha del Censo 2018 para Chía", "https://sitios.dane.gov.co/cnpv/app/views/informacion/fichas/25175.pdf", "of"],
     danep: ["DANE, proyecciones y retroproyecciones de población municipal", "https://www.dane.gov.co/index.php/estadisticas-por-tema/demografia-y-poblacion/proyecciones-de-poblacion", "of"],
     danev: ["DANE, capa de referencia de veredas 2024", "https://geoportal.dane.gov.co/", "of"],
-    dnp: ["DNP, ejecuciones presupuestales y Operaciones Efectivas de Caja, panel municipal 1984 a 2025", "https://github.com/doar95/carga-tributaria-ciudades", "of"],
+    dnp: ["DNP, Operaciones Efectivas de Caja (OEC), 2000 a 2025, y ejecuciones presupuestales, 1984 a 1999", "https://github.com/doar95/carga-tributaria-ciudades", "of"],
     dts: ["Municipio de Chía, Documento Técnico de Soporte del POT, Acuerdo 100 de 2016", "https://www.chia-cundinamarca.gov.co/POT/Acuerdo100de2016/DTS%20%20FINAL.pdf", "of"],
     uptc: ["Revista Nuevas Lecturas de Historia, UPTC, el resguardo de Chía entre 1904 y 1937", "https://revistas.uptc.edu.co/index.php/nuev_lec_historia/article/download/20754/16599", "ac"],
     igac18: ["IGAC, registros catastrales 1 y 2 de Chía, corte del 28 de mayo de 2018", "", "of"],

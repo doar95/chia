@@ -2,6 +2,9 @@
 
 Las fechas son de 2026.
 
+## 15 de noviembre
+- La fuente fiscal se cita como Operaciones Efectivas de Caja, OEC, del DNP.
+
 ## 14 de noviembre
 - Nuevo diseño de pantalla: los capítulos pasan a una barra grande sobre el mapa, con Geografía en segundo lugar. Las capas del mapa salen del panel a un recuadro propio y se pueden prender en cualquier capítulo. El panel es más ancho y se puede ampliar.
 - Tema claro por defecto y tema oscuro como opción.
