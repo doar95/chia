@@ -1,7 +1,7 @@
 window.TXT = window.TXT || {};
 window.TXT.es = {
 lang: 'es',
-revista: ['Chía, memoria y porvenir · Documento técnico 01', 'Versión 1.0 · 16 de noviembre de 2026'],
+revista: ['Chía, memoria y porvenir · Documento técnico 01', 'Versión 1.1 · 16 de noviembre de 2026'],
 titulo: 'Plan maestro de arborización de Chía 2027–2035: un enfoque ecosistémico con especies nativas de la Sabana de Bogotá',
 autores: 'Elaborado por el titular del repositorio <a href="https://github.com/doar95/chia">doar95/chia</a>, con asistencia de inteligencia artificial (Claude, de Anthropic), que redactó textos, programas y traducción bajo su dirección. Documento abierto para revisión de la Alcaldía de Chía, la CAR Cundinamarca, el Concejo Municipal y la ciudadanía.',
 destacados: [

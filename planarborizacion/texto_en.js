@@ -1,7 +1,7 @@
 window.TXT = window.TXT || {};
 window.TXT.en = {
 lang: 'en',
-revista: ['Chía, memory and future · Technical paper 01', 'Version 1.0 · 16 November 2026'],
+revista: ['Chía, memory and future · Technical paper 01', 'Version 1.1 · 16 November 2026'],
 titulo: 'Chía Tree-Planting Master Plan 2027–2035: an ecosystem approach with native species of the Bogotá Savanna',
 autores: 'Prepared by the owner of the <a href="https://github.com/doar95/chia">doar95/chia</a> repository, with assistance from artificial intelligence (Claude, by Anthropic), which drafted text, code and translation under the owner’s direction. Open document for review by the Municipality of Chía, CAR Cundinamarca, the Municipal Council and the public. The Spanish version is the reference text.',
 destacados: [
