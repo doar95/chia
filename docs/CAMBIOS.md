@@ -2,6 +2,15 @@
 
 Las fechas son de 2026.
 
+## 16 de noviembre, plan de arborización, versión 1.1
+- El documento abre con un resumen de dos páginas: qué se propone, dónde, qué va primero, cuánto cuesta, cómo se cuida la plata y qué se pide. El documento técnico viene después.
+- **Corrección.** El casco urbano estaba subestimado: tenía 1.098 árboles calculados por número de predios en 20 cuadros. Ahora se calcula con los metros de calle local de OpenStreetMap (un árbol cada 8 m por andén en el 40 % de la longitud) y suma 9.241 árboles en 27 sectores con nombre de barrio, 14 de ellos en la etapa 1.
+- **Corrección.** El índice de prioridad contaba colegios y plazas como verde. Ahora solo cuentan los parques de 0,5 ha o más y el bosque; pondera 70 % densidad de predios y 30 % distancia al verde.
+- Códigos legibles: U calles de barrio, V vías, P parques, E colegios, R rondas, M montaña, C- cercas vivas.
+- El mapa abre con una explicación, muestra el código de cada zona con su nombre al pasar el puntero y permite colorear por tipo o por etapa. La rejilla técnica sale de la vista y queda como dato descargable.
+- **Corrección.** La tabla CSV se veía con caracteres rotos en Excel. Ahora va en UTF-8 con BOM, con encabezados en español y sin la columna de envolvente, y se agrega una versión .xlsx con hoja de códigos. Nueva página de datos.
+- Nueva figura del casco urbano. El total pasa a 117 zonas y 138.577 plantas; el costo municipal, a $15.435 millones en nueve años.
+
 ## 15 de noviembre
 - La fuente fiscal se cita como Operaciones Efectivas de Caja, OEC, del DNP.
 

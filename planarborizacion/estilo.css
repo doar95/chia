@@ -64,6 +64,17 @@ sup.c a{text-decoration:none;font-family:var(--sans);font-size:11px}
 .pie{font-family:var(--sans);font-size:12.5px;color:var(--tenue);border-top:1px solid var(--linea);margin-top:40px;padding-top:12px}
 @media (max-width:900px){.lay{grid-template-columns:minmax(0,1fr);padding:18px 14px 60px}nav.toc{display:none}.barra .in{padding:8px 12px;gap:8px}.cifras{grid-template-columns:repeat(2,1fr)}}
 article{min-width:0;overflow-wrap:break-word}
+.breve .ante{font-family:var(--sans);font-size:13px;color:var(--tenue);border-top:3px solid var(--verde);padding-top:8px;margin:0 0 6px;text-align:left}
+.breve h1{margin-top:.1em}
+.breve .lead{font-size:20px;line-height:1.5;text-align:left;margin:.3em 0 1em}
+.breve h2{border-top:none;margin:1.6em 0 .4em;font-size:19px;color:var(--verde)}
+.breve .botones{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 6px}
+.breve ul{font-size:16px;padding-left:22px}
+.breve li{margin:.25em 0}
+.breve .fig img{border:1px solid var(--linea);border-radius:6px}
+.sigue{margin:44px 0 34px;padding:16px 0;border-top:3px solid var(--acento);border-bottom:1px solid var(--linea);font-family:var(--sans)}
+.sigue b{display:block;font-size:22px;margin-bottom:4px}
+.sigue span{color:var(--tenue);font-size:14.5px}
 @media print{
   @page{size:A4;margin:16mm 15mm 18mm}
   body{background:#fff;font-size:10.5pt}
@@ -78,9 +89,12 @@ article{min-width:0;overflow-wrap:break-word}
   tr{break-inside:avoid}
   a{color:var(--tinta);text-decoration:none}
   .acuerdo{border:none;padding:0}
+  .sigue{break-before:page}
+  .breve .lead{font-size:13pt}
+  .breve .fig img{max-height:118mm;width:auto!important;max-width:100%;display:block;margin:0 auto}
+  .breve h2{margin-top:.9em}
 }
 @media print{
-  #anexo td:nth-child(7),#anexo th:nth-child(7){display:none}
   #anexo table{font-size:7.4pt}
   #anexo td:nth-child(2){min-width:34mm}
 }

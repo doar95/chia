@@ -13,15 +13,16 @@ plt.rcParams.update({'font.family': 'DejaVu Sans', 'font.size': 9, 'axes.edgecol
                      'xtick.color': '#56615b', 'ytick.color': '#56615b', 'axes.spines.top': False, 'axes.spines.right': False})
 COL = {'ronda': '#2a78d6', 'vial': '#eb6834', 'parque': '#1baf7a', 'cerca': '#eda100', 'urbano': '#e87ba4', 'cerro': '#008300', 'escolar': '#6250d6'}
 NOM = {'es': {'ronda': 'Rondas de ríos y quebradas', 'cerro': 'Núcleos de restauración en ladera', 'vial': 'Corredores viales', 'parque': 'Parques y zonas verdes',
-              'escolar': 'Colegios e instituciones', 'urbano': 'Calles de sombra', 'cerca': 'Cercas vivas rurales'},
+              'escolar': 'Colegios e instituciones', 'urbano': 'Calles de barrio', 'cerca': 'Cercas vivas rurales'},
        'en': {'ronda': 'River and stream buffers', 'cerro': 'Hillside restoration nuclei', 'vial': 'Road corridors', 'parque': 'Parks and green areas',
-              'escolar': 'Schools and institutions', 'urbano': 'Shade streets', 'cerca': 'Rural living fences'}}
+              'escolar': 'Schools and institutions', 'urbano': 'Neighbourhood streets', 'cerca': 'Rural living fences'}}
 Z = json.load(open('planarborizacion/datos/zonas.geojson', encoding='utf-8'))['features']
 R = json.load(open('planarborizacion/datos/resumen.json', encoding='utf-8'))
 lim = [shape(f['geometry']) for f in json.load(open('datos/limites_municipios.geojson'))['features'] if f['properties']['c'] == 25175][0]
 bos = [shape(f['geometry']) for f in json.load(open('datos/bosque_igac.geojson'))['features']]
 agua = [f for f in json.load(open('datos/agua_igac.geojson'))['features'] if f['properties']['t'] == 'q']
 ver = json.load(open('datos/veredas_igac_2026.geojson'))['features']
+pre = [shape(f['geometry']) for f in json.load(open('datos/predios_2026.geojson'))['features'] if f['properties']['u'] == 1]
 
 def poly(ax, g, **kw):
     for p in (g.geoms if g.geom_type == 'MultiPolygon' else [g]):
@@ -52,7 +53,7 @@ for L in ('es', 'en'):
                 poly(ax, g, facecolor=COL[t], edgecolor='white', linewidth=0.3, alpha=0.30 if t in ('cerca', 'cerro') else 0.85)
     for f in Z:
         p = f['properties']
-        if p['tipo'] in ('vial',) or p['id'] in ('R04', 'R05', 'R06', 'R02', 'R01'):
+        if (p['tipo'] in ('vial',) and p['etapa'] > 1) or p['id'] in ('R04', 'R06', 'R02', 'R01', 'M01', 'M02'):
             ax.annotate(p['id'], (p['lon'], p['lat']), fontsize=6.5, color='#1b2420', ha='center', va='center',
                         bbox=dict(boxstyle='round,pad=0.15', fc='white', ec='none', alpha=0.8))
     hs = [plt.Line2D([0], [0], color=COL[t], lw=6 if t != 'vial' else 2.5, alpha=0.9) for t in orden[::-1]]
@@ -62,6 +63,44 @@ for L in ('es', 'en'):
     ax.tick_params(labelsize=7)
     ax.set_title('Zonas estratégicas de siembra, Chía' if L == 'es' else 'Strategic planting zones, Chía', fontsize=10, loc='left')
     fig.tight_layout(); fig.savefig(f'planarborizacion/fig/mapa_zonas_{L}.png'); plt.close(fig)
+
+    # Figura 1b: casco urbano, sectores de calles de barrio por etapa
+    fig, ax = plt.subplots(figsize=(7.2, 7.4), dpi=200)
+    for g in pre: poly(ax, g, facecolor='#ece9df', edgecolor='#d6d1c3', linewidth=0.15)
+    for f in agua:
+        g = shape(f['geometry'])
+        for l in (g.geoms if g.geom_type == 'MultiLineString' else [g]):
+            x, y = l.xy; ax.plot(x, y, color='#7fa7c9', lw=1.0)
+    for b in bos: poly(ax, b, facecolor='#cfe0c8', edgecolor='none')
+    for f in Z:
+        q = f['properties']; g = shape(f['geometry'])
+        if q['tipo'] == 'urbano':
+            poly(ax, g, facecolor=COL['urbano'], edgecolor='white', linewidth=1.2, alpha=0.9 if q['etapa'] == 1 else 0.38)
+        elif q['tipo'] in ('parque', 'escolar'):
+            poly(ax, g, facecolor=COL[q['tipo']], edgecolor='white', linewidth=0.4, alpha=0.85)
+        elif q['id'] == 'R05':
+            poly(ax, g, facecolor=COL['ronda'], edgecolor='none', alpha=0.8)
+    for f in Z:
+        q = f['properties']; g = shape(f['geometry'])
+        if q['tipo'] == 'vial':
+            for l in (g.geoms if g.geom_type == 'MultiLineString' else [g]):
+                x, y = l.xy; ax.plot(x, y, color=COL['vial'], lw=2.4, solid_capstyle='round')
+    X0, X1, Y0, Y1 = -74.0745, -74.033, 4.8405, 4.8875
+    for f in Z:
+        q = f['properties']
+        if (q['tipo'] in ('urbano',) or q['id'] in ('R05', 'V01', 'V05', 'V06', 'V07')) and X0 < q['lon'] < X1 and Y0 < q['lat'] < Y1:
+            ax.annotate(q['id'], (q['lon'], q['lat']), fontsize=7 if q['tipo'] == 'urbano' else 6.5, weight='bold' if q['tipo'] == 'urbano' else 'normal', color='#1b2420', ha='center', va='center',
+                        bbox=dict(boxstyle='round,pad=0.18', fc='white', ec='none', alpha=0.85))
+    et1 = 'Calles de barrio, etapa 1 (2027–2028)' if L == 'es' else 'Neighbourhood streets, stage 1 (2027–2028)'
+    et2 = 'Calles de barrio, etapa 2 (2029–2031)' if L == 'es' else 'Neighbourhood streets, stage 2 (2029–2031)'
+    hs = [plt.Line2D([0], [0], color=COL['urbano'], lw=7, alpha=0.9), plt.Line2D([0], [0], color=COL['urbano'], lw=7, alpha=0.38),
+          plt.Line2D([0], [0], color=COL['vial'], lw=2.5), plt.Line2D([0], [0], color=COL['parque'], lw=7), plt.Line2D([0], [0], color=COL['escolar'], lw=7), plt.Line2D([0], [0], color=COL['ronda'], lw=7)]
+    ax.legend(hs, [et1, et2, NOM[L]['vial'], NOM[L]['parque'], NOM[L]['escolar'], 'Ronda urbana del río Frío' if L == 'es' else 'Urban Frío River buffer'],
+              loc='upper center', bbox_to_anchor=(0.5, -0.07), ncol=2, fontsize=7, frameon=False)
+    ax.set_xlim(X0, X1); ax.set_ylim(Y0, Y1); ax.set_aspect(1 / 0.9965)
+    ax.set_xlabel('Longitud (°)' if L == 'es' else 'Longitude (°)'); ax.set_ylabel('Latitud (°)' if L == 'es' else 'Latitude (°)'); ax.tick_params(labelsize=7)
+    ax.set_title('Casco urbano: dónde van los árboles de calle' if L == 'es' else 'Town centre: where the street trees go', fontsize=10, loc='left')
+    fig.tight_layout(); fig.savefig(f'planarborizacion/fig/mapa_urbano_{L}.png'); plt.close(fig)
 
     # Figura 2: clima, dos paneles con su propio eje (no doble eje)
     mes = ['E', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'] if L == 'es' else ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D']

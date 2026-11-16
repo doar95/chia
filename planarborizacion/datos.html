@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Datos del plan de arborización de Chía</title>
+<link rel="icon" href="../icono.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="estilo.css?v=3">
+<style>.lay{grid-template-columns:minmax(0,1fr);max-width:860px}.arch{display:grid;gap:10px;margin:18px 0}.arch a{display:block;background:#fff;border:1px solid var(--linea);border-radius:6px;padding:12px 16px;text-decoration:none;color:var(--tinta);font-family:var(--sans)}.arch a:hover{border-color:var(--verde)}.arch b{color:var(--verde)}.arch span{display:block;color:var(--tenue);font-size:13.5px;margin-top:2px}</style>
+</head>
+<body>
+<header class="barra"><div class="in">
+  <a class="marca" href="../">Chía, memoria y porvenir · <span>Arborización</span></a>
+  <nav class="tabs"><a href="./" data-t="doc">Documento</a><a href="mapa.html" data-t="mapa">Mapa</a><a href="datos.html" aria-current="page" data-t="datos">Datos</a></nav>
+  <button class="btn" id="btn-lang" type="button">English</button>
+</div></header>
+<div class="lay"><article id="c"></article></div>
+<script>
+const C = {
+ es: {doc: 'Documento', mapa: 'Mapa', datos: 'Datos', otro: 'English', h: 'Datos del plan',
+  p: 'Todos los archivos tienen las 117 zonas del plan con su código, nombre, tipo, etapa, coordenadas, cantidad de árboles y arbustos, paleta de especies y costo estimado. Son datos abiertos (CC BY 4.0); los insumos de OpenStreetMap están bajo licencia ODbL.',
+  a: [['datos/zonas_arborizacion_chia.xlsx', 'Tabla de zonas (Excel)', 'La forma más fácil de revisarla. Incluye enlace a Google Maps por zona y una hoja que explica los códigos.'],
+      ['datos/zonas.csv', 'Tabla de zonas (CSV)', 'El mismo contenido en texto, codificado en UTF-8, para hojas de cálculo y programas.'],
+      ['datos/zonas.geojson', 'Zonas con su forma (GeoJSON)', 'Polígonos y líneas de cada zona, para QGIS, ArcGIS o geojson.io.'],
+      ['datos/prioridad.geojson', 'Cuadros urbanos y su prioridad (GeoJSON)', 'Insumo técnico: metros de calle, predios, distancia al verde y prioridad de cada cuadro de unos 220 m que forma los sectores de calles de barrio.'],
+      ['descargas/plan_arborizacion_chia_es.pdf', 'Documento completo (PDF)', 'Documento técnico en español.']],
+  ch: 'Qué significan los códigos', cod: [['U', 'Calles de barrio del casco urbano'], ['V', 'Corredor vial'], ['P', 'Parque o zona verde'], ['E', 'Colegio, universidad u otra institución'], ['R', 'Ronda de río o quebrada (30 m por margen)'], ['M', 'Montaña: núcleos de restauración junto al bosque de los cerros'], ['C-', 'Cerca viva en fincas de una vereda; las letras son la vereda (C-FUS = Fusca)']],
+  et: 'Etapas: 1 = 2027–2028, 2 = 2029–2031, 3 = 2032–2035.', rep: 'Los programas que producen estos archivos están en el repositorio <a href="https://github.com/doar95/chia">github.com/doar95/chia</a> (procesamiento/10_arborizacion.py).'},
+ en: {doc: 'Paper', mapa: 'Map', datos: 'Data', otro: 'Español', h: 'Plan data',
+  p: 'Every file holds the plan’s 117 zones with code, name, type, stage, coordinates, number of trees and shrubs, species palette and estimated cost. Open data (CC BY 4.0); OpenStreetMap inputs are under the ODbL.',
+  a: [['datos/zonas_arborizacion_chia.xlsx', 'Zone table (Excel)', 'Easiest to review. Includes a Google Maps link per zone and a sheet explaining the codes (in Spanish).'],
+      ['datos/zonas.csv', 'Zone table (CSV)', 'Same content as UTF-8 text, for spreadsheets and software.'],
+      ['datos/zonas.geojson', 'Zones with shapes (GeoJSON)', 'Polygons and lines for each zone, for QGIS, ArcGIS or geojson.io.'],
+      ['datos/prioridad.geojson', 'Urban squares and priority (GeoJSON)', 'Technical input: street metres, parcels, distance to green and priority for each ~220 m square making up the neighbourhood-street sectors.'],
+      ['descargas/plan_arborizacion_chia_en.pdf', 'Full paper (PDF)', 'Technical paper in English.']],
+  ch: 'What the codes mean', cod: [['U', 'Neighbourhood streets in the town'], ['V', 'Road corridor'], ['P', 'Park or green area'], ['E', 'School, university or other institution'], ['R', 'River or stream buffer (30 m per bank)'], ['M', 'Mountain: restoration nuclei next to hill forest'], ['C-', 'Living fence on farms in a vereda; letters name the vereda (C-FUS = Fusca)']],
+  et: 'Stages: 1 = 2027–2028, 2 = 2029–2031, 3 = 2032–2035.', rep: 'The programs that produce these files are in <a href="https://github.com/doar95/chia">github.com/doar95/chia</a> (procesamiento/10_arborizacion.py).'}};
+let L = new URLSearchParams(location.search).get('lang'); if (!L) { try { L = localStorage.getItem('chia-arb-lang'); } catch (e) {} } L = L || 'es';
+function r() {
+  const T = C[L]; document.documentElement.lang = L;
+  document.querySelectorAll('[data-t]').forEach(e => e.textContent = T[e.dataset.t]); document.getElementById('btn-lang').textContent = T.otro;
+  document.getElementById('c').innerHTML = `<h1>${T.h}</h1><p>${T.p}</p><div class="arch">${T.a.map(a => `<a href="${a[0]}" download><b>${a[1]}</b><span>${a[2]}</span></a>`).join('')}</div>
+  <h2>${T.ch}</h2><div class="tabla"><table><tbody>${T.cod.map(c => `<tr><td><b>${c[0]}</b></td><td>${c[1]}</td></tr>`).join('')}</tbody></table></div><p>${T.et}</p><p class="kw">${T.rep}</p>`;
+}
+document.getElementById('btn-lang').onclick = () => { L = L === 'es' ? 'en' : 'es'; try { localStorage.setItem('chia-arb-lang', L); } catch (e) {} r(); };
+r();
+</script>
+</body>
+</html>

@@ -31,21 +31,21 @@
    400666454
   ],
   "urbano": [
-   20,
-   1098,
-   527760000
+   27,
+   9241,
+   4435680000
   ]
  },
  "por_etapa": {
   "2": [
-   26,
-   102644,
-   7911047527
+   31,
+   105677,
+   9366647527
   ],
   "1": [
-   50,
-   9893,
-   2313090252
+   52,
+   15003,
+   4765410252
   ],
   "3": [
    34,
@@ -60,9 +60,9 @@
    6293780395
   ],
   "Público": [
-   67,
-   13689,
-   4031091994
+   74,
+   21832,
+   7939011994
   ],
   "Gestión con el titular de la vía": [
    4,
@@ -76,15 +76,15 @@
   ]
  },
  "total": [
-  110,
-  130434,
-  12332694199
+  117,
+  138577,
+  16240614199
  ],
  "area_chia_km2": 80.42,
  "bosque_igac_ha": 1085,
  "celdas": [
-  184,
-  20
+  158,
+  27
  ],
  "presupuesto": {
   "supuestos": {
@@ -93,7 +93,7 @@
     "Línea base satelital: temperatura de superficie (Landsat), altura de dosel (CHMv2), modelo de superficie (GEM-15) y mapa de sitios sembrables": 120000000,
     "Manual municipal de silvicultura urbana y paleta de especies, con revisión de la CAR": 150000000,
     "Delimitación y convocatoria de Áreas de Vida (Ley 2173 de 2021, Resolución 1491 de 2025)": 60000000,
-    "Estudios de diseño paisajístico de los primeros 6 corredores y 12 celdas de sombra": 180000000,
+    "Estudios de diseño paisajístico de los corredores y sectores de barrio de la etapa 1": 180000000,
     "Socialización, mesas veredales y diálogo con el Resguardo Indígena de Fonquetá y Cerca de Piedra": 60000000
    },
    "transversal_anual": {
@@ -107,18 +107,18 @@
   },
   "etapas": {
    "1": {
-    "obra_total": 2313090252,
-    "obra_municipio": 2313090252,
+    "obra_total": 4765410252,
+    "obra_municipio": 4765410252,
     "por_financia": {
-     "Público": 2313090252
+     "Público": 4765410252
     }
    },
    "2": {
-    "obra_total": 7911047527,
-    "obra_municipio": 4664558712,
+    "obra_total": 9366647527,
+    "obra_municipio": 6120158712,
     "por_financia": {
      "Mixto": 5893113941,
-     "Público": 1718001742,
+     "Público": 3173601742,
      "Gestión con el titular de la vía": 299931844
     }
    },
@@ -134,10 +134,10 @@
   },
   "etapa0": 757500000,
   "transversal_total": 1620000000,
-  "interventoria": 574238575,
-  "contingencia": 523986038,
-  "municipio_total": 11003706805,
-  "programa_total_todas_las_fuentes": 16158418813,
-  "municipio_anual_promedio": 1222634089
+  "interventoria": 886872175,
+  "contingencia": 735013718,
+  "municipio_total": 15435288085,
+  "programa_total_todas_las_fuentes": 20590000093,
+  "municipio_anual_promedio": 1715032009
  }
 }

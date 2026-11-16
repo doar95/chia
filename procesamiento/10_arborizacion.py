@@ -116,7 +116,7 @@ for r in sec['via']:
     etapa = 1 if zid in ('V01', 'V05', 'V06', 'V07') else (3 if gestor.startswith('Nación') or 'Troncal' in gestor else 2)
     frac = 0.45 if enurb > 0.5 else 0.6
     arb = ln.length / 10 * 2 * frac
-    add('C' + zid[1:], nombre, 'vial', etapa, ln, arb, 'P3 vial' if enurb > 0.5 else 'P2 sabana',
+    add(zid, nombre, 'vial', etapa, ln, arb, 'P3 vial' if enurb > 0.5 else 'P2 sabana',
         gestor, f'Un árbol cada 10 m por costado donde haya andén, separador o franja ≥1,5 m; se asume factible el {int(frac*100)} % de la longitud.', 'Público' if gestor.startswith('Municipio') else 'Gestión con el titular de la vía')
 
 # ---------- 3. Parques, colegios e instituciones (de OSM) ----------
@@ -146,7 +146,7 @@ oeste = borde.intersection(box(*CH.bounds[:2], A(-74.062, 0)[0], CH.bounds[3]))
 este = borde.difference(oeste)
 for i, (nombre, g) in enumerate((('Cerro del Majuy y La Valvanera (occidente)', oeste), ('Cerros orientales: Yerbabuena, Fusca y La Caro', este))):
     meta_ha = 30 if i == 0 else 50          # 80 ha de núcleos en total, coherente con la meta 49 del Plan de Desarrollo (157,5 ha por recuperar)
-    add(f'K{i+1:02d}', f'{nombre}: núcleos de restauración junto al bosque', 'cerro', 2, g, meta_ha * 625, 'P5 ladera',
+    add(f'M{i+1:02d}', f'{nombre}: núcleos de restauración junto al bosque', 'cerro', 2, g, meta_ha * 625, 'P5 ladera',
         'Municipio (predios públicos), CAR y propietarios', f'Franja de 300 m alrededor del bosque IGAC ({g.area/1e4:,.0f} ha) como área de búsqueda; meta de {meta_ha} ha de núcleos a 4 x 4 m, primero en predios municipales y nacimientos.', 'Mixto')
 
 # ---------- 5. Cercas vivas rurales en predios agropecuarios ----------
@@ -158,35 +158,69 @@ for f in PRE:
 for n, per in sorted(agro.items()):
     if per < 2000: continue
     geo = unary_union([m(shape(f['geometry']).buffer(0)) for f in PRE if f['properties']['d'] == 'a' and vereda(m(shape(f['geometry']).buffer(0))) == n]).buffer(0)
-    add('V' + ''.join(ch for ch in n.upper() if ch.isalpha())[:3].replace('Í','I').replace('Á','A'), f'Cercas vivas, vereda {n}', 'cerca', 3, geo, per * 0.5 * 0.10 / 3, 'P6 cerca viva',
+    add('C-' + ''.join(ch for ch in n.upper() if ch.isalpha())[:3].replace('Í','I').replace('Á','A'), f'Cercas vivas, vereda {n}', 'cerca', 3, geo, per * 0.5 * 0.10 / 3, 'P6 cerca viva',
         'Propietarios rurales, Secretaría para el Desarrollo Económico y CAR', 'Perímetro de predios agropecuarios / 2 (linderos compartidos); meta del 10 % con una planta cada 3 m.', 'Mixto')
 
-# ---------- 6. Rejilla urbana de prioridad de sombra ----------
-xs, ys, X, Y = urb.buffer(300).bounds
-celdas = []
-cnt = defaultdict(int)
+# ---------- 6. Calles de barrio en el casco urbano ----------
+# Lógica: donde vive la gente es donde la sombra rinde más (salud, calor, caminata). La regla 3-30-300 pide
+# que cada vivienda vea al menos tres árboles; en una cabecera de manzanas compactas eso solo se logra con
+# árboles de calle. Por eso la cantidad se calcula con los metros de calle local de OpenStreetMap y no con
+# el número de predios: un árbol cada 8 m por andén, en el 40 % de la longitud (el resto son garajes,
+# esquinas, redes, andenes de menos de 1,2 m o fachadas sin retroceso). Las vías arterias quedan en los corredores V.
+# La rejilla es de 0,002° (unos 222 x 221 m). Los cuadros se agrupan en sectores por el barrio de OpenStreetMap más cercano.
+cs = defaultdict(list)
+for l in open('insumos/osm_calles_urbanas_2026-11-16.txt', encoding='utf-8'):
+    l = l.strip()
+    if not l or l.startswith('#'): continue
+    if l.startswith('@'): seccion = l[1:]; continue
+    cs[seccion].append(l)
+calle = {}
+for reg in ' '.join(cs['calle']).split():
+    i, j, v = map(int, reg.split(',')); calle[(i, j)] = v
+barrios = [(n, float(x), float(y)) for n, x, y in (r.split('|') for r in cs['barrio'])]
+urb_w = w(urb)
+mercedes = [shape(f['geometry']).buffer(0) for f in load('datos/veredas_igac_2026.geojson')['features'] if f['properties']['n'] == 'MERCEDES DE CALAHORRA'][0]
+pred = defaultdict(int)
 for f in PRE:
     if f['properties']['u'] == 1 and f['properties']['d'] in ('h', 'c'):
-        c = m(shape(f['geometry']).buffer(0)).centroid
-        cnt[(int((c.x - xs) // 200), int((c.y - ys) // 200))] += 1
-verdes = unary_union([z['_g'] for z in zonas if z['tipo'] in ('parque', 'escolar')] + [w(BOS)])
-verdes = m(verdes)
-for (i, j), n in cnt.items():
-    cell = box(xs + i * 200, ys + j * 200, xs + (i + 1) * 200, ys + (j + 1) * 200)
-    if not cell.intersects(CH): continue
-    vfrac = cell.intersection(verdes).area / cell.area
-    dist = verdes.distance(cell.centroid)
-    pr = min(n / 250, 1) * 0.6 + min(dist / 500, 1) * 0.3 + (1 - min(vfrac / 0.2, 1)) * 0.1
-    celdas.append({'g': w(cell), 'predios': n, 'verde': round(vfrac, 3), 'dist_verde_m': round(dist), 'prioridad': round(pr, 3)})
-celdas.sort(key=lambda c: -c['prioridad'])
-top = [c for c in celdas if c['prioridad'] >= 0.55]
-for i, c in enumerate(top):
-    c['programa'] = 'Calles de sombra'
-for i, c in enumerate(top):
-    cm = m(c['g'])
-    add(f'S{i+1:02d}', f'Calles de sombra, celda {i+1} ({c["predios"]} predios, {c["dist_verde_m"]} m al verde más cercano)', 'urbano', 1 if i < 12 else 2, cm,
-        min(c['predios'] * 0.5, 60), 'P3 vial', 'Municipio y juntas de acción comunal',
-        'Un árbol por cada dos predios residenciales o comerciales de la celda, hasta 60, en andén ≥2 m o antejardín con acuerdo del propietario.')
+        c = shape(f['geometry']).representative_point()
+        pred[(math.floor(c.x * 500), math.floor(c.y * 500))] += 1
+# Verde de referencia: parques de 0,5 ha o más y bosque. Los colegios y las plazas no cuentan porque en su mayoría
+# están pavimentados; además, los parques mismos son zonas de siembra del plan.
+verdes = m(unary_union([z['_g'] for z in zonas if z['tipo'] == 'parque' and z['_g'].area > 0] + [w(BOS)]))
+celdas = []
+for (i, j), metros in calle.items():
+    cell4 = box(i / 500, j / 500, (i + 1) / 500, (j + 1) / 500)
+    if cell4.intersection(urb_w.buffer(0.0005)).area < 0.25 * cell4.area: continue
+    cm = m(cell4)
+    vfrac = cm.intersection(verdes).area / cm.area
+    dist = verdes.distance(cm.centroid)
+    n = pred.get((i, j), 0)
+    pr = 0.7 * min(n / 120, 1) + 0.3 * min(dist / 400, 1)
+    c = cell4.centroid
+    if mercedes.contains(c): sector = 'Mercedes de Calahorra'
+    else:
+        d, sector = min((math.hypot((c.x - x) * 110.9, (c.y - y) * 110.6), nb) for nb, x, y in barrios)
+        if d > 0.7: sector = 'Cabecera ' + ('norte' if c.y > 4.872 else 'sur' if c.y < 4.852 else 'oriente' if c.x > -74.05 else 'occidente')
+    celdas.append({'g': cell4, 'sector': sector, 'calle_m': metros, 'predios': n, 'verde': round(vfrac, 3), 'dist_verde_m': round(dist),
+                   'prioridad': round(pr, 3), 'arboles': round(metros * 2 / 8 * 0.40)})
+sect = defaultdict(list)
+for c in celdas: sect[c['sector']].append(c)
+info = []
+for nb, cc in sect.items():
+    arb = sum(c['arboles'] for c in cc)
+    pr = sum(c['prioridad'] * c['arboles'] for c in cc) / max(arb, 1)
+    info.append((pr, nb, cc, arb))
+info.sort(key=lambda t: -t[0])
+tot_u = sum(t[3] for t in info); acum = 0
+for k, (pr, nb, cc, arb) in enumerate(info):
+    etapa = 1 if pr >= 0.55 else 2          # prioridad alta: mucha gente y lejos del verde
+    acum += arb
+    for c in cc: c['etapa'] = etapa; c['codigo'] = f'U{k+1:02d}'
+    geo = m(unary_union([c['g'] for c in cc]))
+    add(f'U{k+1:02d}', f'Calles de barrio: {nb}', 'urbano', etapa, geo, arb, 'P3 vial', 'Municipio y juntas de acción comunal',
+        f'{sum(c["calle_m"] for c in cc)/1000:.1f} km de calle local; un árbol cada 8 m por andén en el 40 % de la longitud. Prioridad {pr:.2f} de 1 '
+        f'(70 % densidad de predios residenciales y comerciales, 30 % distancia al parque de 0,5 ha o más o al bosque).')
 
 # ---------- salidas ----------
 def r5(o):
@@ -200,10 +234,42 @@ for z in zonas:
 json.dump({'type': 'FeatureCollection', 'features': feats}, open('planarborizacion/datos/zonas.geojson', 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))
 json.dump({'type': 'FeatureCollection', 'features': [{'type': 'Feature', 'properties': {k2: v for k2, v in c.items() if k2 != 'g'}, 'geometry': {'type': 'Polygon', 'coordinates': r5(mapping(c['g'])['coordinates'])}} for c in celdas]},
           open('planarborizacion/datos/prioridad.geojson', 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))
-cols = ['id', 'nombre', 'tipo', 'etapa', 'vereda', 'gestor', 'financia', 'lat', 'lon', 'bbox', 'longitud_m', 'area_ha', 'arboles', 'paleta', 'costo_cop', 'nota']
-with open('planarborizacion/datos/zonas.csv', 'w', encoding='utf-8', newline='') as fh:
-    wr = csv.writer(fh); wr.writerow(cols)
-    for z in zonas: wr.writerow([json.dumps(z[c]) if c == 'bbox' else z[c] for c in cols])
+# Tabla para personas: encabezados en español, sin envolvente, con enlace al mapa y diccionario de códigos.
+# CSV en UTF-8 con BOM para que Excel reconozca las tildes; además un .xlsx, que no depende de la configuración regional.
+TIPO_ES = {'ronda': 'Ronda de río o quebrada', 'vial': 'Corredor vial', 'parque': 'Parque o zona verde', 'escolar': 'Colegio o institución',
+           'urbano': 'Calles de barrio', 'cerro': 'Núcleo de restauración en montaña', 'cerca': 'Cerca viva rural'}
+PERIODO = {1: '2027–2028', 2: '2029–2031', 3: '2032–2035'}
+CODIGOS = [('R', 'Ronda de río o quebrada: franja de 30 m por margen'), ('V', 'Corredor vial: árboles en andén o separador'),
+           ('U', 'Calles de barrio del casco urbano'), ('P', 'Parque o zona verde'), ('E', 'Colegio, universidad u otra institución'),
+           ('M', 'Montaña: núcleos de restauración junto al bosque de los cerros'), ('C-', 'Cerca viva en predios rurales de una vereda (C-FUS = Fusca)')]
+CAB = ['Código', 'Nombre', 'Tipo', 'Etapa', 'Periodo de siembra', 'Vereda o sector', 'Latitud', 'Longitud', 'Ver en Google Maps',
+       'Longitud (m)', 'Área (ha)', 'Árboles y arbustos', 'Paleta de especies', 'Costo estimado (COP 2027)', 'Financiación', 'Responsable', 'Supuesto']
+def fila(z):
+    return [z['id'], z['nombre'], TIPO_ES[z['tipo']], z['etapa'], PERIODO[z['etapa']], z['vereda'], z['lat'], z['lon'],
+            f"https://www.google.com/maps/search/?api=1&query={z['lat']},{z['lon']}", z['longitud_m'] or '', z['area_ha'] or '',
+            z['arboles'], z['paleta'], z['costo_cop'], z['financia'], z['gestor'], z['nota']]
+with open('planarborizacion/datos/zonas.csv', 'w', encoding='utf-8-sig', newline='') as fh:
+    wr = csv.writer(fh); wr.writerow(CAB)
+    for z in zonas: wr.writerow(fila(z))
+from openpyxl import Workbook
+from openpyxl.styles import Font, PatternFill, Alignment
+wb = Workbook(); ws = wb.active; ws.title = 'Zonas'
+ws.append(CAB)
+for z in zonas:
+    ws.append(fila(z)); r = ws.max_row
+    ws.cell(r, 9).hyperlink = ws.cell(r, 9).value; ws.cell(r, 9).value = 'Abrir mapa'; ws.cell(r, 9).font = Font(color='1F5FAD', underline='single')
+    ws.cell(r, 14).number_format = '#,##0'; ws.cell(r, 12).number_format = '#,##0'
+for c in ws[1]: c.font = Font(bold=True, color='FFFFFF'); c.fill = PatternFill('solid', fgColor='2E5E3E'); c.alignment = Alignment(wrap_text=True, vertical='top')
+for col, wd in zip('ABCDEFGHIJKLMNOPQ', (8, 46, 26, 7, 12, 22, 10, 10, 12, 11, 9, 11, 14, 16, 16, 30, 60)): ws.column_dimensions[col].width = wd
+ws.freeze_panes = 'C2'; ws.auto_filter.ref = ws.dimensions
+wc = wb.create_sheet('Códigos')
+wc.append(['Prefijo', 'Significado']); [setattr(c, 'font', Font(bold=True)) for c in wc[1]]
+for k in CODIGOS: wc.append(list(k))
+wc.append([]); wc.append(['Etapa', 'Periodo'])
+for e, p_ in PERIODO.items(): wc.append([e, p_])
+wc.append([]); wc.append(['Nota', 'Cantidades potenciales de planeación. Cada sitio requiere visita técnica, verificación de redes y propiedad, y concepto de la CAR antes de sembrar.'])
+wc.column_dimensions['A'].width = 10; wc.column_dimensions['B'].width = 90
+wb.save('planarborizacion/datos/zonas_arborizacion_chia.xlsx')
 res = {'por_tipo': defaultdict(lambda: [0, 0, 0]), 'por_etapa': defaultdict(lambda: [0, 0, 0]), 'por_financia': defaultdict(lambda: [0, 0, 0])}
 for z in zonas:
     for key, kk in (('por_tipo', z['tipo']), ('por_etapa', z['etapa']), ('por_financia', z['financia'])):
@@ -212,7 +278,7 @@ res = {k2: dict(v) for k2, v in res.items()}
 res['total'] = [len(zonas), sum(z['arboles'] for z in zonas), sum(z['costo_cop'] for z in zonas)]
 res['area_chia_km2'] = round(CH.area / 1e6, 2)
 res['bosque_igac_ha'] = round(BOS.intersection(CH).area / 1e4)
-res['celdas'] = [len(celdas), len(top)]
+res['celdas'] = [len(celdas), len(info)]
 json.dump(res, open('planarborizacion/datos/resumen.json', 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
 print(json.dumps(res, ensure_ascii=False, indent=1))
 for z in zonas: print(z['id'], z['tipo'], z['etapa'], z['vereda'], z['lat'], z['lon'], z['longitud_m'], z['area_ha'], z['arboles'], f"{z['costo_cop']:,}", z['nombre'][:60])
@@ -226,7 +292,7 @@ P = {'etapa0': {'Censo georreferenciado del arbolado urbano público (unos 25.00
                 'Línea base satelital: temperatura de superficie (Landsat), altura de dosel (CHMv2), modelo de superficie (GEM-15) y mapa de sitios sembrables': 120_000_000,
                 'Manual municipal de silvicultura urbana y paleta de especies, con revisión de la CAR': 150_000_000,
                 'Delimitación y convocatoria de Áreas de Vida (Ley 2173 de 2021, Resolución 1491 de 2025)': 60_000_000,
-                'Estudios de diseño paisajístico de los primeros 6 corredores y 12 celdas de sombra': 180_000_000,
+                'Estudios de diseño paisajístico de los corredores y sectores de barrio de la etapa 1': 180_000_000,
                 'Socialización, mesas veredales y diálogo con el Resguardo Indígena de Fonquetá y Cerca de Piedra': 60_000_000},
      'transversal_anual': {'Monitoreo de supervivencia, plataforma de datos abiertos y reporte anual': 80_000_000,
                            'Programa comunitario «Guardianes del árbol», PRAE escolares y adopción de árboles': 100_000_000},

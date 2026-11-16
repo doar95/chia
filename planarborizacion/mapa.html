@@ -7,7 +7,7 @@
 <link rel="icon" href="../icono.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../vendor/maplibre-gl.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="estilo.css?v=2">
+<link rel="stylesheet" href="estilo.css?v=3">
 <style>
 body{font-family:var(--sans);overflow:hidden}
 #map{position:fixed;top:53px;left:0;right:0;bottom:0}
@@ -26,57 +26,86 @@ body{font-family:var(--sans);overflow:hidden}
 .maplibregl-popup-content table{font-size:12px}
 .maplibregl-popup-content td{padding:2px 6px 2px 0;border:none}
 #pl{display:none}
+.intro{background:var(--verde2);border-radius:6px;padding:9px 11px;margin-bottom:10px;font-size:13px;line-height:1.4}
+.intro b{color:var(--verde)}
+.seg{display:flex;border:1px solid var(--linea);border-radius:6px;overflow:hidden}
+.seg button{flex:1;font:inherit;background:#fff;border:0;padding:5px;cursor:pointer;color:var(--tenue)}
+.seg button.on{background:var(--verde);color:#fff}
+.panel .cod{font:600 11px ui-monospace,Menlo,monospace;color:var(--tenue);min-width:20px}
+.tip{position:fixed;z-index:9;pointer-events:none;background:#1b2420e8;color:#fff;font:12.5px/1.35 var(--sans);padding:6px 9px;border-radius:5px;max-width:280px;display:none}
+.tip b{color:#fff}
+.am{display:none}
+@media (max-width:700px){.am{display:flex;gap:8px;align-items:flex-start;position:fixed;left:10px;right:10px;bottom:28px;z-index:6;background:#fffffff5;border:1px solid var(--linea);border-radius:8px;padding:10px 12px;font:13px/1.4 var(--sans);box-shadow:0 2px 12px #0000002a}.am button{border:0;background:none;font-size:20px;line-height:1;cursor:pointer;color:var(--tenue)}.am.fuera{display:none}}
 @media (max-width:700px){.panel{width:auto;right:60px;max-height:45vh}.panel.cerrado{right:auto}#pl{display:inline-block}.panel.cerrado .cuerpo{display:none}}
 </style>
 </head>
 <body>
 <header class="barra"><div class="in">
   <a class="marca" href="../">Chía, memoria y porvenir · <span>Arborización</span></a>
-  <nav class="tabs"><a href="./" data-t="doc">Documento</a><a href="mapa.html" aria-current="page" data-t="mapa">Mapa</a><a href="datos/zonas.csv" data-t="datos">Datos</a></nav>
+  <nav class="tabs"><a href="./" data-t="doc">Documento</a><a href="mapa.html" aria-current="page" data-t="mapa">Mapa</a><a href="datos.html" data-t="datos">Datos</a></nav>
   <button class="btn" id="btn-lang" type="button">English</button>
 </div></header>
 <div id="map"></div>
 <div class="panel" id="panel">
   <button class="btn" id="pl" type="button">☰</button>
   <div class="cuerpo">
+  <div class="intro" id="intro"></div>
+  <h3 data-k="color">Colorear por</h3>
+  <div class="seg"><button type="button" data-c="tipo" class="on" data-k="ctipo">Tipo</button><button type="button" data-c="etapa" data-k="cetapa">Etapa</button></div>
   <h3 data-k="capas">Tipos de zona</h3><div id="tipos"></div>
-  <h3 data-k="etapa">Etapa</h3>
+  <div id="etapas" style="display:none"></div>
+  <h3 data-k="etapa">Mostrar etapa</h3>
   <select id="etapa"><option value="0" data-k="todas">Todas</option><option value="1">1 · 2027–2028</option><option value="2">2 · 2029–2031</option><option value="3">3 · 2032–2035</option></select>
   <h3 data-k="buscar">Buscar</h3>
-  <input type="search" id="q" placeholder="Pradilla, río Frío, C05…">
+  <input type="search" id="q" placeholder="Pradilla, río Frío, U05…">
   <div class="tot" id="tot"></div>
-  <h3 data-k="fondo">Fondo y contexto</h3>
+  <h3 data-k="fondo">Fondo</h3>
   <label><input type="checkbox" id="sat"> <span data-k="sat">Imagen satelital</span></label>
-  <label><input type="checkbox" id="bos" checked> <span data-k="bos">Bosque IGAC 1:25.000</span></label>
-  <label><input type="checkbox" id="pri"> <span data-k="pri">Prioridad de sombra (rejilla 200 m)</span></label>
+  <label><input type="checkbox" id="bos" checked> <span data-k="bos">Bosque existente (IGAC)</span></label>
   <p style="color:var(--tenue);font-size:12px;margin-top:10px" data-k="nota">Coordenadas WGS84. Cada sitio requiere visita técnica, verificación de redes y propiedad, y concepto de la CAR antes de sembrar.</p>
-  <p style="font-size:12px"><a href="datos/zonas.geojson" download>zonas.geojson</a> · <a href="datos/zonas.csv" download>zonas.csv</a> · <a href="datos/prioridad.geojson" download>prioridad.geojson</a></p>
+  <p style="font-size:12px"><a href="datos/zonas_arborizacion_chia.xlsx" data-k="xls">Tabla de zonas (Excel)</a> · <a href="datos.html" data-k="mas">Más datos</a></p>
   </div>
 </div>
+<div id="tip" class="tip"></div>
+<div id="am" class="am"><span id="amt"></span><button type="button" id="amx" aria-label="Cerrar">×</button></div>
 <script src="../vendor/maplibre-gl.js"></script>
 <script>
 const I18N = {
- es: {capas: 'Tipos de zona', etapa: 'Etapa', todas: 'Todas', buscar: 'Buscar', fondo: 'Fondo y contexto', sat: 'Imagen satelital', bos: 'Bosque IGAC 1:25.000', pri: 'Prioridad de sombra (rejilla 200 m)',
-  nota: 'Coordenadas WGS84. Cada sitio requiere visita técnica, verificación de redes y propiedad, y concepto de la CAR antes de sembrar.', doc: 'Documento', mapa: 'Mapa', datos: 'Datos', otro: 'English',
-  zonas: 'zonas', arb: 'árboles y arbustos', costo: 'costo estimado', etq: {etapa: 'Etapa', vereda: 'Vereda', coord: 'Coordenadas', arb: 'Individuos', costo: 'Costo', fin: 'Financiación', gestor: 'Gestor', paleta: 'Paleta', dim: 'Dimensión', nota: 'Supuesto'}, gm: 'Ver en Google Maps',
-  tipos: {ronda: 'Rondas de ríos y quebradas', cerro: 'Núcleos de restauración en ladera', vial: 'Corredores viales', parque: 'Parques y zonas verdes', escolar: 'Colegios e instituciones', urbano: 'Calles de sombra', cerca: 'Cercas vivas rurales'}},
- en: {capas: 'Zone types', etapa: 'Stage', todas: 'All', buscar: 'Search', fondo: 'Basemap and context', sat: 'Satellite imagery', bos: 'IGAC forest 1:25,000', pri: 'Shade priority (200 m grid)',
-  nota: 'WGS84 coordinates. Every site needs a technical visit, checks on utilities and ownership, and a CAR opinion before planting.', doc: 'Paper', mapa: 'Map', datos: 'Data', otro: 'Español',
-  zonas: 'zones', arb: 'trees and shrubs', costo: 'estimated cost', etq: {etapa: 'Stage', vereda: 'Vereda', coord: 'Coordinates', arb: 'Plants', costo: 'Cost', fin: 'Funding', gestor: 'Manager', paleta: 'Palette', dim: 'Size', nota: 'Assumption'}, gm: 'Open in Google Maps',
-  tipos: {ronda: 'River and stream buffers', cerro: 'Hillside restoration nuclei', vial: 'Road corridors', parque: 'Parks and green areas', escolar: 'Schools and institutions', urbano: 'Shade streets', cerca: 'Rural living fences'}}
+ es: {color: 'Colorear por', ctipo: 'Tipo', cetapa: 'Etapa', capas: 'Tipos de zona', etapa: 'Mostrar etapa', todas: 'Todas', buscar: 'Buscar', fondo: 'Fondo', sat: 'Imagen satelital', bos: 'Bosque existente (IGAC)',
+  xls: 'Tabla de zonas (Excel)', mas: 'Más datos',
+  intro: '<b>Cada mancha o línea de color es un lugar donde el plan propone sembrar.</b> El código dice qué tipo de siembra es (U = calles de barrio, V = vía, R = río…). Pase el puntero o toque una zona para ver su nombre; haga clic para ver árboles, especies, costo y coordenadas.',
+  nota: 'Coordenadas WGS84. Cantidades potenciales de planeación: cada sitio requiere visita técnica, verificación de redes y propiedad, y concepto de la CAR antes de sembrar.', doc: 'Documento', mapa: 'Mapa', datos: 'Datos', otro: 'English',
+  zonas: 'zonas', arb: 'árboles y arbustos', costo: 'costo estimado', etq: {etapa: 'Etapa', vereda: 'Vereda o sector', coord: 'Coordenadas', arb: 'Árboles y arbustos', costo: 'Costo', fin: 'Financiación', gestor: 'Responsable', paleta: 'Paleta de especies', dim: 'Tamaño', nota: 'Supuesto'}, gm: 'Ver en Google Maps',
+  per: {1: 'Etapa 1 · 2027–2028', 2: 'Etapa 2 · 2029–2031', 3: 'Etapa 3 · 2032–2035'},
+  tipos: {urbano: 'Calles de barrio', vial: 'Corredores viales', parque: 'Parques y zonas verdes', escolar: 'Colegios e instituciones', ronda: 'Rondas de ríos y quebradas', cerro: 'Montaña: restauración junto al bosque', cerca: 'Cercas vivas rurales'}},
+ en: {color: 'Colour by', ctipo: 'Type', cetapa: 'Stage', capas: 'Zone types', etapa: 'Show stage', todas: 'All', buscar: 'Search', fondo: 'Basemap', sat: 'Satellite imagery', bos: 'Existing forest (IGAC)',
+  xls: 'Zone table (Excel)', mas: 'More data',
+  intro: '<b>Every coloured patch or line is a place where the plan proposes planting.</b> The code tells the planting type (U = neighbourhood streets, V = road, R = river…). Hover over or tap a zone to see its name; click for trees, species, cost and coordinates.',
+  nota: 'WGS84 coordinates. Planning potentials: every site needs a technical visit, checks on utilities and ownership, and a CAR opinion before planting.', doc: 'Paper', mapa: 'Map', datos: 'Data', otro: 'Español',
+  zonas: 'zones', arb: 'trees and shrubs', costo: 'estimated cost', etq: {etapa: 'Stage', vereda: 'Vereda or sector', coord: 'Coordinates', arb: 'Trees and shrubs', costo: 'Cost', fin: 'Funding', gestor: 'Responsible', paleta: 'Species palette', dim: 'Size', nota: 'Assumption'}, gm: 'Open in Google Maps',
+  per: {1: 'Stage 1 · 2027–2028', 2: 'Stage 2 · 2029–2031', 3: 'Stage 3 · 2032–2035'},
+  tipos: {urbano: 'Neighbourhood streets', vial: 'Road corridors', parque: 'Parks and green areas', escolar: 'Schools and institutions', ronda: 'River and stream buffers', cerro: 'Mountain: restoration next to forest', cerca: 'Rural living fences'}}
 };
 const COL = {ronda: '#2a78d6', vial: '#eb6834', parque: '#1baf7a', cerca: '#eda100', urbano: '#e87ba4', cerro: '#008300', escolar: '#6250d6'};
-const ORD = ['ronda', 'cerro', 'vial', 'parque', 'escolar', 'urbano', 'cerca'];
+const CET = {1: '#b5541c', 2: '#e8a33a', 3: '#8fa9c4'};
+const PRE = {urbano: 'U', vial: 'V', parque: 'P', escolar: 'E', ronda: 'R', cerro: 'M', cerca: 'C-'};
+const ORD = ['urbano', 'vial', 'parque', 'escolar', 'ronda', 'cerro', 'cerca'];
 let L = new URLSearchParams(location.search).get('lang'); if (!L) { try { L = localStorage.getItem('chia-arb-lang'); } catch (e) {} } L = L || 'es';
-let Z = null; const on = Object.fromEntries(ORD.map(t => [t, true]));
+let Z = null, modo = 'tipo'; const on = Object.fromEntries(ORD.map(t => [t, true]));
 const fmt = n => Number(n).toLocaleString(L === 'es' ? 'es-CO' : 'en-US');
-const map = new maplibregl.Map({container: 'map', center: [-74.045, 4.868], zoom: 12.2, attributionControl: {compact: true},
+const map = new maplibregl.Map({container: 'map', bounds: [[-74.098, 4.818], [-73.982, 4.918]], fitBoundsOptions: {padding: {top: 20, bottom: 20, left: innerWidth > 700 ? 340 : 20, right: 20}}, attributionControl: {compact: true},
  style: {version: 8, glyphs: 'https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf',
   sources: {osm: {type: 'raster', tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'], tileSize: 256, maxzoom: 19, attribution: '© colaboradores de OpenStreetMap'},
    sat: {type: 'raster', tiles: ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'], tileSize: 256, maxzoom: 19, attribution: 'Imagen: Esri, Maxar, Earthstar Geographics'}},
-  layers: [{id: 'osm', type: 'raster', source: 'osm', paint: {'raster-saturation': -0.6, 'raster-opacity': 0.85}}, {id: 'sat', type: 'raster', source: 'sat', layout: {visibility: 'none'}}]}});
+  layers: [{id: 'osm', type: 'raster', source: 'osm', paint: {'raster-saturation': -0.7, 'raster-opacity': 0.8}}, {id: 'sat', type: 'raster', source: 'sat', layout: {visibility: 'none'}}]}});
 map.addControl(new maplibregl.NavigationControl(), 'top-right');
 map.addControl(new maplibregl.ScaleControl({unit: 'metric'}), 'bottom-right');
+const colorExpr = () => modo === 'tipo' ? ['get', 'color'] : ['match', ['get', 'etapa'], 1, CET[1], 2, CET[2], CET[3]];
+function pinta() {
+  ['z-fill', 'z-borde', 'z-line'].forEach(id => map.setPaintProperty(id, id === 'z-fill' ? 'fill-color' : 'line-color', colorExpr()));
+  document.querySelectorAll('.seg button').forEach(b => b.classList.toggle('on', b.dataset.c === modo));
+  leyenda();
+}
 function filtro() {
   const e = +document.getElementById('etapa').value, q = document.getElementById('q').value.trim().toLowerCase();
   const tipos = ORD.filter(t => on[t]);
@@ -89,65 +118,80 @@ function filtro() {
   document.getElementById('tot').innerHTML = `<b>${fmt(vis.reduce((a, x) => a + x.properties.arboles, 0))}</b> ${T.arb}<br>${vis.length} ${T.zonas} · ${T.costo} $${fmt(Math.round(vis.reduce((a, x) => a + x.properties.costo_cop, 0) / 1e6))} M`;
   if (q && vis.length && vis.length < 6) { const b = vis.map(v => v.properties.bbox); map.fitBounds([[Math.min(...b.map(x => x[1])), Math.min(...b.map(x => x[0]))], [Math.max(...b.map(x => x[3])), Math.max(...b.map(x => x[2]))]], {padding: 80, maxZoom: 16}); }
 }
+function leyenda() {
+  const T = I18N[L];
+  const cnt = {}; Z.features.forEach(f => cnt[f.properties.tipo] = (cnt[f.properties.tipo] || 0) + f.properties.arboles);
+  document.getElementById('tipos').innerHTML = ORD.map(t => `<label><input type="checkbox" data-tipo="${t}" ${on[t] ? 'checked' : ''}><span class="sw${t === 'vial' ? ' l' : ''}" style="background:${modo === 'tipo' ? COL[t] : '#c9c4b5'}"></span><span class="cod">${PRE[t]}</span>${T.tipos[t]}<span class="n">${fmt(cnt[t])}</span></label>`).join('');
+  document.querySelectorAll('[data-tipo]').forEach(c => c.onchange = () => { on[c.dataset.tipo] = c.checked; filtro(); });
+  const ce = {}; Z.features.forEach(f => ce[f.properties.etapa] = (ce[f.properties.etapa] || 0) + f.properties.arboles);
+  const et = document.getElementById('etapas'); et.style.display = modo === 'etapa' ? '' : 'none';
+  et.innerHTML = [1, 2, 3].map(e => `<label><span class="sw" style="background:${CET[e]}"></span>${T.per[e]}<span class="n">${fmt(ce[e])}</span></label>`).join('');
+}
 function textos() {
   const T = I18N[L]; document.documentElement.lang = L;
   document.querySelectorAll('[data-k]').forEach(e => e.textContent = T[e.dataset.k]);
   document.querySelectorAll('[data-t]').forEach(e => e.textContent = T[e.dataset.t]);
+  document.getElementById('intro').innerHTML = T.intro; document.getElementById('amt').innerHTML = T.intro;
   document.getElementById('btn-lang').textContent = T.otro;
-  const cnt = {}; Z.features.forEach(f => cnt[f.properties.tipo] = (cnt[f.properties.tipo] || 0) + f.properties.arboles);
-  document.getElementById('tipos').innerHTML = ORD.map(t => `<label><input type="checkbox" data-tipo="${t}" ${on[t] ? 'checked' : ''}><span class="sw${t === 'vial' ? ' l' : ''}" style="background:${COL[t]}"></span>${T.tipos[t]}<span class="n">${fmt(cnt[t])}</span></label>`).join('');
-  document.querySelectorAll('[data-tipo]').forEach(c => c.onchange = () => { on[c.dataset.tipo] = c.checked; filtro(); });
-  filtro();
+  leyenda(); filtro();
 }
-map.on('load', async () => {
-  const [z, b, p, lim] = await Promise.all(['datos/zonas.geojson', '../datos/bosque_igac.geojson', 'datos/prioridad.geojson', '../datos/limites_municipios.geojson'].map(u => fetch(u).then(r => r.json())));
+const tip = document.getElementById('tip');
+function muestraTip(e) {
+  const p = e.features[0].properties, T = I18N[L];
+  tip.innerHTML = `<b>${p.id} · ${p.nombre}</b><br>${T.tipos[p.tipo]} · ${fmt(p.arboles)} ${T.arb}<br>${T.per[p.etapa]}`;
+  tip.style.display = 'block'; tip.style.left = Math.min(e.originalEvent.clientX + 14, innerWidth - 290) + 'px'; tip.style.top = (e.originalEvent.clientY + 14) + 'px';
+}
+map.once('style.load', async () => {
+  const [z, b, lim] = await Promise.all(['datos/zonas.geojson', '../datos/bosque_igac.geojson', '../datos/limites_municipios.geojson'].map(u => fetch(u).then(r => r.json())));
   Z = z;
   z.features.forEach(f => f.properties.color = COL[f.properties.tipo]);
   lim.features = lim.features.filter(f => f.properties.c === 25175);
   map.addSource('lim', {type: 'geojson', data: lim});
   map.addSource('bos', {type: 'geojson', data: b});
-  map.addSource('pri', {type: 'geojson', data: p});
   map.addSource('z', {type: 'geojson', data: z});
   map.addSource('zc', {type: 'geojson', data: {type: 'FeatureCollection', features: z.features.map(f => ({type: 'Feature', properties: f.properties, geometry: {type: 'Point', coordinates: [f.properties.lon, f.properties.lat]}}))}});
-  map.addLayer({id: 'bos', type: 'fill', source: 'bos', paint: {'fill-color': '#4f8a3c', 'fill-opacity': 0.22}});
-  map.addLayer({id: 'pri', type: 'fill', source: 'pri', layout: {visibility: 'none'}, paint: {'fill-color': ['interpolate', ['linear'], ['get', 'prioridad'], 0.2, '#fff3d6', 0.45, '#f2a65a', 0.7, '#b5541c'], 'fill-opacity': 0.55, 'fill-outline-color': '#ffffff'}});
+  map.addLayer({id: 'bos', type: 'fill', source: 'bos', paint: {'fill-color': '#4f8a3c', 'fill-opacity': 0.2}});
   map.addLayer({id: 'lim', type: 'line', source: 'lim', paint: {'line-color': '#1b2420', 'line-width': 1.6, 'line-dasharray': [3, 2]}});
   const pol = ['match', ['geometry-type'], ['Polygon', 'MultiPolygon'], true, false], lin = ['match', ['geometry-type'], ['LineString', 'MultiLineString'], true, false];
-  map.addLayer({id: 'z-fill', type: 'fill', source: 'z', metadata: {g: pol}, paint: {'fill-color': ['get', 'color'], 'fill-opacity': ['match', ['get', 'tipo'], ['cerca', 'cerro'], 0.22, 0.6]}});
-  map.addLayer({id: 'z-borde', type: 'line', source: 'z', metadata: {g: pol}, paint: {'line-color': ['get', 'color'], 'line-width': ['match', ['get', 'tipo'], ['cerca', 'cerro'], 0.4, 1], 'line-opacity': ['match', ['get', 'tipo'], ['cerca', 'cerro'], 0.5, 1]}});
-  map.addLayer({id: 'z-line', type: 'line', source: 'z', metadata: {g: lin}, layout: {'line-cap': 'round'}, paint: {'line-color': ['get', 'color'], 'line-width': ['interpolate', ['linear'], ['zoom'], 11, 3, 16, 8]}});
-  map.addLayer({id: 'z-pt', type: 'symbol', source: 'zc', metadata: {g: ['match', ['get', 'tipo'], ['ronda', 'cerro', 'vial', 'urbano'], true, false]}, layout: {'text-field': ['get', 'id'], 'text-size': 11, 'text-font': ['Noto Sans Regular']}, paint: {'text-color': '#1b2420', 'text-halo-color': '#fff', 'text-halo-width': 1.6}});
+  map.addLayer({id: 'z-fill', type: 'fill', source: 'z', metadata: {g: pol}, paint: {'fill-color': ['get', 'color'], 'fill-opacity': ['match', ['get', 'tipo'], 'cerca', 0.08, 'cerro', 0.25, 'urbano', 0.55, 0.7]}});
+  map.addLayer({id: 'z-borde', type: 'line', source: 'z', metadata: {g: pol}, paint: {'line-color': ['get', 'color'], 'line-width': ['match', ['get', 'tipo'], 'cerca', 0.7, 'cerro', 0.4, 'urbano', 1.6, 1], 'line-opacity': 0.9}});
+  map.addLayer({id: 'z-line', type: 'line', source: 'z', metadata: {g: lin}, layout: {'line-cap': 'round'}, paint: {'line-color': ['get', 'color'], 'line-width': ['interpolate', ['linear'], ['zoom'], 11, 3.5, 16, 9]}});
+  map.addLayer({id: 'z-pt', type: 'symbol', source: 'zc', metadata: {g: ['literal', true]},
+    layout: {'text-field': ['get', 'id'], 'text-size': ['interpolate', ['linear'], ['zoom'], 11, 10, 15, 13], 'text-font': ['Noto Sans Regular'], 'text-allow-overlap': false, 'text-padding': 1,
+      'symbol-sort-key': ['match', ['get', 'tipo'], 'urbano', 0, 'vial', 1, 'ronda', 2, 'cerro', 3, 4]},
+    minzoom: 0, paint: {'text-color': '#1b2420', 'text-halo-color': '#fff', 'text-halo-width': 1.8}});
   textos();
   const T = () => I18N[L];
-  ['z-fill', 'z-line'].forEach(id => {
-    map.on('mouseenter', id, () => map.getCanvas().style.cursor = 'pointer');
-    map.on('mouseleave', id, () => map.getCanvas().style.cursor = '');
-    map.on('click', id, e => {
-      const p = e.features[0].properties, E = T().etq, bb = JSON.parse(p.bbox);
-      const dim = p.longitud_m && p.longitud_m !== 'null' ? fmt(p.longitud_m) + ' m' : fmt(p.area_ha) + ' ha';
-      new maplibregl.Popup({maxWidth: '340px'}).setLngLat(e.lngLat).setHTML(
-        `<h4>${p.id} · ${p.nombre}</h4><div style="color:${p.color};font-weight:600;margin-bottom:4px">${T().tipos[p.tipo]}</div><table>
-        <tr><td>${E.etapa}</td><td>${p.etapa}</td></tr><tr><td>${E.vereda}</td><td>${p.vereda}</td></tr>
-        <tr><td>${E.coord}</td><td class="coord">${(+p.lat).toFixed(5)}, ${(+p.lon).toFixed(5)}</td></tr>
-        <tr><td>${E.dim}</td><td>${dim}</td></tr><tr><td>${E.arb}</td><td>${fmt(p.arboles)}</td></tr>
-        <tr><td>${E.costo}</td><td>$${fmt(p.costo_cop)}</td></tr><tr><td>${E.fin}</td><td>${p.financia}</td></tr>
-        <tr><td>${E.gestor}</td><td>${p.gestor}</td></tr><tr><td>${E.paleta}</td><td>${p.paleta}</td></tr></table>
-        <p style="color:#56615b;margin:6px 0">${E.nota}: ${p.nota}</p>
-        <a href="https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lon}" target="_blank" rel="noopener">${T().gm}</a>`).addTo(map);
-    });
+  ['z-fill', 'z-line', 'z-pt'].forEach(id => {
+    map.on('mousemove', id, e => { map.getCanvas().style.cursor = 'pointer'; muestraTip(e); });
+    map.on('mouseleave', id, () => { map.getCanvas().style.cursor = ''; tip.style.display = 'none'; });
   });
-  map.on('click', 'pri', e => { if (map.queryRenderedFeatures(e.point, {layers: ['z-fill', 'z-line']}).length) return; const p = e.features[0].properties;
-    new maplibregl.Popup().setLngLat(e.lngLat).setHTML(`<b>${L === 'es' ? 'Prioridad' : 'Priority'} ${(+p.prioridad).toFixed(2)}</b><br>${p.predios} ${L === 'es' ? 'predios' : 'parcels'} · ${p.dist_verde_m} m ${L === 'es' ? 'al verde más cercano' : 'to nearest green'}`).addTo(map); });
+  map.on('click', e => {
+    const fs = map.queryRenderedFeatures(e.point, {layers: ['z-pt', 'z-line', 'z-fill']}); if (!fs.length) return;
+    tip.style.display = 'none';
+    const p = fs[0].properties, E = T().etq;
+    const dim = p.longitud_m && p.longitud_m !== 'null' ? fmt(p.longitud_m) + ' m' : fmt(p.area_ha) + ' ha';
+    new maplibregl.Popup({maxWidth: '340px'}).setLngLat(e.lngLat).setHTML(
+      `<h4>${p.id} · ${p.nombre}</h4><div style="color:${COL[p.tipo]};font-weight:600;margin-bottom:4px">${T().tipos[p.tipo]}</div><table>
+      <tr><td>${E.etapa}</td><td>${T().per[p.etapa]}</td></tr><tr><td>${E.arb}</td><td><b>${fmt(p.arboles)}</b></td></tr>
+      <tr><td>${E.vereda}</td><td>${p.vereda}</td></tr><tr><td>${E.coord}</td><td class="coord">${(+p.lat).toFixed(5)}, ${(+p.lon).toFixed(5)}</td></tr>
+      <tr><td>${E.dim}</td><td>${dim}</td></tr><tr><td>${E.costo}</td><td>$${fmt(p.costo_cop)}</td></tr><tr><td>${E.fin}</td><td>${p.financia}</td></tr>
+      <tr><td>${E.gestor}</td><td>${p.gestor}</td></tr><tr><td>${E.paleta}</td><td>${p.paleta}</td></tr></table>
+      <p style="color:#56615b;margin:6px 0">${E.nota}: ${p.nota}</p>
+      <a href="https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lon}" target="_blank" rel="noopener">${T().gm}</a>`).addTo(map);
+  });
+  document.body.dataset.listo = '1';
 });
+document.querySelectorAll('.seg button').forEach(b => b.onclick = () => { modo = b.dataset.c; pinta(); });
 document.getElementById('etapa').onchange = filtro;
 document.getElementById('q').oninput = filtro;
 document.getElementById('sat').onchange = e => { map.setLayoutProperty('sat', 'visibility', e.target.checked ? 'visible' : 'none'); map.setLayoutProperty('osm', 'visibility', e.target.checked ? 'none' : 'visible'); };
 document.getElementById('bos').onchange = e => map.setLayoutProperty('bos', 'visibility', e.target.checked ? 'visible' : 'none');
-document.getElementById('pri').onchange = e => map.setLayoutProperty('pri', 'visibility', e.target.checked ? 'visible' : 'none');
 document.getElementById('btn-lang').onclick = () => { L = L === 'es' ? 'en' : 'es'; try { localStorage.setItem('chia-arb-lang', L); } catch (e) {} textos(); };
 function ajusta(){const h=document.querySelector('.barra').offsetHeight;document.getElementById('map').style.top=h+'px';document.getElementById('panel').style.top=(h+12)+'px';map.resize();}
 window.addEventListener('resize',ajusta);ajusta();
 if (innerWidth <= 700) document.getElementById('panel').classList.add('cerrado');
+document.getElementById('amx').onclick = () => document.getElementById('am').classList.add('fuera');
 document.getElementById('pl').onclick = () => document.getElementById('panel').classList.toggle('cerrado');
 </script>
 </body>

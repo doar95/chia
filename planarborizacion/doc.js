@@ -109,11 +109,34 @@ function tabla(caption, head, rows, numCols = [], totRow = null) {
   return `<div class="tabla"><table><caption>${caption}</caption><thead><tr>${th}</tr></thead><tbody>${rows.map(tr).join('')}${totRow ? tr(totRow).replace('<tr>', '<tr class="tot">') : ''}</tbody></table></div>`;
 }
 
+function breve(T, $) {
+  const B = T.breve, es = L === 'es';
+  const per = e => ({1: '2027–28', 2: '2029–31', 3: '2032–35'})[e];
+  const orden = ['urbano', 'vial', 'parque', 'escolar', 'ronda', 'cerro', 'cerca'];
+  const filas = orden.map(t => {
+    const zz = Z.filter(z => z.tipo === t), et = [...new Set(zz.map(z => z.etapa))].sort();
+    const ini = {1: 2027, 2: 2029, 3: 2032}, fin = {1: 2028, 2: 2031, 3: 2035}, cuando = ini[et[0]] + '–' + fin[et[et.length - 1]];
+    return [`<span class="chip" style="background:${COL[t]}"></span><b>${B.pref[t]}</b>`, T.tipos[t], B.filas[t], fmt(zz.reduce((a, z) => a + z.arboles, 0)), cuando];
+  });
+  const u1 = Z.filter(z => z.tipo === 'urbano' && z.etapa === 1).map(z => z.nombre.split(': ')[1]);
+  const lista = u1.slice(0, -1).join(', ') + (es ? ' y ' : ' and ') + u1[u1.length - 1];
+  const P = RES.presupuesto, n1 = RES.por_etapa['1'][1];
+  const r = n => fmt(Math.round(n / 1e6));
+  $('#breve').innerHTML = `<p class="ante">${B.ante}</p><h1>${B.titulo}</h1><p class="lead">${B.lead}</p>
+  <p class="botones noimp"><a class="btn prim" href="mapa.html">${B.bMapa}</a> <a class="btn" href="descargas/plan_arborizacion_chia_${L}.pdf">${B.bPdf}</a> <a class="btn" href="datos/zonas_arborizacion_chia.xlsx">${B.bXls}</a></p>
+  <figure class="fig"><a href="mapa.html"><img src="fig/mapa_zonas_${L}.png" alt="${B.bMapa}" style="width:100%"></a><figcaption>${B.figura}</figcaption></figure>
+  <h2>${B.donde}</h2>` + tabla('', B.cab, filas, [3], ['', 'Total', '', fmt(RES.total[1]), '2027–2035']) +
+  `<h2>${B.primero}</h2>${B.primeroTxt(lista, fmt(n1))}<figure class="fig"><a href="mapa.html"><img src="fig/mapa_urbano_${L}.png" alt="" style="width:100%"></a><figcaption>${B.figuraU}</figcaption></figure><h2>${B.cuanto}</h2>${B.cuantoTxt(r(P.municipio_total), r(P.municipio_anual_promedio), r(P.programa_total_todas_las_fuentes))}
+  <h2>${B.plata}</h2>${B.plataTxt}<h2>${B.pide}</h2>${B.pideTxt}<p class="nota">${B.aviso}</p>
+  <div class="sigue"><b>${B.sigue}</b><span>${B.sigueTxt}</span></div>`;
+}
+
 function render() {
   const T = window.TXT[L];
   document.documentElement.lang = L;
   document.title = T.titulo;
   const $ = s => document.querySelector(s);
+  breve(T, $);
   $('#rev').innerHTML = T.revista.map(x => `<span>${x}</span>`).join('');
   $('#tit').textContent = T.titulo;
   $('#aut').innerHTML = T.autores;
@@ -161,8 +184,8 @@ function render() {
   // Anexo
   const C = T.cols;
   const rowsA = Z.map(z => [z.id, z.nombre, `<span class="chip" style="background:${COL[z.tipo]}"></span>${T.tipos[z.tipo]}`, z.etapa, z.vereda, `<span class="coord">${z.lat.toFixed(5)}, ${z.lon.toFixed(5)}</span>`,
-    `<span class="coord">${z.bbox.map(v => v.toFixed(4)).join(', ')}</span>`, z.longitud_m ? fmt(z.longitud_m) + ' m' : fmt(z.area_ha, 2) + ' ha', fmt(z.arboles), fmt(z.costo_cop), T.fin[z.financia], PALETAS[L][z.paleta.split(' ')[0]]]);
-  $('#anexo').innerHTML = `<h2>${T.anexo}</h2><p>${T.anexoTxt}</p>` + tabla('', [C.id, C.nombre, C.tipo, C.etapa, C.vereda, C.coord, C.bbox, C.dim, C.arb, C.costo, C.fin, C.paleta], rowsA, [7, 8, 9]);
+    z.longitud_m ? fmt(z.longitud_m) + ' m' : fmt(z.area_ha, 2) + ' ha', fmt(z.arboles), fmt(z.costo_cop), T.fin[z.financia], PALETAS[L][z.paleta.split(' ')[0]]]);
+  $('#anexo').innerHTML = `<h2>${T.anexo}</h2><p>${T.anexoTxt}</p>` + tabla('', [C.id, C.nombre, C.tipo, C.etapa, C.vereda, C.coord, C.dim, C.arb, C.costo, C.fin, C.paleta], rowsA, [6, 7, 8]);
   $('#refs').innerHTML = `<h2>${T.refs}</h2>` + REFS.map((r, i) => `<p class="ref" id="${r[0]}">[${i + 1}] ${r[1]}</p>`).join('');
   document.querySelectorAll('img[src^="fig/"]').forEach(im => im.src = im.getAttribute('src').replace(/_(es|en)\.png/, `_${L}.png`));
   if (location.hash) { const t = document.getElementById(location.hash.slice(1)); if (t) t.scrollIntoView(); }
