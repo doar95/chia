@@ -26,7 +26,7 @@ body{font-family:var(--sans);overflow:hidden}
 .maplibregl-popup-content table{font-size:12px}
 .maplibregl-popup-content td{padding:2px 6px 2px 0;border:none}
 #pl{display:none}
-@media (max-width:700px){.panel{width:auto;right:12px;max-height:40vh}#pl{display:inline-block}.panel.cerrado .cuerpo{display:none}}
+@media (max-width:700px){.panel{width:auto;right:60px;max-height:45vh}.panel.cerrado{right:auto}#pl{display:inline-block}.panel.cerrado .cuerpo{display:none}}
 </style>
 </head>
 <body>
@@ -145,6 +145,9 @@ document.getElementById('sat').onchange = e => { map.setLayoutProperty('sat', 'v
 document.getElementById('bos').onchange = e => map.setLayoutProperty('bos', 'visibility', e.target.checked ? 'visible' : 'none');
 document.getElementById('pri').onchange = e => map.setLayoutProperty('pri', 'visibility', e.target.checked ? 'visible' : 'none');
 document.getElementById('btn-lang').onclick = () => { L = L === 'es' ? 'en' : 'es'; try { localStorage.setItem('chia-arb-lang', L); } catch (e) {} textos(); };
+function ajusta(){const h=document.querySelector('.barra').offsetHeight;document.getElementById('map').style.top=h+'px';document.getElementById('panel').style.top=(h+12)+'px';map.resize();}
+window.addEventListener('resize',ajusta);ajusta();
+if (innerWidth <= 700) document.getElementById('panel').classList.add('cerrado');
 document.getElementById('pl').onclick = () => document.getElementById('panel').classList.toggle('cerrado');
 </script>
 </body>
