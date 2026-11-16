@@ -1,7 +1,7 @@
 window.TXT = window.TXT || {};
 window.TXT.es = {
 lang: 'es',
-revista: ['Chía, memoria y porvenir · Documento técnico 01', 'Versión 1.1 · 16 de noviembre de 2026'],
+revista: ['Chía, memoria y porvenir · Documento técnico 01', 'Versión 1.2 · 16 de noviembre de 2026'],
 titulo: 'Plan maestro de arborización de Chía 2027–2035: un enfoque ecosistémico con especies nativas de la Sabana de Bogotá',
 autores: 'Elaborado por el titular del repositorio <a href="https://github.com/doar95/chia">doar95/chia</a>, con asistencia de inteligencia artificial (Claude, de Anthropic), que redactó textos, programas y traducción bajo su dirección. Documento abierto para revisión de la Alcaldía de Chía, la CAR Cundinamarca, el Concejo Municipal y la ciudadanía.',
 destacados: [
@@ -240,6 +240,9 @@ donde: 'Dónde se siembra',
 cab: ['Código', 'Qué', 'Dónde', 'Plantas', 'Cuándo'],
 filas: {urbano: '27 sectores de calles de barrio en el casco urbano y Mercedes de Calahorra', vial: 'Avenida Pradilla, Calle 7, Carrera 9 y Calle 21 primero; después las vías rurales', parque: '25 parques y zonas verdes', escolar: '33 colegios e instituciones', ronda: 'Río Frío, río Bogotá, quebradas Honda, Tíquiza y Torca, canal Guaymaral', cerro: 'Junto al bosque del Majuy y de los cerros orientales', cerca: 'Linderos de fincas en nueve veredas'},
 pref: {urbano: 'U', vial: 'V', parque: 'P', escolar: 'E', ronda: 'R', cerro: 'M', cerca: 'C-'},
+que: 'Qué árbol va en cada zona',
+queTxt: 'Cada tipo de zona tiene una receta: especies principales (las que darán la sombra o el dosel), intermedias (crecen más rápido y acompañan), restricciones del sitio y forma de sembrar. Las mismas recetas aparecen en cada zona del mapa y en la tabla de Excel.',
+cabQ: ['Zona', 'Qué especies', 'Cómo sembrar'],
 primero: 'Qué se siembra primero (julio de 2027 a diciembre de 2028)',
 primeroTxt: (sect, n) => `<p>Las calles de los barrios con más viviendas y menos verde cerca: ${sect}. Además, los cuatro ejes viales del centro, la ronda urbana del río Frío, 14 colegios e instituciones públicas y 19 parques. En total, <b>${n} plantas</b> en la etapa 1. Las rondas rurales y los cerros siguen entre 2029 y 2031, y las cercas vivas y las vías nacionales entre 2032 y 2035.</p>`,
 cuanto: 'Cuánto cuesta',

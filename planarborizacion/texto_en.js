@@ -1,7 +1,7 @@
 window.TXT = window.TXT || {};
 window.TXT.en = {
 lang: 'en',
-revista: ['Chía, memory and future · Technical paper 01', 'Version 1.1 · 16 November 2026'],
+revista: ['Chía, memory and future · Technical paper 01', 'Version 1.2 · 16 November 2026'],
 titulo: 'Chía Tree-Planting Master Plan 2027–2035: an ecosystem approach with native species of the Bogotá Savanna',
 autores: 'Prepared by the owner of the <a href="https://github.com/doar95/chia">doar95/chia</a> repository, with assistance from artificial intelligence (Claude, by Anthropic), which drafted text, code and translation under the owner’s direction. Open document for review by the Municipality of Chía, CAR Cundinamarca, the Municipal Council and the public. The Spanish version is the reference text.',
 destacados: [
@@ -240,6 +240,9 @@ donde: 'Where planting happens',
 cab: ['Code', 'What', 'Where', 'Plants', 'When'],
 filas: {urbano: '27 neighbourhood-street sectors in the town and Mercedes de Calahorra', vial: 'Avenida Pradilla, Calle 7, Carrera 9 and Calle 21 first; rural roads later', parque: '25 parks and green areas', escolar: '33 schools and institutions', ronda: 'Frío River, Bogotá River, Honda, Tíquiza and Torca streams, Guaymaral canal', cerro: 'Next to the forest on the Majuy and the eastern hills', cerca: 'Farm boundaries in nine veredas'},
 pref: {urbano: 'U', vial: 'V', parque: 'P', escolar: 'E', ronda: 'R', cerro: 'M', cerca: 'C-'},
+que: 'Which tree goes in each zone',
+queTxt: 'Each zone type has a recipe: main species (those that will give shade or canopy), secondary species (faster-growing companions), site restrictions and planting method. The same recipes appear in every zone on the map and in the Excel table.',
+cabQ: ['Zone', 'Which species', 'How to plant'],
 primero: 'What is planted first (July 2027 to December 2028)',
 primeroTxt: (sect, n) => `<p>The streets of the neighbourhoods with the most homes and the least green nearby: ${sect}. Also the four central road axes, the urban Frío River buffer, 14 public schools and institutions, and 19 parks. In all, <b>${n} plants</b> in stage 1. Rural river buffers and the hills follow in 2029–2031, and living fences and national roads in 2032–2035.</p>`,
 cuanto: 'What it costs',

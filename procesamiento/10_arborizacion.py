@@ -13,7 +13,9 @@ Uso: python procesamiento/10_arborizacion.py
 Todas las cantidades son potenciales técnicos para planeación. Cada punto exige visita de campo,
 verificación de redes, propiedad del suelo y concepto de la autoridad ambiental antes de sembrar.
 """
-import json, csv, math
+import json, csv, math, sys
+sys.path.insert(0, 'procesamiento')
+from recetas_arborizacion import R as RECETA, MESES, LIMITES
 from collections import defaultdict
 from shapely.geometry import shape, mapping, LineString, Point, box
 from shapely.ops import transform, unary_union
@@ -243,11 +245,11 @@ CODIGOS = [('R', 'Ronda de río o quebrada: franja de 30 m por margen'), ('V', '
            ('U', 'Calles de barrio del casco urbano'), ('P', 'Parque o zona verde'), ('E', 'Colegio, universidad u otra institución'),
            ('M', 'Montaña: núcleos de restauración junto al bosque de los cerros'), ('C-', 'Cerca viva en predios rurales de una vereda (C-FUS = Fusca)')]
 CAB = ['Código', 'Nombre', 'Tipo', 'Etapa', 'Periodo de siembra', 'Vereda o sector', 'Latitud', 'Longitud', 'Ver en Google Maps',
-       'Longitud (m)', 'Área (ha)', 'Árboles y arbustos', 'Paleta de especies', 'Costo estimado (COP 2027)', 'Financiación', 'Responsable', 'Supuesto']
+       'Longitud (m)', 'Área (ha)', 'Árboles y arbustos', 'Especies principales', 'Especies intermedias', 'Restricciones y acompañantes', 'Cómo sembrar', 'Mezcla', 'Meses de siembra', 'Paleta', 'Costo estimado (COP 2027)', 'Financiación', 'Responsable', 'Supuesto']
 def fila(z):
     return [z['id'], z['nombre'], TIPO_ES[z['tipo']], z['etapa'], PERIODO[z['etapa']], z['vereda'], z['lat'], z['lon'],
             f"https://www.google.com/maps/search/?api=1&query={z['lat']},{z['lon']}", z['longitud_m'] or '', z['area_ha'] or '',
-            z['arboles'], z['paleta'], z['costo_cop'], z['financia'], z['gestor'], z['nota']]
+            z['arboles'], RECETA[z['tipo']]['es']['principal'], RECETA[z['tipo']]['es']['intermedio'], RECETA[z['tipo']]['es']['acomp'], RECETA[z['tipo']]['es']['como'], RECETA[z['tipo']]['es']['mezcla'], MESES['es'], z['paleta'], z['costo_cop'], z['financia'], z['gestor'], z['nota']]
 with open('planarborizacion/datos/zonas.csv', 'w', encoding='utf-8-sig', newline='') as fh:
     wr = csv.writer(fh); wr.writerow(CAB)
     for z in zonas: wr.writerow(fila(z))
@@ -258,18 +260,22 @@ ws.append(CAB)
 for z in zonas:
     ws.append(fila(z)); r = ws.max_row
     ws.cell(r, 9).hyperlink = ws.cell(r, 9).value; ws.cell(r, 9).value = 'Abrir mapa'; ws.cell(r, 9).font = Font(color='1F5FAD', underline='single')
-    ws.cell(r, 14).number_format = '#,##0'; ws.cell(r, 12).number_format = '#,##0'
+    ws.cell(r, 20).number_format = '#,##0'; ws.cell(r, 12).number_format = '#,##0'
 for c in ws[1]: c.font = Font(bold=True, color='FFFFFF'); c.fill = PatternFill('solid', fgColor='2E5E3E'); c.alignment = Alignment(wrap_text=True, vertical='top')
-for col, wd in zip('ABCDEFGHIJKLMNOPQ', (8, 46, 26, 7, 12, 22, 10, 10, 12, 11, 9, 11, 14, 16, 16, 30, 60)): ws.column_dimensions[col].width = wd
+for col, wd in zip('ABCDEFGHIJKLMNOPQRSTUVW', (8, 46, 26, 7, 12, 22, 10, 10, 12, 11, 9, 11, 45, 45, 40, 60, 28, 40, 14, 16, 16, 30, 60)): ws.column_dimensions[col].width = wd
+for row in ws.iter_rows(min_row=2):
+    for c in row: c.alignment = Alignment(wrap_text=True, vertical='top')
 ws.freeze_panes = 'C2'; ws.auto_filter.ref = ws.dimensions
 wc = wb.create_sheet('Códigos')
 wc.append(['Prefijo', 'Significado']); [setattr(c, 'font', Font(bold=True)) for c in wc[1]]
 for k in CODIGOS: wc.append(list(k))
 wc.append([]); wc.append(['Etapa', 'Periodo'])
 for e, p_ in PERIODO.items(): wc.append([e, p_])
+wc.append([]); wc.append(['Límites', LIMITES['es']])
 wc.append([]); wc.append(['Nota', 'Cantidades potenciales de planeación. Cada sitio requiere visita técnica, verificación de redes y propiedad, y concepto de la CAR antes de sembrar.'])
 wc.column_dimensions['A'].width = 10; wc.column_dimensions['B'].width = 90
 wb.save('planarborizacion/datos/zonas_arborizacion_chia.xlsx')
+json.dump({'recetas': RECETA, 'meses': MESES, 'limites': LIMITES}, open('planarborizacion/datos/recetas.json', 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
 res = {'por_tipo': defaultdict(lambda: [0, 0, 0]), 'por_etapa': defaultdict(lambda: [0, 0, 0]), 'por_financia': defaultdict(lambda: [0, 0, 0])}
 for z in zonas:
     for key, kk in (('por_tipo', z['tipo']), ('por_etapa', z['etapa']), ('por_financia', z['financia'])):

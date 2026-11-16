@@ -34,6 +34,8 @@ body{font-family:var(--sans);overflow:hidden}
 .panel .cod{font:600 11px ui-monospace,Menlo,monospace;color:var(--tenue);min-width:20px}
 .tip{position:fixed;z-index:9;pointer-events:none;background:#1b2420e8;color:#fff;font:12.5px/1.35 var(--sans);padding:6px 9px;border-radius:5px;max-width:280px;display:none}
 .tip b{color:#fff}
+.pop .rec{background:#f3f7f1;border-radius:5px;padding:7px 9px;margin:6px 0;font-size:12.3px;line-height:1.42;max-height:46vh;overflow:auto}
+.pop details{font-size:12px;margin:4px 0}.pop summary{cursor:pointer;color:var(--azul)}
 .am{display:none}
 @media (max-width:700px){.am{display:flex;gap:8px;align-items:flex-start;position:fixed;left:10px;right:10px;bottom:28px;z-index:6;background:#fffffff5;border:1px solid var(--linea);border-radius:8px;padding:10px 12px;font:13px/1.4 var(--sans);box-shadow:0 2px 12px #0000002a}.am button{border:0;background:none;font-size:20px;line-height:1;cursor:pointer;color:var(--tenue)}.am.fuera{display:none}}
 @media (max-width:700px){.panel{width:auto;right:60px;max-height:45vh}.panel.cerrado{right:auto}#pl{display:inline-block}.panel.cerrado .cuerpo{display:none}}
@@ -75,14 +77,14 @@ const I18N = {
   xls: 'Tabla de zonas (Excel)', mas: 'Más datos',
   intro: '<b>Cada mancha o línea de color es un lugar donde el plan propone sembrar.</b> El código dice qué tipo de siembra es (U = calles de barrio, V = vía, R = río…). Pase el puntero o toque una zona para ver su nombre; haga clic para ver árboles, especies, costo y coordenadas.',
   nota: 'Coordenadas WGS84. Cantidades potenciales de planeación: cada sitio requiere visita técnica, verificación de redes y propiedad, y concepto de la CAR antes de sembrar.', doc: 'Documento', mapa: 'Mapa', datos: 'Datos', otro: 'English',
-  zonas: 'zonas', arb: 'árboles y arbustos', costo: 'costo estimado', etq: {etapa: 'Etapa', vereda: 'Vereda o sector', coord: 'Coordenadas', arb: 'Árboles y arbustos', costo: 'Costo', fin: 'Financiación', gestor: 'Responsable', paleta: 'Paleta de especies', dim: 'Tamaño', nota: 'Supuesto'}, gm: 'Ver en Google Maps',
+  zonas: 'zonas', arb: 'árboles y arbustos', costo: 'costo estimado', etq: {etapa: 'Etapa', vereda: 'Vereda o sector', coord: 'Coordenadas', arb: 'Árboles y arbustos', costo: 'Costo', fin: 'Financiación', gestor: 'Responsable', paleta: 'Paleta de especies', dim: 'Tamaño', nota: 'Supuesto'}, gm: 'Ver en Google Maps', sembrar: 'Qué sembrar', princ: 'Principales', inter: 'Intermedias', como: 'Cómo', cuando: 'Cuándo', detalle: 'Datos de la zona',
   per: {1: 'Etapa 1 · 2027–2028', 2: 'Etapa 2 · 2029–2031', 3: 'Etapa 3 · 2032–2035'},
   tipos: {urbano: 'Calles de barrio', vial: 'Corredores viales', parque: 'Parques y zonas verdes', escolar: 'Colegios e instituciones', ronda: 'Rondas de ríos y quebradas', cerro: 'Montaña: restauración junto al bosque', cerca: 'Cercas vivas rurales'}},
  en: {color: 'Colour by', ctipo: 'Type', cetapa: 'Stage', capas: 'Zone types', etapa: 'Show stage', todas: 'All', buscar: 'Search', fondo: 'Basemap', sat: 'Satellite imagery', bos: 'Existing forest (IGAC)',
   xls: 'Zone table (Excel)', mas: 'More data',
   intro: '<b>Every coloured patch or line is a place where the plan proposes planting.</b> The code tells the planting type (U = neighbourhood streets, V = road, R = river…). Hover over or tap a zone to see its name; click for trees, species, cost and coordinates.',
   nota: 'WGS84 coordinates. Planning potentials: every site needs a technical visit, checks on utilities and ownership, and a CAR opinion before planting.', doc: 'Paper', mapa: 'Map', datos: 'Data', otro: 'Español',
-  zonas: 'zones', arb: 'trees and shrubs', costo: 'estimated cost', etq: {etapa: 'Stage', vereda: 'Vereda or sector', coord: 'Coordinates', arb: 'Trees and shrubs', costo: 'Cost', fin: 'Funding', gestor: 'Responsible', paleta: 'Species palette', dim: 'Size', nota: 'Assumption'}, gm: 'Open in Google Maps',
+  zonas: 'zones', arb: 'trees and shrubs', costo: 'estimated cost', etq: {etapa: 'Stage', vereda: 'Vereda or sector', coord: 'Coordinates', arb: 'Trees and shrubs', costo: 'Cost', fin: 'Funding', gestor: 'Responsible', paleta: 'Species palette', dim: 'Size', nota: 'Assumption'}, gm: 'Open in Google Maps', sembrar: 'What to plant', princ: 'Main', inter: 'Secondary', como: 'How', cuando: 'When', detalle: 'Zone data',
   per: {1: 'Stage 1 · 2027–2028', 2: 'Stage 2 · 2029–2031', 3: 'Stage 3 · 2032–2035'},
   tipos: {urbano: 'Neighbourhood streets', vial: 'Road corridors', parque: 'Parks and green areas', escolar: 'Schools and institutions', ronda: 'River and stream buffers', cerro: 'Mountain: restoration next to forest', cerca: 'Rural living fences'}}
 };
@@ -91,7 +93,7 @@ const CET = {1: '#b5541c', 2: '#e8a33a', 3: '#8fa9c4'};
 const PRE = {urbano: 'U', vial: 'V', parque: 'P', escolar: 'E', ronda: 'R', cerro: 'M', cerca: 'C-'};
 const ORD = ['urbano', 'vial', 'parque', 'escolar', 'ronda', 'cerro', 'cerca'];
 let L = new URLSearchParams(location.search).get('lang'); if (!L) { try { L = localStorage.getItem('chia-arb-lang'); } catch (e) {} } L = L || 'es';
-let Z = null, modo = 'tipo'; const on = Object.fromEntries(ORD.map(t => [t, true]));
+let Z = null, RC = null, modo = 'tipo'; const on = Object.fromEntries(ORD.map(t => [t, true]));
 const fmt = n => Number(n).toLocaleString(L === 'es' ? 'es-CO' : 'en-US');
 const map = new maplibregl.Map({container: 'map', bounds: [[-74.098, 4.818], [-73.982, 4.918]], fitBoundsOptions: {padding: {top: 20, bottom: 20, left: innerWidth > 700 ? 340 : 20, right: 20}}, attributionControl: {compact: true},
  style: {version: 8, glyphs: 'https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf',
@@ -138,12 +140,12 @@ function textos() {
 const tip = document.getElementById('tip');
 function muestraTip(e) {
   const p = e.features[0].properties, T = I18N[L];
-  tip.innerHTML = `<b>${p.id} · ${p.nombre}</b><br>${T.tipos[p.tipo]} · ${fmt(p.arboles)} ${T.arb}<br>${T.per[p.etapa]}`;
+  tip.innerHTML = `<b>${p.id} · ${p.nombre}</b><br>${T.tipos[p.tipo]} · ${fmt(p.arboles)} ${T.arb}<br>${T.per[p.etapa]}<br><span style="color:#cfe0c8">${T.sembrar}: ${RC.recetas[p.tipo][L].corto}</span>`;
   tip.style.display = 'block'; tip.style.left = Math.min(e.originalEvent.clientX + 14, innerWidth - 290) + 'px'; tip.style.top = (e.originalEvent.clientY + 14) + 'px';
 }
 map.once('style.load', async () => {
-  const [z, b, lim] = await Promise.all(['datos/zonas.geojson', '../datos/bosque_igac.geojson', '../datos/limites_municipios.geojson'].map(u => fetch(u).then(r => r.json())));
-  Z = z;
+  const [z, b, lim, rc] = await Promise.all(['datos/zonas.geojson', '../datos/bosque_igac.geojson', '../datos/limites_municipios.geojson', 'datos/recetas.json'].map(u => fetch(u).then(r => r.json())));
+  Z = z; RC = rc;
   z.features.forEach(f => f.properties.color = COL[f.properties.tipo]);
   lim.features = lim.features.filter(f => f.properties.c === 25175);
   map.addSource('lim', {type: 'geojson', data: lim});
@@ -171,14 +173,16 @@ map.once('style.load', async () => {
     tip.style.display = 'none';
     const p = fs[0].properties, E = T().etq;
     const dim = p.longitud_m && p.longitud_m !== 'null' ? fmt(p.longitud_m) + ' m' : fmt(p.area_ha) + ' ha';
-    new maplibregl.Popup({maxWidth: '340px'}).setLngLat(e.lngLat).setHTML(
-      `<h4>${p.id} · ${p.nombre}</h4><div style="color:${COL[p.tipo]};font-weight:600;margin-bottom:4px">${T().tipos[p.tipo]}</div><table>
-      <tr><td>${E.etapa}</td><td>${T().per[p.etapa]}</td></tr><tr><td>${E.arb}</td><td><b>${fmt(p.arboles)}</b></td></tr>
+    const rc = RC.recetas[p.tipo][L];
+    new maplibregl.Popup({maxWidth: '380px'}).setLngLat(e.lngLat).setHTML(
+      `<div class="pop"><h4>${p.id} · ${p.nombre}</h4><div style="color:${COL[p.tipo]};font-weight:600;margin-bottom:4px">${T().tipos[p.tipo]} · ${T().per[p.etapa]} · <b>${fmt(p.arboles)}</b> ${T().arb}</div>
+      <div class="rec"><b>${T().sembrar}</b><br><i>${T().princ}:</i> ${rc.principal}<br><i>${T().inter}:</i> ${rc.intermedio}<br>${rc.acomp}<br><i>${T().como}:</i> ${rc.como} ${rc.mezcla}<br><i>${T().cuando}:</i> ${RC.meses[L]}</div>
+      <details><summary>${T().detalle}</summary><table>
       <tr><td>${E.vereda}</td><td>${p.vereda}</td></tr><tr><td>${E.coord}</td><td class="coord">${(+p.lat).toFixed(5)}, ${(+p.lon).toFixed(5)}</td></tr>
       <tr><td>${E.dim}</td><td>${dim}</td></tr><tr><td>${E.costo}</td><td>$${fmt(p.costo_cop)}</td></tr><tr><td>${E.fin}</td><td>${p.financia}</td></tr>
-      <tr><td>${E.gestor}</td><td>${p.gestor}</td></tr><tr><td>${E.paleta}</td><td>${p.paleta}</td></tr></table>
-      <p style="color:#56615b;margin:6px 0">${E.nota}: ${p.nota}</p>
-      <a href="https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lon}" target="_blank" rel="noopener">${T().gm}</a>`).addTo(map);
+      <tr><td>${E.gestor}</td><td>${p.gestor}</td></tr></table>
+      <p style="color:#56615b;margin:6px 0">${E.nota}: ${p.nota}</p></details>
+      <a href="https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lon}" target="_blank" rel="noopener">${T().gm}</a></div>`).addTo(map);
   });
   document.body.dataset.listo = '1';
 });

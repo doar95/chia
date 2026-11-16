@@ -109,6 +109,7 @@ function tabla(caption, head, rows, numCols = [], totRow = null) {
   return `<div class="tabla"><table><caption>${caption}</caption><thead><tr>${th}</tr></thead><tbody>${rows.map(tr).join('')}${totRow ? tr(totRow).replace('<tr>', '<tr class="tot">') : ''}</tbody></table></div>`;
 }
 
+let RC = null;
 function breve(T, $) {
   const B = T.breve, es = L === 'es';
   const per = e => ({1: '2027–28', 2: '2029–31', 3: '2032–35'})[e];
@@ -126,7 +127,9 @@ function breve(T, $) {
   <p class="botones noimp"><a class="btn prim" href="mapa.html">${B.bMapa}</a> <a class="btn" href="descargas/plan_arborizacion_chia_${L}.pdf">${B.bPdf}</a> <a class="btn" href="datos/zonas_arborizacion_chia.xlsx">${B.bXls}</a></p>
   <figure class="fig"><a href="mapa.html"><img src="fig/mapa_zonas_${L}.png" alt="${B.bMapa}" style="width:100%"></a><figcaption>${B.figura}</figcaption></figure>
   <h2>${B.donde}</h2>` + tabla('', B.cab, filas, [3], ['', 'Total', '', fmt(RES.total[1]), '2027–2035']) +
-  `<h2>${B.primero}</h2>${B.primeroTxt(lista, fmt(n1))}<figure class="fig"><a href="mapa.html"><img src="fig/mapa_urbano_${L}.png" alt="" style="width:100%"></a><figcaption>${B.figuraU}</figcaption></figure><h2>${B.cuanto}</h2>${B.cuantoTxt(r(P.municipio_total), r(P.municipio_anual_promedio), r(P.programa_total_todas_las_fuentes))}
+  `<h2>${B.que}</h2><p>${B.queTxt}</p>` + tabla('', B.cabQ, orden.map(t => { const r = RC.recetas[t][L]; return [`<span class="chip" style="background:${COL[t]}"></span><b>${B.pref[t]}</b> ${T.tipos[t]}`, `<b>${es ? 'Principales' : 'Main'}:</b> ${r.principal}<br><b>${es ? 'Intermedias' : 'Secondary'}:</b> ${r.intermedio}<br>${r.acomp}`, `${r.como} ${r.mezcla}`]; })) +
+  `<p><b>${es ? 'Cuándo' : 'When'}:</b> ${RC.meses[L]}</p><p class="nota">${RC.limites[L]}</p>
+  <h2>${B.primero}</h2>${B.primeroTxt(lista, fmt(n1))}<figure class="fig"><a href="mapa.html"><img src="fig/mapa_urbano_${L}.png" alt="" style="width:100%"></a><figcaption>${B.figuraU}</figcaption></figure><h2>${B.cuanto}</h2>${B.cuantoTxt(r(P.municipio_total), r(P.municipio_anual_promedio), r(P.programa_total_todas_las_fuentes))}
   <h2>${B.plata}</h2>${B.plataTxt}<h2>${B.pide}</h2>${B.pideTxt}<p class="nota">${B.aviso}</p>
   <div class="sigue"><b>${B.sigue}</b><span>${B.sigueTxt}</span></div>`;
 }
@@ -196,8 +199,8 @@ async function iniciar() {
   const q = new URLSearchParams(location.search).get('lang');
   let guard = null; try { guard = localStorage.getItem('chia-arb-lang'); } catch (e) {}
   L = q || guard || 'es';
-  const [g, r] = await Promise.all([fetch('datos/zonas.geojson').then(x => x.json()), fetch('datos/resumen.json').then(x => x.json())]);
-  Z = g.features.map(f => f.properties); RES = r;
+  const [g, r, rc] = await Promise.all([fetch('datos/zonas.geojson').then(x => x.json()), fetch('datos/resumen.json').then(x => x.json()), fetch('datos/recetas.json').then(x => x.json())]);
+  Z = g.features.map(f => f.properties); RES = r; RC = rc;
   render();
   document.getElementById('btn-lang').onclick = () => {
     L = L === 'es' ? 'en' : 'es'; try { localStorage.setItem('chia-arb-lang', L); } catch (e) {}

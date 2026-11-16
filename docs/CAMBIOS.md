@@ -2,6 +2,10 @@
 
 Las fechas son de 2026.
 
+## 16 de noviembre, plan de arborización, versión 1.2
+- Cada zona dice qué árboles sembrar: especies principales e intermedias, restricciones del sitio, cómo sembrar (distancias, tamaño, protección), mezcla mínima y meses de siembra. Aparece en la ventana de cada zona del mapa, en el Excel y el CSV, y en una tabla nueva del resumen del documento.
+- Se declaran los límites: recetas por tipo de zona y no por sitio, distancias como propuesta para el manual municipal y preparación con apoyo de Claude (Anthropic), sujeta a revisión de un ingeniero forestal o biólogo.
+
 ## 16 de noviembre, plan de arborización, versión 1.1
 - El documento abre con un resumen de dos páginas: qué se propone, dónde, qué va primero, cuánto cuesta, cómo se cuida la plata y qué se pide. El documento técnico viene después.
 - **Corrección.** El casco urbano estaba subestimado: tenía 1.098 árboles calculados por número de predios en 20 cuadros. Ahora se calcula con los metros de calle local de OpenStreetMap (un árbol cada 8 m por andén en el 40 % de la longitud) y suma 9.241 árboles en 27 sectores con nombre de barrio, 14 de ellos en la etapa 1.
