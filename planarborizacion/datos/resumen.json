@@ -1,0 +1,143 @@
+{
+ "por_tipo": {
+  "ronda": [
+   7,
+   54452,
+   3376239537
+  ],
+  "vial": [
+   13,
+   4472,
+   2329793146
+  ],
+  "escolar": [
+   33,
+   2012,
+   910571400
+  ],
+  "parque": [
+   25,
+   4096,
+   1887663662
+  ],
+  "cerro": [
+   2,
+   50000,
+   2900000000
+  ],
+  "cerca": [
+   10,
+   14304,
+   400666454
+  ],
+  "urbano": [
+   20,
+   1098,
+   527760000
+  ]
+ },
+ "por_etapa": {
+  "2": [
+   26,
+   102644,
+   7911047527
+  ],
+  "1": [
+   50,
+   9893,
+   2313090252
+  ],
+  "3": [
+   34,
+   17897,
+   2108556420
+  ]
+ },
+ "por_financia": {
+  "Mixto": [
+   17,
+   112577,
+   6293780395
+  ],
+  "Público": [
+   67,
+   13689,
+   4031091994
+  ],
+  "Gestión con el titular de la vía": [
+   4,
+   1693,
+   881842010
+  ],
+  "Privado": [
+   22,
+   2475,
+   1125979800
+  ]
+ },
+ "total": [
+  110,
+  130434,
+  12332694199
+ ],
+ "area_chia_km2": 80.42,
+ "bosque_igac_ha": 1085,
+ "celdas": [
+  184,
+  20
+ ],
+ "presupuesto": {
+  "supuestos": {
+   "etapa0": {
+    "Censo georreferenciado del arbolado urbano público (unos 25.000 individuos a $7.500, referencia JBB 2026)": 187500000,
+    "Línea base satelital: temperatura de superficie (Landsat), altura de dosel (CHMv2), modelo de superficie (GEM-15) y mapa de sitios sembrables": 120000000,
+    "Manual municipal de silvicultura urbana y paleta de especies, con revisión de la CAR": 150000000,
+    "Delimitación y convocatoria de Áreas de Vida (Ley 2173 de 2021, Resolución 1491 de 2025)": 60000000,
+    "Estudios de diseño paisajístico de los primeros 6 corredores y 12 celdas de sombra": 180000000,
+    "Socialización, mesas veredales y diálogo con el Resguardo Indígena de Fonquetá y Cerca de Piedra": 60000000
+   },
+   "transversal_anual": {
+    "Monitoreo de supervivencia, plataforma de datos abiertos y reporte anual": 80000000,
+    "Programa comunitario «Guardianes del árbol», PRAE escolares y adopción de árboles": 100000000
+   },
+   "vivero_fortalecimiento": 350000000,
+   "anios": 9,
+   "interventoria": 0.08,
+   "contingencia": 0.05
+  },
+  "etapas": {
+   "1": {
+    "obra_total": 2313090252,
+    "obra_municipio": 2313090252,
+    "por_financia": {
+     "Público": 2313090252
+    }
+   },
+   "2": {
+    "obra_total": 7911047527,
+    "obra_municipio": 4664558712,
+    "por_financia": {
+     "Mixto": 5893113941,
+     "Público": 1718001742,
+     "Gestión con el titular de la vía": 299931844
+    }
+   },
+   "3": {
+    "obra_total": 2108556420,
+    "obra_municipio": 200333227,
+    "por_financia": {
+     "Gestión con el titular de la vía": 581910166,
+     "Privado": 1125979800,
+     "Mixto": 400666454
+    }
+   }
+  },
+  "etapa0": 757500000,
+  "transversal_total": 1620000000,
+  "interventoria": 574238575,
+  "contingencia": 523986038,
+  "municipio_total": 11003706805,
+  "programa_total_todas_las_fuentes": 16158418813,
+  "municipio_anual_promedio": 1222634089
+ }
+}

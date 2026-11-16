@@ -1,0 +1,92 @@
+# Extracto curado de OpenStreetMap (ODbL, © colaboradores de OpenStreetMap), consulta Overpass del 16 de noviembre de 2026
+# bbox 4.80,-74.12,4.95,-73.98: highway primary|secondary|tertiary con nombre, leisure park, amenity school|university|college|hospital|townhall.
+# Las vías se reordenaron a mano en polilíneas continuas a partir de los segmentos de OSM (lon,lat; WGS84).
+# @via id|nombre|gestor probable|coordenadas
+@via
+V01|Avenida Pradilla|Municipio|-74.0541,4.8628 -74.0509,4.8633 -74.0459,4.8641 -74.0418,4.8646 -74.0385,4.8650 -74.0369,4.8631
+V02|Vía Bogotá–Chía y Vía Chía–Cajicá (ruta 45A)|Departamento / Nación (Troncal de los Andes)|-74.0302,4.8520 -74.0303,4.8548 -74.0331,4.8559 -74.0362,4.8589 -74.0367,4.8628 -74.0377,4.8641 -74.0381,4.8665 -74.0379,4.8678 -74.0377,4.8691 -74.0373,4.8720 -74.0376,4.8762 -74.0377,4.8801 -74.0368,4.8829 -74.0362,4.8850 -74.0356,4.8876 -74.0353,4.8892 -74.0321,4.8974 -74.0314,4.8993
+V03|Vía Bogotá–La Caro (ruta 55)|Nación (concesión)|-74.0315,4.8247 -74.0307,4.8280 -74.0292,4.8307 -74.0289,4.8348 -74.0289,4.8366 -74.0272,4.8442 -74.0247,4.8506 -74.0258,4.8538 -74.0271,4.8599 -74.0261,4.8638 -74.0247,4.8656
+V04|Vía Cota–Chía|Departamento|-74.0914,4.8266 -74.0893,4.8307 -74.0879,4.8343 -74.0868,4.8370 -74.0853,4.8388 -74.0812,4.8433 -74.0792,4.8461 -74.0779,4.8483 -74.0757,4.8494 -74.0738,4.8500 -74.0720,4.8518 -74.0699,4.8539 -74.0686,4.8545
+V05|Calle 7|Municipio|-74.0638,4.8587 -74.0588,4.8567 -74.0558,4.8555 -74.0495,4.8530 -74.0458,4.8514
+V06|Carrera 9 hacia Fagua|Municipio|-74.0586,4.8624 -74.0567,4.8663 -74.0540,4.8686 -74.0529,4.8707 -74.0503,4.8766 -74.0473,4.8806 -74.0447,4.8854 -74.0423,4.8895
+V07|Calle 21|Municipio|-74.0608,4.8711 -74.0520,4.8670 -74.0474,4.8659 -74.0441,4.8651
+V08|Vía Chía–Tabio|Departamento|-74.0707,4.8757 -74.0714,4.8774 -74.0749,4.8788 -74.0748,4.8823 -74.0757,4.8849 -74.0781,4.8871 -74.0785,4.8891 -74.0800,4.8909 -74.0812,4.8922 -74.0803,4.8951 -74.0810,4.8985 -74.0817,4.9015 -74.0844,4.9051
+V09|Vía Tíquiza–Fagua|Municipio|-74.0666,4.8738 -74.0650,4.8784 -74.0635,4.8831 -74.0613,4.8884 -74.0607,4.8922 -74.0588,4.8944 -74.0571,4.8953
+V10|Vía Fagua–Cajicá|Municipio|-74.0713,4.8774 -74.0670,4.8846 -74.0653,4.8874 -74.0616,4.8941 -74.0600,4.8970 -74.0576,4.8959 -74.0500,4.8924 -74.0423,4.8895
+V11|Vía a La Valvanera|Municipio|-74.0665,4.8627 -74.0697,4.8630 -74.0692,4.8644 -74.0744,4.8661 -74.0757,4.8674
+V12|Vía Chía–Sopó por Yerbabuena|Municipio / Departamento|-74.0243,4.8655 -74.0232,4.8627 -74.0200,4.8644 -74.0165,4.8627 -74.0141,4.8644 -74.0125,4.8612 -74.0101,4.8598 -74.0064,4.8557 -74.0018,4.8547 -73.9986,4.8551 -73.9942,4.8586 -73.9913,4.8603
+V13|Vía Simandoy|Municipio|-74.0121,4.8848 -74.0085,4.8900 -74.0062,4.8947 -74.0055,4.9002
+V14|Canal Guaymaral|Municipio / CAR|-74.0384,4.8186 -74.0380,4.8216 -74.0401,4.8232 -74.0410,4.8289 -74.0441,4.8331
+# @pol tipo|nombre|lon|lat|area_m2   (centroide del polígono OSM)
+@pol
+recr|Club Campestre Guaymaral|-74.04289|4.82529|763222
+park|Buenavista Colsubsidio|-74.03670|4.82379|156359
+scho|Colegio Maria|-74.03006|4.83284|2868
+ceme|Cementerio de Chía|-74.06232|4.86559|12543
+univ|Centro de BioSistemas (Universidad Jorge Tadeo Lozano)|-74.01340|4.88449|30117
+park||-74.06874|4.85726|145808
+coll|Colegio Rochester|-74.03179|4.83007|27288
+univ|Universidad de Cundinamarca Sede Chía|-74.03833|4.87375|15805
+scho|IEDp Diosa Chía|-74.05094|4.87881|6853
+scho|Kabalia Academia ecuestre|-74.06174|4.87058|10777
+park|Faunáticos Granja Pedagógica|-74.09357|4.88009|46929
+scho|Colegio Fonquetá|-74.07143|4.86253|5825
+scho|Colegio Nacional Diversificado Conaldi|-74.05652|4.85682|12818
+park||-74.06110|4.84910|9399
+park|La Montaña de Oso|-74.01009|4.84328|431973
+scho|Colegio campestre Monte Cervino|-74.06620|4.87330|2716
+coll|SENA Centro de Desarrollo Agroempresarial|-74.05443|4.87712|33578
+park|Parque central|-74.04626|4.86568|1083
+park|Parque sabana|-74.04609|4.86457|1212
+park|Parque Centro Comercial Centro Chía|-74.03511|4.86598|21252
+scho|Colegio Diosa Chía Primaria|-74.05740|4.85999|5618
+scho|Colegio Departamental José Joaquín Casas|-74.05428|4.86565|5584
+park|Parque La Balsa|-74.05736|4.84703|8428
+park|Parque de los Franciscanos|-74.07233|4.87115|4519
+park|Parque Santa Bárbara|-74.07020|4.85554|5061
+park||-74.02196|4.88586|37083
+park||-74.02651|4.88282|25850
+scho|Colegio Yerbabuena|-74.00416|4.85457|10906
+hosp|Hospital San Antonio|-74.06054|4.85822|5738
+park|Parque 20 de Julio|-74.05066|4.85789|1474
+park||-74.02170|4.88789|20976
+park||-74.02592|4.87893|89575
+park||-74.02205|4.88510|20040
+scho|Institución Educativa Fagua sede nueva|-74.06361|4.88500|12521
+scho|Happy days|-74.06470|4.87810|3134
+scho|Institución Educativa Fagua sede Tíquiza|-74.06568|4.87299|5102
+scho|Gimnasio los Caobos|-74.05862|4.83836|51786
+town|Centro Administrativo de Chía|-74.05841|4.86041|7621
+univ|Universidad El Bosque|-74.03223|4.84485|46256
+recr|Parque Hipódromo de los Andes|-74.03569|4.84884|681839
+park|Parque Acqua|-74.06261|4.86732|4687
+park|Parque Gauia|-74.05160|4.85586|9536
+park||-74.05214|4.85512|16503
+scho|Institución Educativa Diversificado Sede Santa Lucía|-74.06263|4.85439|2711
+scho|Colegio Montemorel|-74.06363|4.84901|7694
+park||-74.04362|4.87877|10807
+park||-74.04755|4.82119|2573
+park||-74.04566|4.81938|23041
+park||-74.05008|4.82109|32610
+scho||-74.06231|4.88695|7548
+recr|Parque Río Frío|-74.06680|4.86145|25266
+recr|Villa Olímpica|-74.05501|4.86469|16803
+park|Lagos de Chía|-74.06427|4.86999|29098
+scho|María Auxiliadora|-74.05969|4.86019|6612
+park|Lote|-74.06759|4.85681|24975
+park|Parque El Refugio|-74.05535|4.85872|2803
+park|Parque Principal de Chía|-74.06022|4.86129|7538
+park||-74.02993|4.88332|3601
+recr|Área social Encenillos de Sindamanoy|-73.99075|4.89354|82910
+scho|Colegio La Inmaculada|-74.01073|4.88361|23678
+scho|SEK Colombia International School|-74.01270|4.88165|24245
+scho|Colegio Jorbalán|-74.02575|4.86073|42834
+scho|IE Fusca sede La Caro|-74.02671|4.85853|2930
+univ|Universidad Católica de Colombia sede La Caro|-74.02586|4.85926|40751
+scho|Colegio Cumbres|-74.00533|4.89568|38521
+park|Parque Ospina Pérez|-74.05864|4.86221|2023
+scho|Gimnasio Campestre Cristiano|-74.04161|4.87398|19281
+park|Parque El Paraíso|-74.04302|4.87514|6216
+park|Parque Saldarriaga Concha|-74.04791|4.85650|18069
+scho|Gimnasio El Hontanar|-74.03048|4.83456|50796
+scho|Colegio Fundación Colombia|-74.03195|4.82819|47648

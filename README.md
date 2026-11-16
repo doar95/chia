@@ -4,6 +4,8 @@ Portal interactivo sobre la historia, la gente, las finanzas, el suelo, el agua,
 
 **Sitio:** https://doar95.github.io/chia/
 
+**Plan maestro de arborización 2027–2035:** https://doar95.github.io/chia/planarborizacion/ (documento en español e inglés, PDF, mapa con coordenadas y datos abiertos en `planarborizacion/datos/`).
+
 ## Para quien llega por primera vez
 
 El portal es un solo mapa con siete capítulos y una barra de tiempo que va de la época muisca a 2026. Cada capítulo empieza con una explicación corta de qué muestra, y hay un glosario para los términos técnicos. Está en español, inglés, portugués, francés, chino mandarín y árabe. La versión validada es la española.

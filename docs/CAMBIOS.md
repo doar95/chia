@@ -22,3 +22,10 @@ Las fechas son de 2026.
 - **Corrección.** Se quitó un mapa de fondo que mostraba una marca de agua y se corrigió el límite de Chía, que no incluía la cabecera.
 - Catastro de 2018 agregado por zona y manzana. Capítulo Suelo con la estructura predial del diagnóstico del POT de 2020.
 - Primera versión: historia, gente, hacienda, agua, planes y obras, en cinco idiomas.
+
+## 16 de noviembre de 2026: plan de arborización
+
+- Nueva sección `planarborizacion/`: documento técnico en español e inglés (con PDF), mapa interactivo de 110 zonas con coordenadas y datos abiertos (`zonas.geojson`, `zonas.csv`, `prioridad.geojson`, `resumen.json`).
+- Nuevos programas `procesamiento/10_arborizacion.py` (zonas, cantidades, costos) y `11_figuras_arborizacion.py` (figuras).
+- Nuevo insumo `insumos/osm_arborizacion_2026-11-16.txt` con vías, parques y colegios de OpenStreetMap.
+- Botón de acceso al plan en la cabecera del portal.

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mapa del plan de arborización de Chía</title>
+<link rel="icon" href="../icono.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../vendor/maplibre-gl.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="estilo.css?v=1">
+<style>
+body{font-family:var(--sans);overflow:hidden}
+#map{position:fixed;top:53px;left:0;right:0;bottom:0}
+.panel{position:fixed;top:66px;left:12px;z-index:5;width:310px;max-height:calc(100vh - 90px);overflow:auto;background:#fffffff2;border:1px solid var(--linea);border-radius:8px;padding:12px 14px;font-size:13px;box-shadow:0 2px 12px #0000001a}
+.panel h3{font-size:13px;margin:10px 0 6px;letter-spacing:.04em;text-transform:uppercase;color:var(--tenue)}
+.panel h3:first-child{margin-top:0}
+.panel label{display:flex;align-items:center;gap:6px;padding:2px 0;cursor:pointer}
+.panel .sw{width:14px;height:14px;border-radius:3px;flex:0 0 auto}
+.panel .sw.l{height:4px;border-radius:2px}
+.panel .n{margin-left:auto;color:var(--tenue);font-variant-numeric:tabular-nums}
+.panel select,.panel input[type=search]{width:100%;font:inherit;padding:5px 7px;border:1px solid var(--linea);border-radius:5px}
+.tot{background:var(--verde2);border-radius:6px;padding:8px 10px;margin:8px 0}
+.tot b{font-size:18px;color:var(--verde)}
+.maplibregl-popup-content{font-family:var(--sans);font-size:12.5px;line-height:1.4;max-width:320px}
+.maplibregl-popup-content h4{margin:0 0 4px;font-size:14px}
+.maplibregl-popup-content table{font-size:12px}
+.maplibregl-popup-content td{padding:2px 6px 2px 0;border:none}
+#pl{display:none}
+@media (max-width:700px){.panel{width:auto;right:12px;max-height:40vh}#pl{display:inline-block}.panel.cerrado .cuerpo{display:none}}
+</style>
+</head>
+<body>
+<header class="barra"><div class="in">
+  <a class="marca" href="../">Chía, memoria y porvenir · <span>Arborización</span></a>
+  <nav class="tabs"><a href="./" data-t="doc">Documento</a><a href="mapa.html" aria-current="page" data-t="mapa">Mapa</a><a href="datos/zonas.csv" data-t="datos">Datos</a></nav>
+  <button class="btn" id="btn-lang" type="button">English</button>
+</div></header>
+<div id="map"></div>
+<div class="panel" id="panel">
+  <button class="btn" id="pl" type="button">☰</button>
+  <div class="cuerpo">
+  <h3 data-k="capas">Tipos de zona</h3><div id="tipos"></div>
+  <h3 data-k="etapa">Etapa</h3>
+  <select id="etapa"><option value="0" data-k="todas">Todas</option><option value="1">1 · 2027–2028</option><option value="2">2 · 2029–2031</option><option value="3">3 · 2032–2035</option></select>
+  <h3 data-k="buscar">Buscar</h3>
+  <input type="search" id="q" placeholder="Pradilla, río Frío, C05…">
+  <div class="tot" id="tot"></div>
+  <h3 data-k="fondo">Fondo y contexto</h3>
+  <label><input type="checkbox" id="sat"> <span data-k="sat">Imagen satelital</span></label>
+  <label><input type="checkbox" id="bos" checked> <span data-k="bos">Bosque IGAC 1:25.000</span></label>
+  <label><input type="checkbox" id="pri"> <span data-k="pri">Prioridad de sombra (rejilla 200 m)</span></label>
+  <p style="color:var(--tenue);font-size:12px;margin-top:10px" data-k="nota">Coordenadas WGS84. Cada sitio requiere visita técnica, verificación de redes y propiedad, y concepto de la CAR antes de sembrar.</p>
+  <p style="font-size:12px"><a href="datos/zonas.geojson" download>zonas.geojson</a> · <a href="datos/zonas.csv" download>zonas.csv</a> · <a href="datos/prioridad.geojson" download>prioridad.geojson</a></p>
+  </div>
+</div>
+<script src="../vendor/maplibre-gl.js"></script>
+<script>
+const I18N = {
+ es: {capas: 'Tipos de zona', etapa: 'Etapa', todas: 'Todas', buscar: 'Buscar', fondo: 'Fondo y contexto', sat: 'Imagen satelital', bos: 'Bosque IGAC 1:25.000', pri: 'Prioridad de sombra (rejilla 200 m)',
+  nota: 'Coordenadas WGS84. Cada sitio requiere visita técnica, verificación de redes y propiedad, y concepto de la CAR antes de sembrar.', doc: 'Documento', mapa: 'Mapa', datos: 'Datos', otro: 'English',
+  zonas: 'zonas', arb: 'árboles y arbustos', costo: 'costo estimado', etq: {etapa: 'Etapa', vereda: 'Vereda', coord: 'Coordenadas', arb: 'Individuos', costo: 'Costo', fin: 'Financiación', gestor: 'Gestor', paleta: 'Paleta', dim: 'Dimensión', nota: 'Supuesto'}, gm: 'Ver en Google Maps',
+  tipos: {ronda: 'Rondas de ríos y quebradas', cerro: 'Núcleos de restauración en ladera', vial: 'Corredores viales', parque: 'Parques y zonas verdes', escolar: 'Colegios e instituciones', urbano: 'Calles de sombra', cerca: 'Cercas vivas rurales'}},
+ en: {capas: 'Zone types', etapa: 'Stage', todas: 'All', buscar: 'Search', fondo: 'Basemap and context', sat: 'Satellite imagery', bos: 'IGAC forest 1:25,000', pri: 'Shade priority (200 m grid)',
+  nota: 'WGS84 coordinates. Every site needs a technical visit, checks on utilities and ownership, and a CAR opinion before planting.', doc: 'Paper', mapa: 'Map', datos: 'Data', otro: 'Español',
+  zonas: 'zones', arb: 'trees and shrubs', costo: 'estimated cost', etq: {etapa: 'Stage', vereda: 'Vereda', coord: 'Coordinates', arb: 'Plants', costo: 'Cost', fin: 'Funding', gestor: 'Manager', paleta: 'Palette', dim: 'Size', nota: 'Assumption'}, gm: 'Open in Google Maps',
+  tipos: {ronda: 'River and stream buffers', cerro: 'Hillside restoration nuclei', vial: 'Road corridors', parque: 'Parks and green areas', escolar: 'Schools and institutions', urbano: 'Shade streets', cerca: 'Rural living fences'}}
+};
+const COL = {ronda: '#2a78d6', vial: '#eb6834', parque: '#1baf7a', cerca: '#eda100', urbano: '#e87ba4', cerro: '#008300', escolar: '#6250d6'};
+const ORD = ['ronda', 'cerro', 'vial', 'parque', 'escolar', 'urbano', 'cerca'];
+let L = new URLSearchParams(location.search).get('lang'); if (!L) { try { L = localStorage.getItem('chia-arb-lang'); } catch (e) {} } L = L || 'es';
+let Z = null; const on = Object.fromEntries(ORD.map(t => [t, true]));
+const fmt = n => Number(n).toLocaleString(L === 'es' ? 'es-CO' : 'en-US');
+const map = new maplibregl.Map({container: 'map', center: [-74.045, 4.868], zoom: 12.2, attributionControl: {compact: true},
+ style: {version: 8, glyphs: 'https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf',
+  sources: {osm: {type: 'raster', tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'], tileSize: 256, maxzoom: 19, attribution: '© colaboradores de OpenStreetMap'},
+   sat: {type: 'raster', tiles: ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'], tileSize: 256, maxzoom: 19, attribution: 'Imagen: Esri, Maxar, Earthstar Geographics'}},
+  layers: [{id: 'osm', type: 'raster', source: 'osm', paint: {'raster-saturation': -0.6, 'raster-opacity': 0.85}}, {id: 'sat', type: 'raster', source: 'sat', layout: {visibility: 'none'}}]}});
+map.addControl(new maplibregl.NavigationControl(), 'top-right');
+map.addControl(new maplibregl.ScaleControl({unit: 'metric'}), 'bottom-right');
+function filtro() {
+  const e = +document.getElementById('etapa').value, q = document.getElementById('q').value.trim().toLowerCase();
+  const tipos = ORD.filter(t => on[t]);
+  const f = ['all', ['in', ['get', 'tipo'], ['literal', tipos]]];
+  if (e) f.push(['==', ['get', 'etapa'], e]);
+  if (q) f.push(['any', ['in', q, ['downcase', ['get', 'nombre']]], ['in', q, ['downcase', ['get', 'id']]], ['in', q, ['downcase', ['get', 'vereda']]]]);
+  ['z-fill', 'z-line', 'z-borde', 'z-pt'].forEach(id => map.getLayer(id) && map.setFilter(id, ['all', f, map.getLayer(id).metadata.g]));
+  const vis = Z.features.filter(x => tipos.includes(x.properties.tipo) && (!e || x.properties.etapa === e) && (!q || (x.properties.nombre + x.properties.id + x.properties.vereda).toLowerCase().includes(q)));
+  const T = I18N[L];
+  document.getElementById('tot').innerHTML = `<b>${fmt(vis.reduce((a, x) => a + x.properties.arboles, 0))}</b> ${T.arb}<br>${vis.length} ${T.zonas} · ${T.costo} $${fmt(Math.round(vis.reduce((a, x) => a + x.properties.costo_cop, 0) / 1e6))} M`;
+  if (q && vis.length && vis.length < 6) { const b = vis.map(v => v.properties.bbox); map.fitBounds([[Math.min(...b.map(x => x[1])), Math.min(...b.map(x => x[0]))], [Math.max(...b.map(x => x[3])), Math.max(...b.map(x => x[2]))]], {padding: 80, maxZoom: 16}); }
+}
+function textos() {
+  const T = I18N[L]; document.documentElement.lang = L;
+  document.querySelectorAll('[data-k]').forEach(e => e.textContent = T[e.dataset.k]);
+  document.querySelectorAll('[data-t]').forEach(e => e.textContent = T[e.dataset.t]);
+  document.getElementById('btn-lang').textContent = T.otro;
+  const cnt = {}; Z.features.forEach(f => cnt[f.properties.tipo] = (cnt[f.properties.tipo] || 0) + f.properties.arboles);
+  document.getElementById('tipos').innerHTML = ORD.map(t => `<label><input type="checkbox" data-tipo="${t}" ${on[t] ? 'checked' : ''}><span class="sw${t === 'vial' ? ' l' : ''}" style="background:${COL[t]}"></span>${T.tipos[t]}<span class="n">${fmt(cnt[t])}</span></label>`).join('');
+  document.querySelectorAll('[data-tipo]').forEach(c => c.onchange = () => { on[c.dataset.tipo] = c.checked; filtro(); });
+  filtro();
+}
+map.on('load', async () => {
+  const [z, b, p, lim] = await Promise.all(['datos/zonas.geojson', '../datos/bosque_igac.geojson', 'datos/prioridad.geojson', '../datos/limites_municipios.geojson'].map(u => fetch(u).then(r => r.json())));
+  Z = z;
+  z.features.forEach(f => f.properties.color = COL[f.properties.tipo]);
+  lim.features = lim.features.filter(f => f.properties.c === 25175);
+  map.addSource('lim', {type: 'geojson', data: lim});
+  map.addSource('bos', {type: 'geojson', data: b});
+  map.addSource('pri', {type: 'geojson', data: p});
+  map.addSource('z', {type: 'geojson', data: z});
+  map.addSource('zc', {type: 'geojson', data: {type: 'FeatureCollection', features: z.features.map(f => ({type: 'Feature', properties: f.properties, geometry: {type: 'Point', coordinates: [f.properties.lon, f.properties.lat]}}))}});
+  map.addLayer({id: 'bos', type: 'fill', source: 'bos', paint: {'fill-color': '#4f8a3c', 'fill-opacity': 0.22}});
+  map.addLayer({id: 'pri', type: 'fill', source: 'pri', layout: {visibility: 'none'}, paint: {'fill-color': ['interpolate', ['linear'], ['get', 'prioridad'], 0.2, '#fff3d6', 0.45, '#f2a65a', 0.7, '#b5541c'], 'fill-opacity': 0.55, 'fill-outline-color': '#ffffff'}});
+  map.addLayer({id: 'lim', type: 'line', source: 'lim', paint: {'line-color': '#1b2420', 'line-width': 1.6, 'line-dasharray': [3, 2]}});
+  const pol = ['match', ['geometry-type'], ['Polygon', 'MultiPolygon'], true, false], lin = ['match', ['geometry-type'], ['LineString', 'MultiLineString'], true, false];
+  map.addLayer({id: 'z-fill', type: 'fill', source: 'z', metadata: {g: pol}, paint: {'fill-color': ['get', 'color'], 'fill-opacity': ['match', ['get', 'tipo'], ['cerca', 'cerro'], 0.22, 0.6]}});
+  map.addLayer({id: 'z-borde', type: 'line', source: 'z', metadata: {g: pol}, paint: {'line-color': ['get', 'color'], 'line-width': ['match', ['get', 'tipo'], ['cerca', 'cerro'], 0.4, 1], 'line-opacity': ['match', ['get', 'tipo'], ['cerca', 'cerro'], 0.5, 1]}});
+  map.addLayer({id: 'z-line', type: 'line', source: 'z', metadata: {g: lin}, layout: {'line-cap': 'round'}, paint: {'line-color': ['get', 'color'], 'line-width': ['interpolate', ['linear'], ['zoom'], 11, 3, 16, 8]}});
+  map.addLayer({id: 'z-pt', type: 'symbol', source: 'zc', metadata: {g: ['match', ['get', 'tipo'], ['ronda', 'cerro', 'vial', 'urbano'], true, false]}, layout: {'text-field': ['get', 'id'], 'text-size': 11, 'text-font': ['Noto Sans Regular']}, paint: {'text-color': '#1b2420', 'text-halo-color': '#fff', 'text-halo-width': 1.6}});
+  textos();
+  const T = () => I18N[L];
+  ['z-fill', 'z-line'].forEach(id => {
+    map.on('mouseenter', id, () => map.getCanvas().style.cursor = 'pointer');
+    map.on('mouseleave', id, () => map.getCanvas().style.cursor = '');
+    map.on('click', id, e => {
+      const p = e.features[0].properties, E = T().etq, bb = JSON.parse(p.bbox);
+      const dim = p.longitud_m && p.longitud_m !== 'null' ? fmt(p.longitud_m) + ' m' : fmt(p.area_ha) + ' ha';
+      new maplibregl.Popup({maxWidth: '340px'}).setLngLat(e.lngLat).setHTML(
+        `<h4>${p.id} · ${p.nombre}</h4><div style="color:${p.color};font-weight:600;margin-bottom:4px">${T().tipos[p.tipo]}</div><table>
+        <tr><td>${E.etapa}</td><td>${p.etapa}</td></tr><tr><td>${E.vereda}</td><td>${p.vereda}</td></tr>
+        <tr><td>${E.coord}</td><td class="coord">${(+p.lat).toFixed(5)}, ${(+p.lon).toFixed(5)}</td></tr>
+        <tr><td>${E.dim}</td><td>${dim}</td></tr><tr><td>${E.arb}</td><td>${fmt(p.arboles)}</td></tr>
+        <tr><td>${E.costo}</td><td>$${fmt(p.costo_cop)}</td></tr><tr><td>${E.fin}</td><td>${p.financia}</td></tr>
+        <tr><td>${E.gestor}</td><td>${p.gestor}</td></tr><tr><td>${E.paleta}</td><td>${p.paleta}</td></tr></table>
+        <p style="color:#56615b;margin:6px 0">${E.nota}: ${p.nota}</p>
+        <a href="https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lon}" target="_blank" rel="noopener">${T().gm}</a>`).addTo(map);
+    });
+  });
+  map.on('click', 'pri', e => { if (map.queryRenderedFeatures(e.point, {layers: ['z-fill', 'z-line']}).length) return; const p = e.features[0].properties;
+    new maplibregl.Popup().setLngLat(e.lngLat).setHTML(`<b>${L === 'es' ? 'Prioridad' : 'Priority'} ${(+p.prioridad).toFixed(2)}</b><br>${p.predios} ${L === 'es' ? 'predios' : 'parcels'} · ${p.dist_verde_m} m ${L === 'es' ? 'al verde más cercano' : 'to nearest green'}`).addTo(map); });
+});
+document.getElementById('etapa').onchange = filtro;
+document.getElementById('q').oninput = filtro;
+document.getElementById('sat').onchange = e => { map.setLayoutProperty('sat', 'visibility', e.target.checked ? 'visible' : 'none'); map.setLayoutProperty('osm', 'visibility', e.target.checked ? 'none' : 'visible'); };
+document.getElementById('bos').onchange = e => map.setLayoutProperty('bos', 'visibility', e.target.checked ? 'visible' : 'none');
+document.getElementById('pri').onchange = e => map.setLayoutProperty('pri', 'visibility', e.target.checked ? 'visible' : 'none');
+document.getElementById('btn-lang').onclick = () => { L = L === 'es' ? 'en' : 'es'; try { localStorage.setItem('chia-arb-lang', L); } catch (e) {} textos(); };
+document.getElementById('pl').onclick = () => document.getElementById('panel').classList.toggle('cerrado');
+</script>
+</body>
+</html>
